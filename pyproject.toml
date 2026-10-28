@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "joinwitness"
+version = "0.1.0"
+description = "JoinWitness: human-authorized decision robustness auditing"
+requires-python = ">=3.11"
+dependencies = ["pydantic==2.13.5"]
+
+[project.optional-dependencies]
+dev = ["pytest==9.0.2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
