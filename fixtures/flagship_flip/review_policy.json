@@ -1,0 +1,18 @@
+{
+  "schema_version": "jw.review.v1",
+  "revision": 1,
+  "coverage": "REVIEWED_CLOSED_SCOPE",
+  "scope_note": "Synthetic flagship only: four reviewed links and three explicit unmatched decisions. No claim of real-world completeness.",
+  "closed_scope_attested": true,
+  "edges": [
+    {"attendance_id": "T-01", "registration_id": "R-A1", "status": "CONFIRMED", "operation": "EXPLICIT_REVIEW"},
+    {"attendance_id": "T-02", "registration_id": "R-A2", "status": "POSSIBLE", "operation": "EXPLICIT_REVIEW"},
+    {"attendance_id": "T-02", "registration_id": "R-B2", "status": "POSSIBLE", "operation": "EXPLICIT_REVIEW"},
+    {"attendance_id": "T-03", "registration_id": "R-B1", "status": "CONFIRMED", "operation": "EXPLICIT_REVIEW"}
+  ],
+  "unmatched": [
+    {"attendance_id": "T-01", "status": "FORBIDDEN", "operation": "EXPLICIT_REVIEW"},
+    {"attendance_id": "T-02", "status": "FORBIDDEN", "operation": "EXPLICIT_REVIEW"},
+    {"attendance_id": "T-03", "status": "FORBIDDEN", "operation": "EXPLICIT_REVIEW"}
+  ]
+}
