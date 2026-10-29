@@ -1,0 +1,78 @@
+{
+  "schema_version": "jw.review.v1",
+  "revision": 1,
+  "coverage": "REVIEWED_CLOSED_SCOPE",
+  "scope_note": "Synthetic two-changes case: four A and one B initially; two A-to-B switches needed to reverse.",
+  "closed_scope_attested": true,
+  "edges": [
+    {
+      "attendance_id": "T-01",
+      "registration_id": "R-A1",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-02",
+      "registration_id": "R-A2",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-02",
+      "registration_id": "R-B2",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-03",
+      "registration_id": "R-A3",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-03",
+      "registration_id": "R-B3",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-04",
+      "registration_id": "R-A4",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-05",
+      "registration_id": "R-B1",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    }
+  ],
+  "unmatched": [
+    {
+      "attendance_id": "T-01",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-02",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-03",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-04",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-05",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    }
+  ]
+}
