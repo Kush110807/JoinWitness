@@ -1,7 +1,7 @@
 # JW-T08B — Restricted local Meta suggestions route
 
-**Governing authority:** JW-RD-3.0 FINAL, sections 4, 6, 8–12, 14, 16.  
-**Exact accepted base:** `a997cb67e30437301eb5d2a8263da189e82f789e`.  
+**Governing authority:** JW-RD-3.0 FINAL, sections 4, 6, 8–12, 14, 16.
+**Exact accepted base:** `a997cb67e30437301eb5d2a8263da189e82f789e`.
 **Classification:** LOCAL ONLY; not production-ready; offline test acceptance pending owner Windows run.
 
 ## Scope and mandatory authority separation
