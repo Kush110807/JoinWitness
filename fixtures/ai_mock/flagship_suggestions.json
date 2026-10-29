@@ -1,0 +1,8 @@
+{
+  "suggestions": [
+    {"attendance_id": "T-01", "registration_id": "R-A1", "reason": "Name text matches in the synthetic fixture."},
+    {"attendance_id": "T-02", "registration_id": "R-A2", "reason": "The ambiguous spelling could correspond to Kim."},
+    {"attendance_id": "T-02", "registration_id": "R-B2", "reason": "The ambiguous spelling could correspond to Kym."},
+    {"attendance_id": "T-03", "registration_id": "R-B1", "reason": "Name text matches in the synthetic fixture."}
+  ]
+}
