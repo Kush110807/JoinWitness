@@ -1,0 +1,2 @@
+# Exact Windows smoke SDK; credentials are read from a process environment variable.
+openai==3.41.0
