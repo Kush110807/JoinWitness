@@ -253,3 +253,6 @@ async def verify(request: Request):
             "proof_basis": replayed.proof_basis,
             "receipt_sha256": replayed.receipt_sha256,
             "scope_caveat": replayed.scope_caveat}
+
+from .meta_api import router as meta_router
+app.include_router(meta_router)
