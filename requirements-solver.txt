@@ -1,0 +1,2 @@
+# JW-T05 — pinned local CP-SAT runtime. No paid API or remote inference.
+ortools==9.15.6755
