@@ -256,3 +256,7 @@ async def verify(request: Request):
 
 from .meta_api import router as meta_router
 app.include_router(meta_router)
+
+# G3 HQ-owned integration: register the B-owned commerce.v1 router as-is.
+from .commerce_api import commerce_router
+app.include_router(commerce_router)
