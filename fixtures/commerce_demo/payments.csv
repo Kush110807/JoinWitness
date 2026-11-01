@@ -1,0 +1,4 @@
+payment_id,order_ref,amount,currency,status
+P1,O1,100.00,USD,SETTLED
+P2,O2,100.00,USD,SETTLED
+P3,O3,80.00,USD,SETTLED
