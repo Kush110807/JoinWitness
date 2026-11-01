@@ -27,6 +27,8 @@ import {
   singleCanvasLabel,
 } from "./lib/decisionView";
 import ReviewEditor from "./components/ReviewEditor";
+import AtlasSwitcher, { type AtlasScenario } from "./components/AtlasSwitcher";
+import CommerceAtlas from "./components/CommerceAtlas";
 import {
   baselineToReferenceDraft,
   deriveBaseline,
@@ -88,6 +90,8 @@ export default function App() {
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<{ stage: string; message: string } | null>(null);
   const [stage, setStage] = useState<Stage>(1);
+  /** Decision Atlas scenario. Commerce mounts separately; event state persists. */
+  const [scenario, setScenario] = useState<AtlasScenario>("event");
   const [inspect, setInspect] = useState<"baseline" | "witness">("witness");
   /** Demo fixtures vs human-uploaded CSVs. Only the source cards and the
    * review path differ; Challenge/Verify consume the same validated state. */
@@ -697,6 +701,10 @@ export default function App() {
     </header>
   );
 
+  if (scenario === "commerce") {
+    return <CommerceAtlas scenario={scenario} onScenario={setScenario} />;
+  }
+
   return (
     <ProductShell
       stage={stage}
@@ -707,6 +715,7 @@ export default function App() {
       landing={landing}
       analysis={analysis}
       gotoStage={gotoStage}
+      atlasSwitcher={<AtlasSwitcher value={scenario} onChange={setScenario} disabled={!!busy} />}
     >
         {error && (
           <div className="alert" role="alert" aria-live="assertive">

@@ -36,6 +36,14 @@ interface ProductShellProps {
   analysis: CanvasVerdict | null;
   gotoStage: (n: Stage) => void;
   children: ReactNode;
+  /** Optional Decision Atlas scenario switcher, rendered below the top bar. */
+  atlasSwitcher?: ReactNode;
+  /** Optional override of the event context-bar question (Commerce mode). */
+  contextQuestion?: string;
+  /** Optional override of the event stage captions (Commerce mode). */
+  stageNow?: Record<Stage, string>;
+  /** Optional verdict summary used when no event `analysis` is present. */
+  verdictSummary?: ReactNode;
 }
 
 export default function ProductShell({
@@ -48,6 +56,10 @@ export default function ProductShell({
   analysis,
   gotoStage,
   children,
+  atlasSwitcher,
+  contextQuestion,
+  stageNow,
+  verdictSummary,
 }: ProductShellProps) {
   return (
     <div className="page">
@@ -66,15 +78,16 @@ export default function ProductShell({
           <span className="demopill">Synthetic data</span>
         </div>
       </div>
+      {atlasSwitcher && <div className="atlas-switcher-bar">{atlasSwitcher}</div>}
 
       {!hasStarted && !analysis ? (
         landing
       ) : (
         <header className="contextbar" aria-label="Current question and result">
           <p className="contextbar-q">
-            Fictional event · Can one uncertain match change who came out ahead?
+            {contextQuestion ?? "Fictional event · Can one uncertain match change who came out ahead?"}
           </p>
-          <p className="contextbar-now">{STAGE_NOW[stage]}</p>
+          <p className="contextbar-now">{(stageNow ?? STAGE_NOW)[stage]}</p>
           {analysis && (
             <p className="contextbar-verdict">
               <span
@@ -98,6 +111,7 @@ export default function ProductShell({
               Only within the reviewed matching rules — nothing about real-world identity.
             </p>
           )}
+          {!analysis && verdictSummary}
         </header>
       )}
 
