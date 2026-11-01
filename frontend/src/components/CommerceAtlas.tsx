@@ -126,6 +126,13 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
   const [suggest, setSuggest] = useState<CommerceSuggestResponse | null>(null);
   const [draft, setDraft] = useState<CommerceDraftState | null>(null);
   const [validation, setValidation] = useState<CommerceReviewValidateResponse | null>(null);
+  /** Last-accepted authoritative server revisions. Survives draft edits and
+   * failed requests; replaced only by a newer accepted response or a new import. */
+  const [serverRevisions, setServerRevisions] = useState<{
+    source_revision: number;
+    candidate_revision: number;
+    policy_revision: number;
+  } | null>(null);
   const [challenge, setChallenge] = useState<CommerceChallengeResponse | null>(null);
   const [receipt, setReceipt] = useState<CommerceReceiptResponse | null>(null);
   const [replay, setReplay] = useState<CommerceReplayResponse | null>(null);
@@ -274,6 +281,15 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
     setError({ stage: stageName, message: errText(e), missing: isCommerceRouterMissing(e) });
   }
 
+  /** A 409 means the server moved without us; no endpoint can re-sync revisions. */
+  function noteIfStale(e: unknown) {
+    if (e instanceof CommerceApiError && e.code === "STALE_STATE") {
+      setStaleNote(
+        "Server rejected stale revisions — Clear and re-import to restart from authoritative server state.",
+      );
+    }
+  }
+
   function invalidateFrom(point: "source" | "catalog" | "review" | "challenge" | "receipt") {
     if (point === "source") {
       setSuggest(null);
@@ -340,6 +356,11 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
       });
       invalidateFrom("source");
       setParse(res);
+      setServerRevisions({
+        source_revision: res.source_revision,
+        candidate_revision: res.candidate_revision,
+        policy_revision: 0,
+      });
       setDraft(emptyCommerceDraft(keys));
       setStaleNote(null);
       setStage(2);
@@ -356,6 +377,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
     setBusy(null);
     setFiles({ "orders.csv": null, "payments.csv": null, "deliveries.csv": null, "refunds.csv": null });
     setParse(null);
+    setServerRevisions(null);
     invalidateFrom("source");
     setError(null);
     setStaleNote(null);
@@ -366,7 +388,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
   }
 
   async function requestSuggest() {
-    if (!parse || !draft || busy) return;
+    if (!parse || !draft || !serverRevisions || busy) return;
     if (!Number.isInteger(maxSuggestions) || maxSuggestions < 1 || maxSuggestions > 5) {
       setError({ stage: "Review", message: "MAX_SUGGESTIONS_MUST_BE_1_TO_5", missing: false });
       return;
@@ -378,14 +400,19 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
       const res = await commerceSuggest({
         contract_version: COMMERCE_CONTRACT_VERSION,
         session_id: parse.session_id,
-        expected_source_revision: parse.source_revision,
-        expected_candidate_revision: suggest?.candidate_revision ?? parse.candidate_revision,
-        expected_policy_revision: validation?.policy_revision ?? 0,
+        expected_source_revision: serverRevisions.source_revision,
+        expected_candidate_revision: serverRevisions.candidate_revision,
+        expected_policy_revision: serverRevisions.policy_revision,
         mode: "META",
         max_suggestions: maxSuggestions,
       });
       if (opEpoch.current !== epoch) return;
       setSuggest(res);
+      setServerRevisions({
+        source_revision: res.source_revision,
+        candidate_revision: res.candidate_revision,
+        policy_revision: res.policy_revision,
+      });
       if (res.catalog_changed) {
         invalidateFrom("catalog");
         setStaleNote(
@@ -395,13 +422,14 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
     } catch (e) {
       if (opEpoch.current !== epoch) return;
       fail("Review", e);
+      noteIfStale(e);
     } finally {
       if (opEpoch.current === epoch) setBusy(null);
     }
   }
 
   async function adoptReview() {
-    if (!parse || !draft || busy) return;
+    if (!parse || !draft || !serverRevisions || busy) return;
     const k = draft.thresholdK;
     if (!Number.isInteger(k) || (k as number) < 1 || (k as number) > orderCount) {
       setError({
@@ -432,9 +460,9 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
       const res = await commerceReviewValidate({
         contract_version: COMMERCE_CONTRACT_VERSION,
         session_id: parse.session_id,
-        expected_source_revision: parse.source_revision,
-        expected_candidate_revision: suggest?.candidate_revision ?? parse.candidate_revision,
-        expected_policy_revision: validation?.policy_revision ?? 0,
+        expected_source_revision: serverRevisions.source_revision,
+        expected_candidate_revision: serverRevisions.candidate_revision,
+        expected_policy_revision: serverRevisions.policy_revision,
         threshold_k: k as number,
         reviewer_label: draft.reviewerLabel,
         review_attestation: { ...draft.attestation },
@@ -445,6 +473,11 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
       if (opEpoch.current !== epoch) return;
       invalidateFrom("review");
       setValidation(res);
+      setServerRevisions({
+        source_revision: res.source_revision,
+        candidate_revision: res.candidate_revision,
+        policy_revision: res.policy_revision,
+      });
       setStaleNote(null);
       setStage(3);
     } catch (e) {
@@ -452,6 +485,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
       setValidation(null);
       invalidateFrom("review");
       fail("Review", e);
+      noteIfStale(e);
     } finally {
       if (opEpoch.current === epoch) setBusy(null);
     }
@@ -895,9 +929,10 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
               adoptedReviewSha={validation?.review_sha256 ?? null}
               isDirty={!adopted || staleNote !== null}
               epochs={{
-                sourceRevision: parse?.source_revision ?? 1,
-                candidateRevision: suggest?.candidate_revision ?? parse?.candidate_revision ?? 1,
-                policyRevision: validation?.policy_revision ?? 0,
+                sourceRevision: serverRevisions?.source_revision ?? parse?.source_revision ?? 1,
+                candidateRevision:
+                  serverRevisions?.candidate_revision ?? parse?.candidate_revision ?? 1,
+                policyRevision: serverRevisions?.policy_revision ?? 0,
               }}
               onAdopt={() => void adoptReview()}
               adoptBusy={busy === "adopt"}

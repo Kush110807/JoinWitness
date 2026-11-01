@@ -287,3 +287,104 @@ describe("G2-C01 commerce human-only adoption and inconclusive challenge", () =>
     expect(exportBtn).toHaveProperty("disabled", true);
   });
 });
+
+describe("G2-C02 re-adopt revision regression (PRE-009)", () => {
+  function staleError() {
+    return errJson(409, {
+      error: {
+        code: "STALE_STATE",
+        message: "Candidate revision no longer matches registered suggestions.",
+        path: "expected_candidate_revision",
+        details: {},
+      },
+      verified: false,
+    });
+  }
+
+  /** CAS-enforcing server mock: rejects any review whose revisions are not current. */
+  function casReviewMock(
+    server: { candidate: number; policy: number },
+    reviewBodies: Array<Record<string, unknown>>,
+  ) {
+    return async (url: string, init?: RequestInit) => {
+      const u = String(url);
+      if (u.includes("/api/commerce/v1/parse")) return okJson(parseCommerce);
+      if (u.includes("/api/commerce/v1/review/validate")) {
+        const body = JSON.parse(String((init as { body: string }).body)) as Record<string, unknown>;
+        reviewBodies.push(body);
+        if (
+          body.expected_candidate_revision !== server.candidate ||
+          body.expected_policy_revision !== server.policy
+        ) {
+          return staleError();
+        }
+        server.candidate = 2;
+        server.policy += 1;
+        return okJson({
+          ...validateCommerce,
+          candidate_revision: 2,
+          policy_revision: server.policy,
+        });
+      }
+      throw new Error(`unexpected fetch ${url}`);
+    };
+  }
+
+  async function adoptThenEdit(user: ReturnType<typeof userEvent.setup>) {
+    await importCommerce(user);
+    await fillAndAdopt(user);
+    await waitFor(() =>
+      expect(screen.getByRole("heading", { name: /could the conclusion reverse/i })).toBeTruthy(),
+    );
+    await user.click(screen.getByRole("button", { name: /back to review/i }));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: /which links may be considered/i }),
+      ).toBeTruthy(),
+    );
+    const k = screen.getByLabelText("Threshold K");
+    await user.clear(k);
+    await user.type(k, "2");
+  }
+
+  it("repeated valid adoption echoes the server current revisions (2,1)", async () => {
+    const server = { candidate: 1, policy: 0 };
+    const reviewBodies: Array<Record<string, unknown>> = [];
+    globalThis.fetch = vi.fn().mockImplementation(casReviewMock(server, reviewBodies));
+    render(<App />);
+    const user = userEvent.setup();
+    await adoptThenEdit(user);
+    await user.click(screen.getByRole("button", { name: /adopt & freeze review/i }));
+    await waitFor(() =>
+      expect(screen.getByRole("heading", { name: /could the conclusion reverse/i })).toBeTruthy(),
+    );
+    expect(reviewBodies.length).toBe(2);
+    expect(reviewBodies[0].expected_candidate_revision).toBe(1);
+    expect(reviewBodies[0].expected_policy_revision).toBe(0);
+    expect(reviewBodies[1].expected_candidate_revision).toBe(2);
+    expect(reviewBodies[1].expected_policy_revision).toBe(1);
+    expect(screen.queryByText(/STALE_STATE/)).toBeNull();
+  });
+
+  it("genuinely stale re-adoption still fails closed with STALE_STATE", async () => {
+    const server = { candidate: 1, policy: 0 };
+    const reviewBodies: Array<Record<string, unknown>> = [];
+    globalThis.fetch = vi.fn().mockImplementation(casReviewMock(server, reviewBodies));
+    render(<App />);
+    const user = userEvent.setup();
+    await adoptThenEdit(user);
+    // Server-side advancement the client cannot see (e.g. revoked provenance).
+    server.candidate = 3;
+    await user.click(screen.getByRole("button", { name: /adopt & freeze review/i }));
+    await waitFor(() => expect(screen.getByText(/STALE_STATE/)).toBeTruthy());
+    expect(reviewBodies.length).toBe(2);
+    // The client sent its best-known authoritative revisions; the server genuinely rejected them.
+    expect(reviewBodies[1].expected_candidate_revision).toBe(2);
+    expect(reviewBodies[1].expected_policy_revision).toBe(1);
+    expect(screen.queryByText(/REVIEW_FROZEN/)).toBeNull();
+    expect(
+      screen.getByRole("heading", { name: /which links may be considered/i }),
+    ).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /run challenge/i })).toBeNull();
+  });
+});
