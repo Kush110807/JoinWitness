@@ -75,9 +75,26 @@ def main() -> None:
     r = client.get("/api/health")
     check("case-a-health", r.status_code == 200 and r.json().get("status") == "LOCAL_API_READY",
           f"http={r.status_code}")
-    paths = set(client.get("/openapi.json").json()["paths"])
-    missing = [p for p in CASE_A_PATHS + COMMERCE_PATHS if p not in paths]
-    check("route-table", not missing, f"missing={missing}" if missing else "8 case-a + 6 commerce")
+    try:
+        doc = client.get("/openapi.json").json()
+        paths = set(doc["paths"]) if isinstance(doc, dict) and "paths" in doc else None
+    except Exception:
+        paths = None
+    if paths is None:
+        # Proxy mode: /openapi.json sits outside the /api proxy surface, so
+        # prove route presence with real requests (404 = absent route).
+        missing = []
+        if client.get("/api/health").status_code == 404:
+            missing.append("/api/health")
+        for p in CASE_A_PATHS[1:] + COMMERCE_PATHS:
+            rr = client.post(p, json={"contract_version": "commerce.v1"}, headers=HEADERS)
+            if rr.status_code == 404:
+                missing.append(p)
+        check("route-table", not missing,
+              f"missing={missing}" if missing else "8 case-a + 6 commerce (probed)")
+    else:
+        missing = [p for p in CASE_A_PATHS + COMMERCE_PATHS if p not in paths]
+        check("route-table", not missing, f"missing={missing}" if missing else "8 case-a + 6 commerce")
 
     # 2. Case A parse smoke over real HTTP (flagship_flip fixtures).
     case = ROOT / "fixtures" / "flagship_flip"
