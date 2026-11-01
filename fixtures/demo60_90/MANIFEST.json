@@ -1,0 +1,46 @@
+{
+  "generator": "scripts/gen_synthetic_demo.py",
+  "seed": 20261031,
+  "counts": {
+    "attendance": 60,
+    "registrations": 90,
+    "ambiguous_rows": 12
+  },
+  "files": {
+    "registrations.csv": "48feedb1ac550a048a0da4126c0e720ced658675f3e8adf89c9c80c1aea0b7cb",
+    "attendance.csv": "e7db50d0fa6c2a2902f0629abe0b291f118f13ee14eef6b76b5f472242e40b66",
+    "review_policy.json": "9773dfb494d0de2f29caf17c078cd0ac654c5235eb73d7dfa0a73a75cb0cd8b1",
+    "reference.json": "c7408655d6b2a2af8c808153a2df560dd75ee1bc37225ebb2d1e484e737f094d",
+    "ground_truth.json": "1757cab5be967749b964494c1a22ee60c942e87cca1a629657bad41e028dc66f"
+  },
+  "construction_report": {
+    "baseline_counts": {
+      "A": 32,
+      "B": 28,
+      "unmatched": 0
+    },
+    "margin": 4,
+    "flippable_rows": [
+      "T-49",
+      "T-50",
+      "T-51",
+      "T-52",
+      "T-54",
+      "T-56",
+      "T-58",
+      "T-60"
+    ],
+    "flips_needed_for_tie_or_reversal": 2,
+    "feasibility": "CONSTRUCTION_FEASIBLE_ENGINE_UNRUN"
+  },
+  "owner_benchmark_commands": [
+    "python scripts/gen_synthetic_demo.py --seed 20261031 --out fixtures/demo60_90",
+    "python -m joinwitness.solver --registrations fixtures/demo60_90/registrations.csv --attendance fixtures/demo60_90/attendance.csv --policy fixtures/demo60_90/review_policy.json --reference fixtures/demo60_90/reference.json --time-limit 10",
+    "python -m joinwitness.verify --receipt <issued-receipt>.json --registrations fixtures/demo60_90/registrations.csv --attendance fixtures/demo60_90/attendance.csv --policy fixtures/demo60_90/review_policy.json"
+  ],
+  "disclaimers": [
+    "No engine execution happened during generation.",
+    "Feasibility/minimum verdicts are engine-determined and UNRUN.",
+    "The small-case oracle refuses above 12 rows: expect solver-attributed proof only."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "joinwitness-t09a",
+  "private": true,
+  "version": "0.1.0-t09a",
+  "type": "module",
+  "description": "JW-T09A fictional-flagship four-stage browser vertical slice (offline deterministic, no Meta calls)",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 5173",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.1",
+    "@testing-library/user-event": "14.6.1",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@vitejs/plugin-react": "5.0.4",
+    "jsdom": "26.1.0",
+    "typescript": "5.9.3",
+    "vite": "7.1.9",
+    "vitest": "3.2.4"
+  }
+}

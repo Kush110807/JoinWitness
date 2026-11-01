@@ -1,0 +1,3359 @@
+{
+  "_notice": "G1-B03 bounded illustrative JSON examples ONLY. All Meta calls, status outcomes, proofs and replay are HYPOTHETICAL / UNRUN. These are transport fixtures, not execution traces.",
+  "contract_version": "commerce.v1",
+  "parse": {
+    "valid_request": {
+      "contract_version": "commerce.v1",
+      "files": {
+        "orders.csv": {
+          "content_base64": "b3JkZXJfaWQsY3VzdG9tZXJfaWQsb3JkZXJfdG90YWwsY3VycmVuY3kKTzEsQzEsMTAwLjAwLFVTRApPMixDMiwxMDAuMDAsVVNECk8zLEMzLDgwLjAwLFVTRAo="
+        },
+        "payments.csv": {
+          "content_base64": "cGF5bWVudF9pZCxvcmRlcl9yZWYsYW1vdW50LGN1cnJlbmN5LHN0YXR1cwpQMSxPMSwxMDAuMDAsVVNELFNFVFRMRUQKUDIsTzIsMTAwLjAwLFVTRCxTRVRUTEVEClAzLE8zLDgwLjAwLFVTRCxTRVRUTEVECg=="
+        },
+        "deliveries.csv": {
+          "content_base64": "ZGVsaXZlcnlfaWQsb3JkZXJfcmVmLHN0YXR1cwpEMSxPMSxERUxJVkVSRUQKRDIsTzIsREVMSVZFUkVECkQzLE8zLElOX1RSQU5TSVQK"
+        },
+        "refunds.csv": {
+          "content_base64": "cmVmdW5kX2lkLHBheW1lbnRfcmVmLGFtb3VudCxzdGF0dXMKUjEsUDMsNS4wMCxDT01QTEVURUQK"
+        }
+      }
+    },
+    "valid_response": {
+      "contract_version": "commerce.v1",
+      "state": "IMPORTED",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "source_revision": 1,
+      "candidate_revision": 1,
+      "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+      "file_sha256": {
+        "orders.csv": "8063a0ead1bdbf5764900e34009e9331847d7e74e57b541a6e554bdcfbf0ee95",
+        "payments.csv": "9dbac299fb73598818afeef13d3827cb40da73de1fb38966399cc3a94100f441",
+        "deliveries.csv": "e02c99782c8f02ae8b50572cc3fcadfec12d7c00d6f9b272711388fd4ec2c084",
+        "refunds.csv": "aae37407144077385b8ad87b33d8d8faeb4b9d32f67988c4960c17b79469de56"
+      },
+      "row_counts": {
+        "orders": 3,
+        "payments": 3,
+        "deliveries": 3,
+        "refunds": 1
+      },
+      "deterministic_candidates": [
+        {
+          "record_key": "payment:P1",
+          "target_id": "O1",
+          "origin": "SOURCE_REF",
+          "authorised": false
+        },
+        {
+          "record_key": "payment:P2",
+          "target_id": "O2",
+          "origin": "SOURCE_REF",
+          "authorised": false
+        },
+        {
+          "record_key": "payment:P3",
+          "target_id": "O3",
+          "origin": "SOURCE_REF",
+          "authorised": false
+        },
+        {
+          "record_key": "delivery:D1",
+          "target_id": "O1",
+          "origin": "SOURCE_REF",
+          "authorised": false
+        },
+        {
+          "record_key": "delivery:D2",
+          "target_id": "O2",
+          "origin": "SOURCE_REF",
+          "authorised": false
+        },
+        {
+          "record_key": "delivery:D3",
+          "target_id": "O3",
+          "origin": "SOURCE_REF",
+          "authorised": false
+        },
+        {
+          "record_key": "refund:R1",
+          "target_id": "P3",
+          "origin": "SOURCE_REF",
+          "authorised": false
+        }
+      ],
+      "ai_status": "NOT_REQUESTED",
+      "limits": {
+        "orders": 50,
+        "each_other_file": 60,
+        "variables": 10,
+        "alternatives_per_variable": 2,
+        "raw_worlds": 4096
+      },
+      "validated_source_rows": {
+        "orders": [
+          {
+            "source_row_number": 2,
+            "order_id": "O1",
+            "customer_id": "C1",
+            "order_total": "100.00",
+            "currency": "USD"
+          },
+          {
+            "source_row_number": 3,
+            "order_id": "O2",
+            "customer_id": "C2",
+            "order_total": "100.00",
+            "currency": "USD"
+          },
+          {
+            "source_row_number": 4,
+            "order_id": "O3",
+            "customer_id": "C3",
+            "order_total": "80.00",
+            "currency": "USD"
+          }
+        ],
+        "payments": [
+          {
+            "source_row_number": 2,
+            "payment_id": "P1",
+            "order_ref": "O1",
+            "amount": "100.00",
+            "currency": "USD",
+            "status": "SETTLED"
+          },
+          {
+            "source_row_number": 3,
+            "payment_id": "P2",
+            "order_ref": "O2",
+            "amount": "100.00",
+            "currency": "USD",
+            "status": "SETTLED"
+          },
+          {
+            "source_row_number": 4,
+            "payment_id": "P3",
+            "order_ref": "O3",
+            "amount": "80.00",
+            "currency": "USD",
+            "status": "SETTLED"
+          }
+        ],
+        "deliveries": [
+          {
+            "source_row_number": 2,
+            "delivery_id": "D1",
+            "order_ref": "O1",
+            "status": "DELIVERED"
+          },
+          {
+            "source_row_number": 3,
+            "delivery_id": "D2",
+            "order_ref": "O2",
+            "status": "DELIVERED"
+          },
+          {
+            "source_row_number": 4,
+            "delivery_id": "D3",
+            "order_ref": "O3",
+            "status": "IN_TRANSIT"
+          }
+        ],
+        "refunds": [
+          {
+            "source_row_number": 2,
+            "refund_id": "R1",
+            "payment_ref": "P3",
+            "amount": "5.00",
+            "status": "COMPLETED"
+          }
+        ]
+      }
+    },
+    "invalid_request": {
+      "contract_version": "commerce.v1",
+      "files": {
+        "orders.csv": {
+          "content_base64": "b3JkZXJfaWQsY3VzdG9tZXJfaWQsb3JkZXJfdG90YWwsY3VycmVuY3kKTzEsQzEsMTAwLjAwLFVTRApPMixDMiwxMDAuMDAsVVNECk8zLEMzLDgwLjAwLFVTRAo="
+        }
+      }
+    },
+    "invalid_response": {
+      "error": {
+        "code": "MISSING_FILE",
+        "message": "Exactly four named CSV files are required.",
+        "path": "files.payments.csv",
+        "details": {
+          "required_files": [
+            "orders.csv",
+            "payments.csv",
+            "deliveries.csv",
+            "refunds.csv"
+          ]
+        }
+      },
+      "verified": false
+    }
+  },
+  "suggest": {
+    "valid_request": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "expected_source_revision": 1,
+      "expected_candidate_revision": 1,
+      "mode": "META",
+      "max_suggestions": 5,
+      "expected_policy_revision": 0
+    },
+    "valid_response": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "ai_status": "AI_UNAVAILABLE",
+      "suggestions": [],
+      "source_revision": 1,
+      "candidate_revision": 1,
+      "authorisations_changed": false,
+      "policy_revision": 0,
+      "state": "IMPORTED",
+      "model_call": null,
+      "catalog_changed": false,
+      "rejected_proposals": []
+    },
+    "invalid_request": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "expected_source_revision": 0,
+      "expected_candidate_revision": 1,
+      "mode": "META",
+      "max_suggestions": 5,
+      "expected_policy_revision": 0
+    },
+    "invalid_response": {
+      "error": {
+        "code": "STALE_STATE",
+        "message": "Source revision no longer matches.",
+        "path": "expected_source_revision",
+        "details": {
+          "expected": 1,
+          "received": 0
+        }
+      },
+      "verified": false
+    }
+  },
+  "review_validate": {
+    "valid_request": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "expected_source_revision": 1,
+      "expected_candidate_revision": 1,
+      "expected_policy_revision": 0,
+      "threshold_k": 2,
+      "reviewer_label": "demo-reviewer",
+      "review_attestation": {
+        "all_rows_reviewed": true,
+        "understands_bounded_predicate": true,
+        "conflicting_source_ref_overrides_explained": true
+      },
+      "manual_candidates": [
+        {
+          "record_type": "delivery",
+          "record_id": "D2",
+          "target_id": "O3",
+          "reason": "Carrier reference may have been copied from a neighbouring order."
+        }
+      ],
+      "rows": [
+        {
+          "record_type": "payment",
+          "record_id": "P1",
+          "edges": [
+            {
+              "target_id": "O1",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "payment",
+          "record_id": "P2",
+          "edges": [
+            {
+              "target_id": "O2",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "payment",
+          "record_id": "P3",
+          "edges": [
+            {
+              "target_id": "O3",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "delivery",
+          "record_id": "D1",
+          "edges": [
+            {
+              "target_id": "O1",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "delivery",
+          "record_id": "D2",
+          "edges": [
+            {
+              "target_id": "O2",
+              "disposition": "POSSIBLE"
+            },
+            {
+              "target_id": "O3",
+              "disposition": "POSSIBLE"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "delivery",
+          "record_id": "D3",
+          "edges": [
+            {
+              "target_id": "O3",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "refund",
+          "record_id": "R1",
+          "edges": [
+            {
+              "target_id": "P3",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        }
+      ],
+      "reference_mapping": {
+        "payment:P1": "O1",
+        "payment:P2": "O2",
+        "payment:P3": "O3",
+        "delivery:D1": "O1",
+        "delivery:D2": "O2",
+        "delivery:D3": "O3",
+        "refund:R1": "P3"
+      }
+    },
+    "valid_response": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "state": "REVIEW_FROZEN",
+      "source_revision": 1,
+      "candidate_revision": 2,
+      "policy_revision": 1,
+      "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+      "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+      "policy_sha256": "cc07bdc869ad4c8f2ad1bbadbb8c853404cbd03701c6baee45111d998ca0ffba",
+      "baseline_sha256": "49cf0a9061605aa42b5735d130a9c9eb1ad692860119fd62c753dd0538c8fd74",
+      "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+      "threshold_k": 2,
+      "raw_worlds": 2,
+      "admissible_worlds": 2,
+      "invalid_worlds": 0,
+      "variable_records": 1,
+      "baseline_valid": true,
+      "authorised_by": "HUMAN_REVIEW_ATTESTED_NOT_IDENTITY_VERIFIED"
+    },
+    "invalid_request": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "expected_source_revision": 1,
+      "expected_candidate_revision": 1,
+      "expected_policy_revision": 0,
+      "threshold_k": 2,
+      "reviewer_label": "demo-reviewer",
+      "review_attestation": {
+        "all_rows_reviewed": true,
+        "understands_bounded_predicate": true,
+        "conflicting_source_ref_overrides_explained": true
+      },
+      "manual_candidates": [
+        {
+          "record_type": "delivery",
+          "record_id": "D2",
+          "target_id": "O3",
+          "reason": "Carrier reference may have been copied from a neighbouring order."
+        }
+      ],
+      "rows": [
+        {
+          "record_type": "payment",
+          "record_id": "P1",
+          "edges": [
+            {
+              "target_id": "O1",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "payment",
+          "record_id": "P2",
+          "edges": [
+            {
+              "target_id": "O2",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "payment",
+          "record_id": "P3",
+          "edges": [
+            {
+              "target_id": "O3",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "delivery",
+          "record_id": "D1",
+          "edges": [
+            {
+              "target_id": "O1",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "delivery",
+          "record_id": "D2",
+          "edges": [
+            {
+              "target_id": "O2",
+              "disposition": "POSSIBLE"
+            },
+            {
+              "target_id": "O3",
+              "disposition": "POSSIBLE"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "delivery",
+          "record_id": "D3",
+          "edges": [
+            {
+              "target_id": "O3",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        },
+        {
+          "record_type": "refund",
+          "record_id": "R1",
+          "edges": [
+            {
+              "target_id": "P3",
+              "disposition": "CONFIRMED"
+            }
+          ],
+          "unmatched": "PROHIBITED"
+        }
+      ],
+      "reference_mapping": {
+        "payment:P1": "O1",
+        "payment:P2": "O2",
+        "payment:P3": "O3",
+        "delivery:D1": "O1",
+        "delivery:D2": "O9",
+        "delivery:D3": "O3",
+        "refund:R1": "P3"
+      }
+    },
+    "invalid_response": {
+      "error": {
+        "code": "INVALID_BASELINE",
+        "message": "Reference mapping selects a target outside reviewed permissions.",
+        "path": "reference_mapping.delivery:D2",
+        "details": {
+          "target_id": "O9"
+        }
+      },
+      "verified": false
+    }
+  },
+  "challenge": {
+    "valid_request": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "expected_source_revision": 1,
+      "expected_candidate_revision": 2,
+      "expected_policy_revision": 1,
+      "expected_review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+      "time_budget_ms": 10000
+    },
+    "valid_response": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "state": "CHALLENGED",
+      "run_id": "abcdef0123456789abcdef0123456789",
+      "source_revision": 1,
+      "candidate_revision": 2,
+      "policy_revision": 1,
+      "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+      "result": {
+        "status": "REVERSED_EXHAUSTIVE",
+        "predicate": "clean_fulfilled_count >= K",
+        "threshold_k": 2,
+        "baseline": {
+          "clean_fulfilled_count": 2,
+          "decision": true
+        },
+        "witness": {
+          "reference_changes": [
+            {
+              "record_key": "delivery:D2",
+              "from_target_id": "O2",
+              "to_target_id": "O3"
+            }
+          ],
+          "clean_fulfilled_count": 1,
+          "decision": false,
+          "link_distance": 1
+        },
+        "coverage": {
+          "raw_worlds_total": 2,
+          "raw_worlds_checked": 2,
+          "invalid_worlds_total": 0,
+          "invalid_worlds_checked": 0,
+          "admissible_worlds_total": 2,
+          "admissible_worlds_checked": 2,
+          "checker_worlds_total": 2,
+          "checker_worlds_checked": 2,
+          "fully_enumerated": true,
+          "checker_complete": true
+        },
+        "checker_status": "PASSED",
+        "proof_basis": "EXHAUSTIVE_ENUMERATION_AND_INDEPENDENT_RECOMPUTATION",
+        "minimum_distance_proven_within_scope": true,
+        "reason": null,
+        "minimum_link_distance_within_scope": 1
+      }
+    },
+    "invalid_request": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "expected_source_revision": 1,
+      "expected_candidate_revision": 2,
+      "expected_policy_revision": 1,
+      "expected_review_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "time_budget_ms": 10000
+    },
+    "invalid_response": {
+      "error": {
+        "code": "STALE_STATE",
+        "message": "Review digest no longer matches the frozen policy and baseline.",
+        "path": "expected_review_sha256",
+        "details": {}
+      },
+      "verified": false
+    }
+  },
+  "receipt": {
+    "valid_request": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "run_id": "abcdef0123456789abcdef0123456789",
+      "expected_review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9"
+    },
+    "valid_response": {
+      "contract_version": "commerce.v1",
+      "receipt": {
+        "format": "jw.commerce.receipt.v1",
+        "contract_version": "commerce.v1",
+        "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+        "file_sha256": {
+          "orders.csv": "8063a0ead1bdbf5764900e34009e9331847d7e74e57b541a6e554bdcfbf0ee95",
+          "payments.csv": "9dbac299fb73598818afeef13d3827cb40da73de1fb38966399cc3a94100f441",
+          "deliveries.csv": "e02c99782c8f02ae8b50572cc3fcadfec12d7c00d6f9b272711388fd4ec2c084",
+          "refunds.csv": "aae37407144077385b8ad87b33d8d8faeb4b9d32f67988c4960c17b79469de56"
+        },
+        "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+        "policy": {
+          "contract_version": "commerce.v1",
+          "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+          "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+          "candidate_catalog": [
+            {
+              "record_key": "payment:P1",
+              "target_id": "O1",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "payment:P2",
+              "target_id": "O2",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "payment:P3",
+              "target_id": "O3",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D1",
+              "target_id": "O1",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D2",
+              "target_id": "O2",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D2",
+              "target_id": "O3",
+              "origin": "MANUAL",
+              "reason": "Carrier reference may have been copied from a neighbouring order."
+            },
+            {
+              "record_key": "delivery:D3",
+              "target_id": "O3",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "refund:R1",
+              "target_id": "P3",
+              "origin": "SOURCE_REF"
+            }
+          ],
+          "threshold_k": 2,
+          "reviewer_label": "demo-reviewer",
+          "review_attestation": {
+            "all_rows_reviewed": true,
+            "understands_bounded_predicate": true,
+            "conflicting_source_ref_overrides_explained": true
+          },
+          "manual_candidates": [
+            {
+              "record_type": "delivery",
+              "record_id": "D2",
+              "target_id": "O3",
+              "reason": "Carrier reference may have been copied from a neighbouring order."
+            }
+          ],
+          "rows": [
+            {
+              "record_type": "payment",
+              "record_id": "P1",
+              "edges": [
+                {
+                  "target_id": "O1",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "payment",
+              "record_id": "P2",
+              "edges": [
+                {
+                  "target_id": "O2",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "payment",
+              "record_id": "P3",
+              "edges": [
+                {
+                  "target_id": "O3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D1",
+              "edges": [
+                {
+                  "target_id": "O1",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D2",
+              "edges": [
+                {
+                  "target_id": "O2",
+                  "disposition": "POSSIBLE"
+                },
+                {
+                  "target_id": "O3",
+                  "disposition": "POSSIBLE"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D3",
+              "edges": [
+                {
+                  "target_id": "O3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "refund",
+              "record_id": "R1",
+              "edges": [
+                {
+                  "target_id": "P3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            }
+          ]
+        },
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        },
+        "policy_sha256": "cc07bdc869ad4c8f2ad1bbadbb8c853404cbd03701c6baee45111d998ca0ffba",
+        "baseline_sha256": "49cf0a9061605aa42b5735d130a9c9eb1ad692860119fd62c753dd0538c8fd74",
+        "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "run_id": "abcdef0123456789abcdef0123456789",
+        "engine_identity": "EXAMPLE-NOT-EXECUTED",
+        "result": {
+          "status": "REVERSED_EXHAUSTIVE",
+          "predicate": "clean_fulfilled_count >= K",
+          "threshold_k": 2,
+          "baseline": {
+            "clean_fulfilled_count": 2,
+            "decision": true
+          },
+          "witness": {
+            "reference_changes": [
+              {
+                "record_key": "delivery:D2",
+                "from_target_id": "O2",
+                "to_target_id": "O3"
+              }
+            ],
+            "clean_fulfilled_count": 1,
+            "decision": false,
+            "link_distance": 1
+          },
+          "coverage": {
+            "raw_worlds_total": 2,
+            "raw_worlds_checked": 2,
+            "invalid_worlds_total": 0,
+            "invalid_worlds_checked": 0,
+            "admissible_worlds_total": 2,
+            "admissible_worlds_checked": 2,
+            "checker_worlds_total": 2,
+            "checker_worlds_checked": 2,
+            "fully_enumerated": true,
+            "checker_complete": true
+          },
+          "checker_status": "PASSED",
+          "proof_basis": "EXHAUSTIVE_ENUMERATION_AND_INDEPENDENT_RECOMPUTATION",
+          "minimum_distance_proven_within_scope": true,
+          "reason": null,
+          "minimum_link_distance_within_scope": 1
+        },
+        "timings_ms": {
+          "parse": null,
+          "search": null,
+          "checker": null,
+          "wall": null
+        },
+        "scope": {
+          "max_orders": 50,
+          "max_each_other_file": 60,
+          "max_variable_records": 10,
+          "max_alternatives_per_variable": 2,
+          "max_raw_worlds": 4096
+        },
+        "receipt_sha256": "9f91554882665727c0d04112d7c8ebd9b77eb9f9be6fad7f7a9edde7633ce7e8",
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 1
+      },
+      "attestation": "CONSISTENCY_HASH_ONLY_NOT_SIGNATURE"
+    },
+    "invalid_request": {
+      "contract_version": "commerce.v1",
+      "session_id": "0123456789abcdef0123456789abcdef",
+      "run_id": "00000000000000000000000000000000",
+      "expected_review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9"
+    },
+    "invalid_response": {
+      "error": {
+        "code": "RUN_NOT_FOUND",
+        "message": "No completed current run has the supplied identifier.",
+        "path": "run_id",
+        "details": {}
+      },
+      "verified": false
+    }
+  },
+  "replay": {
+    "valid_request": {
+      "contract_version": "commerce.v1",
+      "receipt": {
+        "format": "jw.commerce.receipt.v1",
+        "contract_version": "commerce.v1",
+        "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+        "file_sha256": {
+          "orders.csv": "8063a0ead1bdbf5764900e34009e9331847d7e74e57b541a6e554bdcfbf0ee95",
+          "payments.csv": "9dbac299fb73598818afeef13d3827cb40da73de1fb38966399cc3a94100f441",
+          "deliveries.csv": "e02c99782c8f02ae8b50572cc3fcadfec12d7c00d6f9b272711388fd4ec2c084",
+          "refunds.csv": "aae37407144077385b8ad87b33d8d8faeb4b9d32f67988c4960c17b79469de56"
+        },
+        "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+        "policy": {
+          "contract_version": "commerce.v1",
+          "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+          "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+          "candidate_catalog": [
+            {
+              "record_key": "payment:P1",
+              "target_id": "O1",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "payment:P2",
+              "target_id": "O2",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "payment:P3",
+              "target_id": "O3",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D1",
+              "target_id": "O1",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D2",
+              "target_id": "O2",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D2",
+              "target_id": "O3",
+              "origin": "MANUAL",
+              "reason": "Carrier reference may have been copied from a neighbouring order."
+            },
+            {
+              "record_key": "delivery:D3",
+              "target_id": "O3",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "refund:R1",
+              "target_id": "P3",
+              "origin": "SOURCE_REF"
+            }
+          ],
+          "threshold_k": 2,
+          "reviewer_label": "demo-reviewer",
+          "review_attestation": {
+            "all_rows_reviewed": true,
+            "understands_bounded_predicate": true,
+            "conflicting_source_ref_overrides_explained": true
+          },
+          "manual_candidates": [
+            {
+              "record_type": "delivery",
+              "record_id": "D2",
+              "target_id": "O3",
+              "reason": "Carrier reference may have been copied from a neighbouring order."
+            }
+          ],
+          "rows": [
+            {
+              "record_type": "payment",
+              "record_id": "P1",
+              "edges": [
+                {
+                  "target_id": "O1",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "payment",
+              "record_id": "P2",
+              "edges": [
+                {
+                  "target_id": "O2",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "payment",
+              "record_id": "P3",
+              "edges": [
+                {
+                  "target_id": "O3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D1",
+              "edges": [
+                {
+                  "target_id": "O1",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D2",
+              "edges": [
+                {
+                  "target_id": "O2",
+                  "disposition": "POSSIBLE"
+                },
+                {
+                  "target_id": "O3",
+                  "disposition": "POSSIBLE"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D3",
+              "edges": [
+                {
+                  "target_id": "O3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "refund",
+              "record_id": "R1",
+              "edges": [
+                {
+                  "target_id": "P3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            }
+          ]
+        },
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        },
+        "policy_sha256": "cc07bdc869ad4c8f2ad1bbadbb8c853404cbd03701c6baee45111d998ca0ffba",
+        "baseline_sha256": "49cf0a9061605aa42b5735d130a9c9eb1ad692860119fd62c753dd0538c8fd74",
+        "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "run_id": "abcdef0123456789abcdef0123456789",
+        "engine_identity": "EXAMPLE-NOT-EXECUTED",
+        "result": {
+          "status": "REVERSED_EXHAUSTIVE",
+          "predicate": "clean_fulfilled_count >= K",
+          "threshold_k": 2,
+          "baseline": {
+            "clean_fulfilled_count": 2,
+            "decision": true
+          },
+          "witness": {
+            "reference_changes": [
+              {
+                "record_key": "delivery:D2",
+                "from_target_id": "O2",
+                "to_target_id": "O3"
+              }
+            ],
+            "clean_fulfilled_count": 1,
+            "decision": false,
+            "link_distance": 1
+          },
+          "coverage": {
+            "raw_worlds_total": 2,
+            "raw_worlds_checked": 2,
+            "invalid_worlds_total": 0,
+            "invalid_worlds_checked": 0,
+            "admissible_worlds_total": 2,
+            "admissible_worlds_checked": 2,
+            "checker_worlds_total": 2,
+            "checker_worlds_checked": 2,
+            "fully_enumerated": true,
+            "checker_complete": true
+          },
+          "checker_status": "PASSED",
+          "proof_basis": "EXHAUSTIVE_ENUMERATION_AND_INDEPENDENT_RECOMPUTATION",
+          "minimum_distance_proven_within_scope": true,
+          "reason": null,
+          "minimum_link_distance_within_scope": 1
+        },
+        "timings_ms": {
+          "parse": null,
+          "search": null,
+          "checker": null,
+          "wall": null
+        },
+        "scope": {
+          "max_orders": 50,
+          "max_each_other_file": 60,
+          "max_variable_records": 10,
+          "max_alternatives_per_variable": 2,
+          "max_raw_worlds": 4096
+        },
+        "receipt_sha256": "9f91554882665727c0d04112d7c8ebd9b77eb9f9be6fad7f7a9edde7633ce7e8",
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 1
+      },
+      "files": {
+        "orders.csv": {
+          "content_base64": "b3JkZXJfaWQsY3VzdG9tZXJfaWQsb3JkZXJfdG90YWwsY3VycmVuY3kKTzEsQzEsMTAwLjAwLFVTRApPMixDMiwxMDAuMDAsVVNECk8zLEMzLDgwLjAwLFVTRAo="
+        },
+        "payments.csv": {
+          "content_base64": "cGF5bWVudF9pZCxvcmRlcl9yZWYsYW1vdW50LGN1cnJlbmN5LHN0YXR1cwpQMSxPMSwxMDAuMDAsVVNELFNFVFRMRUQKUDIsTzIsMTAwLjAwLFVTRCxTRVRUTEVEClAzLE8zLDgwLjAwLFVTRCxTRVRUTEVECg=="
+        },
+        "deliveries.csv": {
+          "content_base64": "ZGVsaXZlcnlfaWQsb3JkZXJfcmVmLHN0YXR1cwpEMSxPMSxERUxJVkVSRUQKRDIsTzIsREVMSVZFUkVECkQzLE8zLElOX1RSQU5TSVQK"
+        },
+        "refunds.csv": {
+          "content_base64": "cmVmdW5kX2lkLHBheW1lbnRfcmVmLGFtb3VudCxzdGF0dXMKUjEsUDMsNS4wMCxDT01QTEVURUQK"
+        }
+      }
+    },
+    "valid_response": {
+      "contract_version": "commerce.v1",
+      "verification_status": "VERIFIED_REPLAY",
+      "source_binding": "MATCH",
+      "policy_binding": "MATCH",
+      "receipt_integrity": "MATCH",
+      "engine_identity": "EXAMPLE-NOT-EXECUTED",
+      "independent_checker": "PASSED",
+      "recomputed": {
+        "baseline_clean_count": 2,
+        "witness_clean_count": 1,
+        "link_distance": 1,
+        "coverage": {
+          "raw_worlds_total": 2,
+          "raw_worlds_checked": 2,
+          "invalid_worlds_total": 0,
+          "invalid_worlds_checked": 0,
+          "admissible_worlds_total": 2,
+          "admissible_worlds_checked": 2,
+          "checker_worlds_total": 2,
+          "checker_worlds_checked": 2,
+          "fully_enumerated": true,
+          "checker_complete": true
+        }
+      },
+      "historical_receipt_only": true
+    },
+    "invalid_request": {
+      "contract_version": "commerce.v1",
+      "receipt": {
+        "format": "jw.commerce.receipt.v1",
+        "contract_version": "commerce.v1",
+        "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+        "file_sha256": {
+          "orders.csv": "8063a0ead1bdbf5764900e34009e9331847d7e74e57b541a6e554bdcfbf0ee95",
+          "payments.csv": "9dbac299fb73598818afeef13d3827cb40da73de1fb38966399cc3a94100f441",
+          "deliveries.csv": "e02c99782c8f02ae8b50572cc3fcadfec12d7c00d6f9b272711388fd4ec2c084",
+          "refunds.csv": "aae37407144077385b8ad87b33d8d8faeb4b9d32f67988c4960c17b79469de56"
+        },
+        "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+        "policy": {
+          "contract_version": "commerce.v1",
+          "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+          "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+          "candidate_catalog": [
+            {
+              "record_key": "payment:P1",
+              "target_id": "O1",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "payment:P2",
+              "target_id": "O2",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "payment:P3",
+              "target_id": "O3",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D1",
+              "target_id": "O1",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D2",
+              "target_id": "O2",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D2",
+              "target_id": "O3",
+              "origin": "MANUAL",
+              "reason": "Carrier reference may have been copied from a neighbouring order."
+            },
+            {
+              "record_key": "delivery:D3",
+              "target_id": "O3",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "refund:R1",
+              "target_id": "P3",
+              "origin": "SOURCE_REF"
+            }
+          ],
+          "threshold_k": 2,
+          "reviewer_label": "demo-reviewer",
+          "review_attestation": {
+            "all_rows_reviewed": true,
+            "understands_bounded_predicate": true,
+            "conflicting_source_ref_overrides_explained": true
+          },
+          "manual_candidates": [
+            {
+              "record_type": "delivery",
+              "record_id": "D2",
+              "target_id": "O3",
+              "reason": "Carrier reference may have been copied from a neighbouring order."
+            }
+          ],
+          "rows": [
+            {
+              "record_type": "payment",
+              "record_id": "P1",
+              "edges": [
+                {
+                  "target_id": "O1",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "payment",
+              "record_id": "P2",
+              "edges": [
+                {
+                  "target_id": "O2",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "payment",
+              "record_id": "P3",
+              "edges": [
+                {
+                  "target_id": "O3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D1",
+              "edges": [
+                {
+                  "target_id": "O1",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D2",
+              "edges": [
+                {
+                  "target_id": "O2",
+                  "disposition": "POSSIBLE"
+                },
+                {
+                  "target_id": "O3",
+                  "disposition": "POSSIBLE"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D3",
+              "edges": [
+                {
+                  "target_id": "O3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "refund",
+              "record_id": "R1",
+              "edges": [
+                {
+                  "target_id": "P3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            }
+          ]
+        },
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        },
+        "policy_sha256": "cc07bdc869ad4c8f2ad1bbadbb8c853404cbd03701c6baee45111d998ca0ffba",
+        "baseline_sha256": "49cf0a9061605aa42b5735d130a9c9eb1ad692860119fd62c753dd0538c8fd74",
+        "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "run_id": "abcdef0123456789abcdef0123456789",
+        "engine_identity": "EXAMPLE-NOT-EXECUTED",
+        "result": {
+          "status": "REVERSED_EXHAUSTIVE",
+          "predicate": "clean_fulfilled_count >= K",
+          "threshold_k": 2,
+          "baseline": {
+            "clean_fulfilled_count": 2,
+            "decision": true
+          },
+          "witness": {
+            "reference_changes": [
+              {
+                "record_key": "delivery:D2",
+                "from_target_id": "O2",
+                "to_target_id": "O3"
+              }
+            ],
+            "clean_fulfilled_count": 1,
+            "decision": false,
+            "link_distance": 1
+          },
+          "coverage": {
+            "raw_worlds_total": 2,
+            "raw_worlds_checked": 2,
+            "invalid_worlds_total": 0,
+            "invalid_worlds_checked": 0,
+            "admissible_worlds_total": 2,
+            "admissible_worlds_checked": 2,
+            "checker_worlds_total": 2,
+            "checker_worlds_checked": 2,
+            "fully_enumerated": true,
+            "checker_complete": true
+          },
+          "checker_status": "PASSED",
+          "proof_basis": "EXHAUSTIVE_ENUMERATION_AND_INDEPENDENT_RECOMPUTATION",
+          "minimum_distance_proven_within_scope": true,
+          "reason": null,
+          "minimum_link_distance_within_scope": 1
+        },
+        "timings_ms": {
+          "parse": null,
+          "search": null,
+          "checker": null,
+          "wall": null
+        },
+        "scope": {
+          "max_orders": 50,
+          "max_each_other_file": 60,
+          "max_variable_records": 10,
+          "max_alternatives_per_variable": 2,
+          "max_raw_worlds": 4096
+        },
+        "receipt_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 1
+      },
+      "files": {
+        "orders.csv": {
+          "content_base64": "b3JkZXJfaWQsY3VzdG9tZXJfaWQsb3JkZXJfdG90YWwsY3VycmVuY3kKTzEsQzEsMTAwLjAwLFVTRApPMixDMiwxMDAuMDAsVVNECk8zLEMzLDgwLjAwLFVTRAo="
+        },
+        "payments.csv": {
+          "content_base64": "cGF5bWVudF9pZCxvcmRlcl9yZWYsYW1vdW50LGN1cnJlbmN5LHN0YXR1cwpQMSxPMSwxMDAuMDAsVVNELFNFVFRMRUQKUDIsTzIsMTAwLjAwLFVTRCxTRVRUTEVEClAzLE8zLDgwLjAwLFVTRCxTRVRUTEVECg=="
+        },
+        "deliveries.csv": {
+          "content_base64": "ZGVsaXZlcnlfaWQsb3JkZXJfcmVmLHN0YXR1cwpEMSxPMSxERUxJVkVSRUQKRDIsTzIsREVMSVZFUkVECkQzLE8zLElOX1RSQU5TSVQK"
+        },
+        "refunds.csv": {
+          "content_base64": "cmVmdW5kX2lkLHBheW1lbnRfcmVmLGFtb3VudCxzdGF0dXMKUjEsUDMsNS4wMCxDT01QTEVURUQK"
+        }
+      }
+    },
+    "invalid_response": {
+      "error": {
+        "code": "RECEIPT_TAMPERED",
+        "message": "Receipt digest does not match canonical receipt body.",
+        "path": "receipt.receipt_sha256",
+        "details": {}
+      },
+      "verification_status": "NOT_VERIFIED",
+      "verified": false
+    }
+  },
+  "suggest_cases": {
+    "meta_success": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "mode": "META",
+        "max_suggestions": 5,
+        "expected_policy_revision": 0
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "ai_status": "AI_SUGGESTED",
+        "suggestions": [
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "record_key": "delivery:D2",
+            "target_type": "order",
+            "target_id": "O3",
+            "origin": "META_SUGGESTED",
+            "evidence": "Candidate relates D2 to O3; source references O2 and must be reviewed.",
+            "server_call_id": "example-srv-call-001",
+            "catalog_effect": "ADDED_TARGET",
+            "authorised": false
+          }
+        ],
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 0,
+        "state": "IMPORTED",
+        "catalog_changed": true,
+        "authorisations_changed": false,
+        "model_call": {
+          "provider": "META",
+          "model": "muse-spark-1.3",
+          "server_call_id": "example-srv-call-001",
+          "execution": "SERVER_RESPONSE_RECEIVED"
+        },
+        "rejected_proposals": []
+      }
+    },
+    "duplicate_noop": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 2,
+        "mode": "META",
+        "max_suggestions": 5,
+        "expected_policy_revision": 0
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "ai_status": "AI_SUGGESTED",
+        "suggestions": [
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "record_key": "delivery:D2",
+            "target_type": "order",
+            "target_id": "O3",
+            "origin": "META_SUGGESTED",
+            "evidence": "Candidate relates D2 to O3; source references O2 and must be reviewed.",
+            "server_call_id": "example-srv-call-002",
+            "catalog_effect": "EXISTING_PROVENANCE_NO_OP",
+            "authorised": false
+          }
+        ],
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 0,
+        "state": "IMPORTED",
+        "catalog_changed": false,
+        "authorisations_changed": false,
+        "model_call": {
+          "provider": "META",
+          "model": "muse-spark-1.3",
+          "server_call_id": "example-srv-call-002",
+          "execution": "SERVER_RESPONSE_RECEIVED"
+        },
+        "rejected_proposals": []
+      }
+    },
+    "new_origin_existing_target": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "mode": "META",
+        "max_suggestions": 5,
+        "expected_policy_revision": 0
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "ai_status": "AI_SUGGESTED",
+        "suggestions": [
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "record_key": "delivery:D2",
+            "target_type": "order",
+            "target_id": "O2",
+            "origin": "META_SUGGESTED",
+            "evidence": "Model also proposed the existing D2 source reference O2.",
+            "server_call_id": "example-srv-call-003",
+            "catalog_effect": "ADDED_PROVENANCE",
+            "authorised": false
+          }
+        ],
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 0,
+        "state": "IMPORTED",
+        "catalog_changed": true,
+        "authorisations_changed": false,
+        "model_call": {
+          "provider": "META",
+          "model": "muse-spark-1.3",
+          "server_call_id": "example-srv-call-003",
+          "execution": "SERVER_RESPONSE_RECEIVED"
+        },
+        "rejected_proposals": []
+      }
+    },
+    "invalid_model_output": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "mode": "META",
+        "max_suggestions": 5,
+        "expected_policy_revision": 0
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "ai_status": "AI_SUGGESTED",
+        "suggestions": [],
+        "source_revision": 1,
+        "candidate_revision": 1,
+        "policy_revision": 0,
+        "state": "IMPORTED",
+        "catalog_changed": false,
+        "authorisations_changed": false,
+        "model_call": {
+          "provider": "META",
+          "model": "muse-spark-1.3",
+          "server_call_id": "example-srv-call-004",
+          "execution": "SERVER_RESPONSE_RECEIVED"
+        },
+        "rejected_proposals": [
+          {
+            "reason_code": "INVALID_TARGET",
+            "count": 1
+          }
+        ]
+      }
+    },
+    "unavailable": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "mode": "META",
+        "max_suggestions": 5,
+        "expected_policy_revision": 0
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "ai_status": "AI_UNAVAILABLE",
+        "suggestions": [],
+        "source_revision": 1,
+        "candidate_revision": 1,
+        "authorisations_changed": false,
+        "policy_revision": 0,
+        "state": "IMPORTED",
+        "model_call": null,
+        "catalog_changed": false,
+        "rejected_proposals": []
+      }
+    },
+    "bad_request": {
+      "http_status": 422,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "mode": "META",
+        "max_suggestions": 61,
+        "expected_policy_revision": 0
+      },
+      "response": {
+        "error": {
+          "code": "INVALID_VALUE",
+          "message": "max_suggestions exceeds the bounded request limit.",
+          "path": "max_suggestions",
+          "details": {}
+        },
+        "verified": false
+      }
+    }
+  },
+  "review_meta_adoption": {
+    "human_adoption": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 2,
+        "expected_policy_revision": 0,
+        "threshold_k": 2,
+        "reviewer_label": "demo-reviewer",
+        "review_attestation": {
+          "all_rows_reviewed": true,
+          "understands_bounded_predicate": true,
+          "conflicting_source_ref_overrides_explained": true
+        },
+        "manual_candidates": [],
+        "rows": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "refund",
+            "record_id": "R1",
+            "edges": [
+              {
+                "target_id": "P3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          }
+        ],
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        }
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "state": "REVIEW_FROZEN",
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 1,
+        "candidate_catalog_sha256": "c81a620e1d70389cfae5b41a2d5dc933293ecafb052fe55e2b427f6cd7a9daab",
+        "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+        "policy_sha256": "91a0a5d819757b7b8b6b17b56a5c7b4526c246553c1642e367067c7366aaed0a",
+        "baseline_sha256": "a88d21b120afd518dae8c359e6508c2ff11036da96360498576c5d8ed65a1b66",
+        "review_sha256": "a11d1186c5de25cb42b048e7f2e124070ddbd1e2b24abc0d732680d0819d7b69",
+        "threshold_k": 2,
+        "raw_worlds": 2,
+        "admissible_worlds": 2,
+        "invalid_worlds": 0,
+        "variable_records": 1,
+        "baseline_valid": true,
+        "authorised_by": "HUMAN_REVIEW_ATTESTED_NOT_IDENTITY_VERIFIED"
+      }
+    },
+    "stale_candidate_revision": {
+      "http_status": 409,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "expected_policy_revision": 0,
+        "threshold_k": 2,
+        "reviewer_label": "demo-reviewer",
+        "review_attestation": {
+          "all_rows_reviewed": true,
+          "understands_bounded_predicate": true,
+          "conflicting_source_ref_overrides_explained": true
+        },
+        "manual_candidates": [],
+        "rows": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "refund",
+            "record_id": "R1",
+            "edges": [
+              {
+                "target_id": "P3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          }
+        ],
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        }
+      },
+      "response": {
+        "error": {
+          "code": "STALE_STATE",
+          "message": "Candidate revision no longer matches registered suggestions.",
+          "path": "expected_candidate_revision",
+          "details": {
+            "expected": 2,
+            "received": 1
+          }
+        },
+        "verified": false
+      }
+    },
+    "revoked_meta_option": {
+      "http_status": 422,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 3,
+        "expected_policy_revision": 0,
+        "threshold_k": 2,
+        "reviewer_label": "demo-reviewer",
+        "review_attestation": {
+          "all_rows_reviewed": true,
+          "understands_bounded_predicate": true,
+          "conflicting_source_ref_overrides_explained": true
+        },
+        "manual_candidates": [],
+        "rows": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "refund",
+            "record_id": "R1",
+            "edges": [
+              {
+                "target_id": "P3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          }
+        ],
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        }
+      },
+      "response": {
+        "error": {
+          "code": "INVALID_REVIEW",
+          "message": "Candidate is not active in the current registered catalogue.",
+          "path": "rows.delivery:D2.edges.O3",
+          "details": {}
+        },
+        "verified": false
+      }
+    }
+  },
+  "challenge_cases": {
+    "reversed_exhaustive": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 2,
+        "expected_policy_revision": 1,
+        "expected_review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "time_budget_ms": 10000
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "state": "CHALLENGED",
+        "run_id": "abcdef0123456789abcdef0123456789",
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 1,
+        "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "result": {
+          "status": "REVERSED_EXHAUSTIVE",
+          "predicate": "clean_fulfilled_count >= K",
+          "threshold_k": 2,
+          "baseline": {
+            "clean_fulfilled_count": 2,
+            "decision": true
+          },
+          "witness": {
+            "reference_changes": [
+              {
+                "record_key": "delivery:D2",
+                "from_target_id": "O2",
+                "to_target_id": "O3"
+              }
+            ],
+            "clean_fulfilled_count": 1,
+            "decision": false,
+            "link_distance": 1
+          },
+          "coverage": {
+            "raw_worlds_total": 2,
+            "raw_worlds_checked": 2,
+            "invalid_worlds_total": 0,
+            "invalid_worlds_checked": 0,
+            "admissible_worlds_total": 2,
+            "admissible_worlds_checked": 2,
+            "checker_worlds_total": 2,
+            "checker_worlds_checked": 2,
+            "fully_enumerated": true,
+            "checker_complete": true
+          },
+          "checker_status": "PASSED",
+          "proof_basis": "EXHAUSTIVE_ENUMERATION_AND_INDEPENDENT_RECOMPUTATION",
+          "minimum_distance_proven_within_scope": true,
+          "reason": null,
+          "minimum_link_distance_within_scope": 1
+        }
+      }
+    },
+    "stable_within_scope": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 2,
+        "expected_policy_revision": 2,
+        "expected_review_sha256": "0c298a4f34adce5ee5fac514cefafcc1dd7a300fa066500eea9db7787b23a85b",
+        "time_budget_ms": 10000
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "state": "CHALLENGED",
+        "run_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 2,
+        "review_sha256": "0c298a4f34adce5ee5fac514cefafcc1dd7a300fa066500eea9db7787b23a85b",
+        "result": {
+          "status": "STABLE_WITHIN_SCOPE",
+          "predicate": "clean_fulfilled_count >= K",
+          "threshold_k": 1,
+          "baseline": {
+            "clean_fulfilled_count": 2,
+            "decision": true
+          },
+          "witness": null,
+          "coverage": {
+            "raw_worlds_total": 2,
+            "raw_worlds_checked": 2,
+            "invalid_worlds_total": 0,
+            "invalid_worlds_checked": 0,
+            "admissible_worlds_total": 2,
+            "admissible_worlds_checked": 2,
+            "checker_worlds_total": 2,
+            "checker_worlds_checked": 2,
+            "fully_enumerated": true,
+            "checker_complete": true
+          },
+          "checker_status": "PASSED",
+          "proof_basis": "EXHAUSTIVE_ENUMERATION_AND_INDEPENDENT_RECOMPUTATION",
+          "minimum_distance_proven_within_scope": false,
+          "reason": null,
+          "minimum_link_distance_within_scope": null
+        }
+      }
+    },
+    "timeout": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 2,
+        "expected_policy_revision": 1,
+        "expected_review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "time_budget_ms": 10000
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "state": "REVIEW_FROZEN",
+        "run_id": null,
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 1,
+        "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "result": {
+          "status": "NOT_VERIFIED",
+          "reason": "TIMEOUT",
+          "predicate": "clean_fulfilled_count >= K",
+          "threshold_k": 2,
+          "baseline": null,
+          "witness": null,
+          "coverage": {
+            "raw_worlds_total": 2,
+            "raw_worlds_checked": 1,
+            "invalid_worlds_total": null,
+            "invalid_worlds_checked": 0,
+            "admissible_worlds_total": null,
+            "admissible_worlds_checked": 1,
+            "checker_worlds_total": null,
+            "checker_worlds_checked": 0,
+            "fully_enumerated": false,
+            "checker_complete": false
+          },
+          "checker_status": "UNRUN",
+          "proof_basis": "NONE",
+          "minimum_distance_proven_within_scope": false,
+          "minimum_link_distance_within_scope": null
+        }
+      }
+    },
+    "checker_failure": {
+      "http_status": 200,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 2,
+        "expected_policy_revision": 1,
+        "expected_review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "time_budget_ms": 10000
+      },
+      "response": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "state": "REVIEW_FROZEN",
+        "run_id": null,
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 1,
+        "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "result": {
+          "status": "NOT_VERIFIED",
+          "reason": "CHECKER_MISMATCH",
+          "predicate": "clean_fulfilled_count >= K",
+          "threshold_k": 2,
+          "baseline": null,
+          "witness": null,
+          "coverage": {
+            "raw_worlds_total": 2,
+            "raw_worlds_checked": 2,
+            "invalid_worlds_total": 0,
+            "invalid_worlds_checked": 0,
+            "admissible_worlds_total": 2,
+            "admissible_worlds_checked": 2,
+            "checker_worlds_total": 2,
+            "checker_worlds_checked": 1,
+            "fully_enumerated": true,
+            "checker_complete": false
+          },
+          "checker_status": "FAILED",
+          "proof_basis": "NONE",
+          "minimum_distance_proven_within_scope": false,
+          "minimum_link_distance_within_scope": null
+        }
+      }
+    },
+    "cap_preflight": {
+      "setup_parse_request": {
+        "contract_version": "commerce.v1",
+        "files": {
+          "orders.csv": {
+            "content_base64": "b3JkZXJfaWQsY3VzdG9tZXJfaWQsb3JkZXJfdG90YWwsY3VycmVuY3kKTzEsQzEsMTAwLjAwLFVTRApPMixDMiwxMDAuMDAsVVNECk8zLEMzLDEwMC4wMCxVU0QK"
+          },
+          "payments.csv": {
+            "content_base64": "cGF5bWVudF9pZCxvcmRlcl9yZWYsYW1vdW50LGN1cnJlbmN5LHN0YXR1cwpQMSxPMSwxLjAwLFVTRCxQRU5ESU5HClAyLE8xLDIuMDAsVVNELFBFTkRJTkcKUDMsTzEsMy4wMCxVU0QsUEVORElORwpQNCxPMSw0LjAwLFVTRCxQRU5ESU5HClA1LE8xLDUuMDAsVVNELFBFTkRJTkcKUDYsTzEsNi4wMCxVU0QsUEVORElORwpQNyxPMSw3LjAwLFVTRCxQRU5ESU5HClA4LE8xLDguMDAsVVNELFBFTkRJTkcK"
+          },
+          "deliveries.csv": {
+            "content_base64": "ZGVsaXZlcnlfaWQsb3JkZXJfcmVmLHN0YXR1cwo="
+          },
+          "refunds.csv": {
+            "content_base64": "cmVmdW5kX2lkLHBheW1lbnRfcmVmLGFtb3VudCxzdGF0dXMK"
+          }
+        }
+      },
+      "http_status": 422,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "22222222222222222222222222222222",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "expected_policy_revision": 0,
+        "threshold_k": 1,
+        "reviewer_label": "demo-reviewer",
+        "review_attestation": {
+          "all_rows_reviewed": true,
+          "understands_bounded_predicate": true,
+          "conflicting_source_ref_overrides_explained": true
+        },
+        "manual_candidates": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "target_id": "O2",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "target_id": "O3",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "target_id": "O2",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "target_id": "O3",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "target_id": "O2",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "target_id": "O3",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P4",
+            "target_id": "O2",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P4",
+            "target_id": "O3",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P5",
+            "target_id": "O2",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P5",
+            "target_id": "O3",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P6",
+            "target_id": "O2",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P6",
+            "target_id": "O3",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P7",
+            "target_id": "O2",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P7",
+            "target_id": "O3",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P8",
+            "target_id": "O2",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P8",
+            "target_id": "O3",
+            "reason": "Reviewer permits a competing same-currency parent after record inspection."
+          }
+        ],
+        "rows": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P4",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P5",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P6",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P7",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P8",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          }
+        ],
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O1",
+          "payment:P3": "O1",
+          "payment:P4": "O1",
+          "payment:P5": "O1",
+          "payment:P6": "O1",
+          "payment:P7": "O1",
+          "payment:P8": "O1"
+        }
+      },
+      "response": {
+        "error": {
+          "code": "LIMIT_EXCEEDED",
+          "message": "Raw Cartesian product exceeds the 4096 world cap.",
+          "path": "review.options",
+          "details": {
+            "raw_worlds_total": 6561,
+            "max_raw_worlds": 4096,
+            "result_status": "NOT_VERIFIED"
+          }
+        },
+        "verified": false
+      }
+    },
+    "contradictory_policy": {
+      "http_status": 422,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "expected_policy_revision": 0,
+        "threshold_k": 2,
+        "reviewer_label": "demo-reviewer",
+        "review_attestation": {
+          "all_rows_reviewed": true,
+          "understands_bounded_predicate": true,
+          "conflicting_source_ref_overrides_explained": true
+        },
+        "manual_candidates": [
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "target_id": "O3",
+            "reason": "Carrier reference may have been copied from a neighbouring order."
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "target_id": "O1",
+            "reason": "Reviewer disputes the payment source reference."
+          }
+        ],
+        "rows": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              },
+              {
+                "target_id": "O2",
+                "disposition": "PROHIBITED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "refund",
+            "record_id": "R1",
+            "edges": [
+              {
+                "target_id": "P3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          }
+        ],
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O1",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        }
+      },
+      "response": {
+        "error": {
+          "code": "CONTRADICTORY_POLICY",
+          "message": "No admissible world satisfies all reviewed constraints.",
+          "path": "rows",
+          "details": {
+            "admissible_worlds": 0,
+            "result_status": "NOT_VERIFIED"
+          }
+        },
+        "verified": false
+      }
+    },
+    "invalid_baseline": {
+      "http_status": 422,
+      "request": {
+        "contract_version": "commerce.v1",
+        "session_id": "0123456789abcdef0123456789abcdef",
+        "expected_source_revision": 1,
+        "expected_candidate_revision": 1,
+        "expected_policy_revision": 0,
+        "threshold_k": 2,
+        "reviewer_label": "demo-reviewer",
+        "review_attestation": {
+          "all_rows_reviewed": true,
+          "understands_bounded_predicate": true,
+          "conflicting_source_ref_overrides_explained": true
+        },
+        "manual_candidates": [
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "target_id": "O3",
+            "reason": "Carrier reference may have been copied from a neighbouring order."
+          }
+        ],
+        "rows": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "refund",
+            "record_id": "R1",
+            "edges": [
+              {
+                "target_id": "P3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          }
+        ],
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O9",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        }
+      },
+      "response": {
+        "error": {
+          "code": "INVALID_BASELINE",
+          "message": "Reference mapping selects a target outside reviewed permissions.",
+          "path": "reference_mapping.delivery:D2",
+          "details": {
+            "target_id": "O9"
+          }
+        },
+        "verified": false
+      }
+    }
+  },
+  "canonical_hash_vectors": {
+    "meta_candidate_catalog": {
+      "domain": "JW-COMMERCE-CANDIDATES-v1",
+      "payload": [
+        {
+          "record_key": "payment:P1",
+          "target_id": "O1",
+          "origin": "SOURCE_REF"
+        },
+        {
+          "record_key": "payment:P2",
+          "target_id": "O2",
+          "origin": "SOURCE_REF"
+        },
+        {
+          "record_key": "payment:P3",
+          "target_id": "O3",
+          "origin": "SOURCE_REF"
+        },
+        {
+          "record_key": "delivery:D1",
+          "target_id": "O1",
+          "origin": "SOURCE_REF"
+        },
+        {
+          "record_key": "delivery:D2",
+          "target_id": "O2",
+          "origin": "SOURCE_REF"
+        },
+        {
+          "record_key": "delivery:D2",
+          "target_id": "O3",
+          "origin": "META_SUGGESTED",
+          "evidence": "Candidate relates D2 to O3; source references O2 and must be reviewed.",
+          "provider": "META",
+          "model": "muse-spark-1.3",
+          "server_call_id": "example-srv-call-001"
+        },
+        {
+          "record_key": "delivery:D3",
+          "target_id": "O3",
+          "origin": "SOURCE_REF"
+        },
+        {
+          "record_key": "refund:R1",
+          "target_id": "P3",
+          "origin": "SOURCE_REF"
+        }
+      ],
+      "sha256": "c81a620e1d70389cfae5b41a2d5dc933293ecafb052fe55e2b427f6cd7a9daab"
+    },
+    "meta_policy": {
+      "domain": "JW-COMMERCE-POLICY-v1",
+      "payload": {
+        "contract_version": "commerce.v1",
+        "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+        "candidate_catalog_sha256": "c81a620e1d70389cfae5b41a2d5dc933293ecafb052fe55e2b427f6cd7a9daab",
+        "candidate_catalog": [
+          {
+            "record_key": "payment:P1",
+            "target_id": "O1",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "payment:P2",
+            "target_id": "O2",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "payment:P3",
+            "target_id": "O3",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "delivery:D1",
+            "target_id": "O1",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "delivery:D2",
+            "target_id": "O2",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "delivery:D2",
+            "target_id": "O3",
+            "origin": "META_SUGGESTED",
+            "evidence": "Candidate relates D2 to O3; source references O2 and must be reviewed.",
+            "provider": "META",
+            "model": "muse-spark-1.3",
+            "server_call_id": "example-srv-call-001"
+          },
+          {
+            "record_key": "delivery:D3",
+            "target_id": "O3",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "refund:R1",
+            "target_id": "P3",
+            "origin": "SOURCE_REF"
+          }
+        ],
+        "threshold_k": 2,
+        "reviewer_label": "demo-reviewer",
+        "review_attestation": {
+          "all_rows_reviewed": true,
+          "understands_bounded_predicate": true,
+          "conflicting_source_ref_overrides_explained": true
+        },
+        "manual_candidates": [],
+        "rows": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "refund",
+            "record_id": "R1",
+            "edges": [
+              {
+                "target_id": "P3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          }
+        ]
+      },
+      "sha256": "91a0a5d819757b7b8b6b17b56a5c7b4526c246553c1642e367067c7366aaed0a"
+    },
+    "meta_baseline": {
+      "domain": "JW-COMMERCE-BASELINE-v1",
+      "payload": {
+        "policy_sha256": "91a0a5d819757b7b8b6b17b56a5c7b4526c246553c1642e367067c7366aaed0a",
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        }
+      },
+      "sha256": "a88d21b120afd518dae8c359e6508c2ff11036da96360498576c5d8ed65a1b66"
+    },
+    "meta_review": {
+      "domain": "JW-COMMERCE-REVIEW-v1",
+      "payload": {
+        "policy_sha256": "91a0a5d819757b7b8b6b17b56a5c7b4526c246553c1642e367067c7366aaed0a",
+        "baseline_sha256": "a88d21b120afd518dae8c359e6508c2ff11036da96360498576c5d8ed65a1b66"
+      },
+      "sha256": "a11d1186c5de25cb42b048e7f2e124070ddbd1e2b24abc0d732680d0819d7b69"
+    },
+    "stable_policy": {
+      "domain": "JW-COMMERCE-POLICY-v1",
+      "payload": {
+        "contract_version": "commerce.v1",
+        "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+        "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+        "candidate_catalog": [
+          {
+            "record_key": "payment:P1",
+            "target_id": "O1",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "payment:P2",
+            "target_id": "O2",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "payment:P3",
+            "target_id": "O3",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "delivery:D1",
+            "target_id": "O1",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "delivery:D2",
+            "target_id": "O2",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "delivery:D2",
+            "target_id": "O3",
+            "origin": "MANUAL",
+            "reason": "Carrier reference may have been copied from a neighbouring order."
+          },
+          {
+            "record_key": "delivery:D3",
+            "target_id": "O3",
+            "origin": "SOURCE_REF"
+          },
+          {
+            "record_key": "refund:R1",
+            "target_id": "P3",
+            "origin": "SOURCE_REF"
+          }
+        ],
+        "threshold_k": 1,
+        "reviewer_label": "demo-reviewer",
+        "review_attestation": {
+          "all_rows_reviewed": true,
+          "understands_bounded_predicate": true,
+          "conflicting_source_ref_overrides_explained": true
+        },
+        "manual_candidates": [
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "target_id": "O3",
+            "reason": "Carrier reference may have been copied from a neighbouring order."
+          }
+        ],
+        "rows": [
+          {
+            "record_type": "payment",
+            "record_id": "P1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "payment",
+            "record_id": "P3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D1",
+            "edges": [
+              {
+                "target_id": "O1",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D2",
+            "edges": [
+              {
+                "target_id": "O2",
+                "disposition": "POSSIBLE"
+              },
+              {
+                "target_id": "O3",
+                "disposition": "POSSIBLE"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "delivery",
+            "record_id": "D3",
+            "edges": [
+              {
+                "target_id": "O3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          },
+          {
+            "record_type": "refund",
+            "record_id": "R1",
+            "edges": [
+              {
+                "target_id": "P3",
+                "disposition": "CONFIRMED"
+              }
+            ],
+            "unmatched": "PROHIBITED"
+          }
+        ]
+      },
+      "sha256": "706acbcd45e5fb82c82a118f93daea9bb10dc685a003998679c7047660511c77"
+    },
+    "stable_baseline": {
+      "domain": "JW-COMMERCE-BASELINE-v1",
+      "payload": {
+        "policy_sha256": "706acbcd45e5fb82c82a118f93daea9bb10dc685a003998679c7047660511c77",
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        }
+      },
+      "sha256": "db2aa1b8d330e97582701585f0d55db5a3ac0e3cb4d4f25b1b049ccd5f885c3b"
+    },
+    "stable_review": {
+      "domain": "JW-COMMERCE-REVIEW-v1",
+      "payload": {
+        "policy_sha256": "706acbcd45e5fb82c82a118f93daea9bb10dc685a003998679c7047660511c77",
+        "baseline_sha256": "db2aa1b8d330e97582701585f0d55db5a3ac0e3cb4d4f25b1b049ccd5f885c3b"
+      },
+      "sha256": "0c298a4f34adce5ee5fac514cefafcc1dd7a300fa066500eea9db7787b23a85b"
+    },
+    "reversal_receipt_core": {
+      "domain": "JW-COMMERCE-RECEIPT-v1",
+      "payload": {
+        "format": "jw.commerce.receipt.v1",
+        "contract_version": "commerce.v1",
+        "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+        "file_sha256": {
+          "orders.csv": "8063a0ead1bdbf5764900e34009e9331847d7e74e57b541a6e554bdcfbf0ee95",
+          "payments.csv": "9dbac299fb73598818afeef13d3827cb40da73de1fb38966399cc3a94100f441",
+          "deliveries.csv": "e02c99782c8f02ae8b50572cc3fcadfec12d7c00d6f9b272711388fd4ec2c084",
+          "refunds.csv": "aae37407144077385b8ad87b33d8d8faeb4b9d32f67988c4960c17b79469de56"
+        },
+        "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+        "policy": {
+          "contract_version": "commerce.v1",
+          "source_bundle_sha256": "e7a87bc2a5bda60f6d1004d62fc11ab7cd6c2984a1d983062cf8c5558609be50",
+          "candidate_catalog_sha256": "4c8646f8684112ba4cb3a1bfb072b73e8aa2b309ce199e1e9567a6cb99db5098",
+          "candidate_catalog": [
+            {
+              "record_key": "payment:P1",
+              "target_id": "O1",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "payment:P2",
+              "target_id": "O2",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "payment:P3",
+              "target_id": "O3",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D1",
+              "target_id": "O1",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D2",
+              "target_id": "O2",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "delivery:D2",
+              "target_id": "O3",
+              "origin": "MANUAL",
+              "reason": "Carrier reference may have been copied from a neighbouring order."
+            },
+            {
+              "record_key": "delivery:D3",
+              "target_id": "O3",
+              "origin": "SOURCE_REF"
+            },
+            {
+              "record_key": "refund:R1",
+              "target_id": "P3",
+              "origin": "SOURCE_REF"
+            }
+          ],
+          "threshold_k": 2,
+          "reviewer_label": "demo-reviewer",
+          "review_attestation": {
+            "all_rows_reviewed": true,
+            "understands_bounded_predicate": true,
+            "conflicting_source_ref_overrides_explained": true
+          },
+          "manual_candidates": [
+            {
+              "record_type": "delivery",
+              "record_id": "D2",
+              "target_id": "O3",
+              "reason": "Carrier reference may have been copied from a neighbouring order."
+            }
+          ],
+          "rows": [
+            {
+              "record_type": "payment",
+              "record_id": "P1",
+              "edges": [
+                {
+                  "target_id": "O1",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "payment",
+              "record_id": "P2",
+              "edges": [
+                {
+                  "target_id": "O2",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "payment",
+              "record_id": "P3",
+              "edges": [
+                {
+                  "target_id": "O3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D1",
+              "edges": [
+                {
+                  "target_id": "O1",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D2",
+              "edges": [
+                {
+                  "target_id": "O2",
+                  "disposition": "POSSIBLE"
+                },
+                {
+                  "target_id": "O3",
+                  "disposition": "POSSIBLE"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "delivery",
+              "record_id": "D3",
+              "edges": [
+                {
+                  "target_id": "O3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            },
+            {
+              "record_type": "refund",
+              "record_id": "R1",
+              "edges": [
+                {
+                  "target_id": "P3",
+                  "disposition": "CONFIRMED"
+                }
+              ],
+              "unmatched": "PROHIBITED"
+            }
+          ]
+        },
+        "reference_mapping": {
+          "payment:P1": "O1",
+          "payment:P2": "O2",
+          "payment:P3": "O3",
+          "delivery:D1": "O1",
+          "delivery:D2": "O2",
+          "delivery:D3": "O3",
+          "refund:R1": "P3"
+        },
+        "policy_sha256": "cc07bdc869ad4c8f2ad1bbadbb8c853404cbd03701c6baee45111d998ca0ffba",
+        "baseline_sha256": "49cf0a9061605aa42b5735d130a9c9eb1ad692860119fd62c753dd0538c8fd74",
+        "review_sha256": "152041325c7c122fac2bd2b231563366b985999ac8615f995fea3e61bd5ce5c9",
+        "run_id": "abcdef0123456789abcdef0123456789",
+        "engine_identity": "EXAMPLE-NOT-EXECUTED",
+        "result": {
+          "status": "REVERSED_EXHAUSTIVE",
+          "predicate": "clean_fulfilled_count >= K",
+          "threshold_k": 2,
+          "baseline": {
+            "clean_fulfilled_count": 2,
+            "decision": true
+          },
+          "witness": {
+            "reference_changes": [
+              {
+                "record_key": "delivery:D2",
+                "from_target_id": "O2",
+                "to_target_id": "O3"
+              }
+            ],
+            "clean_fulfilled_count": 1,
+            "decision": false,
+            "link_distance": 1
+          },
+          "coverage": {
+            "raw_worlds_total": 2,
+            "raw_worlds_checked": 2,
+            "invalid_worlds_total": 0,
+            "invalid_worlds_checked": 0,
+            "admissible_worlds_total": 2,
+            "admissible_worlds_checked": 2,
+            "checker_worlds_total": 2,
+            "checker_worlds_checked": 2,
+            "fully_enumerated": true,
+            "checker_complete": true
+          },
+          "checker_status": "PASSED",
+          "proof_basis": "EXHAUSTIVE_ENUMERATION_AND_INDEPENDENT_RECOMPUTATION",
+          "minimum_distance_proven_within_scope": true,
+          "reason": null,
+          "minimum_link_distance_within_scope": 1
+        },
+        "timings_ms": {
+          "parse": null,
+          "search": null,
+          "checker": null,
+          "wall": null
+        },
+        "scope": {
+          "max_orders": 50,
+          "max_each_other_file": 60,
+          "max_variable_records": 10,
+          "max_alternatives_per_variable": 2,
+          "max_raw_worlds": 4096
+        },
+        "source_revision": 1,
+        "candidate_revision": 2,
+        "policy_revision": 1
+      },
+      "sha256": "9f91554882665727c0d04112d7c8ebd9b77eb9f9be6fad7f7a9edde7633ce7e8"
+    }
+  }
+}

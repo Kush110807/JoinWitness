@@ -1,0 +1,761 @@
+{
+  "schema_version": "jw.review.v1",
+  "revision": 1,
+  "edges": [
+    {
+      "attendance_id": "T-01",
+      "registration_id": "R-A01",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-02",
+      "registration_id": "R-A02",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-03",
+      "registration_id": "R-A03",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-04",
+      "registration_id": "R-A04",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-05",
+      "registration_id": "R-A05",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-06",
+      "registration_id": "R-A06",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-07",
+      "registration_id": "R-A08",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-08",
+      "registration_id": "R-A09",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-09",
+      "registration_id": "R-A10",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-10",
+      "registration_id": "R-A12",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-11",
+      "registration_id": "R-A13",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-12",
+      "registration_id": "R-A14",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-13",
+      "registration_id": "R-A16",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-14",
+      "registration_id": "R-A18",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-15",
+      "registration_id": "R-A20",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-16",
+      "registration_id": "R-A21",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-17",
+      "registration_id": "R-A22",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-18",
+      "registration_id": "R-A24",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-19",
+      "registration_id": "R-A25",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-20",
+      "registration_id": "R-A27",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-21",
+      "registration_id": "R-A28",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-22",
+      "registration_id": "R-A30",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-23",
+      "registration_id": "R-A32",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-24",
+      "registration_id": "R-A33",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-25",
+      "registration_id": "R-B01",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-26",
+      "registration_id": "R-B02",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-27",
+      "registration_id": "R-B03",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-28",
+      "registration_id": "R-B04",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-29",
+      "registration_id": "R-B05",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-30",
+      "registration_id": "R-B06",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-31",
+      "registration_id": "R-B07",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-32",
+      "registration_id": "R-B08",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-33",
+      "registration_id": "R-B10",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-34",
+      "registration_id": "R-B11",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-35",
+      "registration_id": "R-B13",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-36",
+      "registration_id": "R-B15",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-37",
+      "registration_id": "R-B16",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-38",
+      "registration_id": "R-B17",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-39",
+      "registration_id": "R-B19",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-40",
+      "registration_id": "R-B22",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-41",
+      "registration_id": "R-B23",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-42",
+      "registration_id": "R-B24",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-43",
+      "registration_id": "R-B26",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-44",
+      "registration_id": "R-B27",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-45",
+      "registration_id": "R-B29",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-46",
+      "registration_id": "R-B31",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-47",
+      "registration_id": "R-B32",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-48",
+      "registration_id": "R-B34",
+      "status": "CONFIRMED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-49",
+      "registration_id": "R-A07",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-49",
+      "registration_id": "R-B12",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-50",
+      "registration_id": "R-A15",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-50",
+      "registration_id": "R-B21",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-51",
+      "registration_id": "R-A23",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-51",
+      "registration_id": "R-B30",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-52",
+      "registration_id": "R-A31",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-52",
+      "registration_id": "R-B33",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-52",
+      "registration_id": "R-B45",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-53",
+      "registration_id": "R-B09",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-53",
+      "registration_id": "R-A40",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-54",
+      "registration_id": "R-A11",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-54",
+      "registration_id": "R-B14",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-55",
+      "registration_id": "R-B41",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-55",
+      "registration_id": "R-A42",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-55",
+      "registration_id": "R-B44",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-56",
+      "registration_id": "R-A17",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-56",
+      "registration_id": "R-B18",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-57",
+      "registration_id": "R-B25",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-57",
+      "registration_id": "R-A26",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-58",
+      "registration_id": "R-A35",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-58",
+      "registration_id": "R-B36",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-58",
+      "registration_id": "R-B37",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-59",
+      "registration_id": "R-B28",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-59",
+      "registration_id": "R-A29",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-60",
+      "registration_id": "R-A19",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-60",
+      "registration_id": "R-B20",
+      "status": "POSSIBLE",
+      "operation": "EXPLICIT_REVIEW"
+    }
+  ],
+  "unmatched": [
+    {
+      "attendance_id": "T-01",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-02",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-03",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-04",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-05",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-06",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-07",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-08",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-09",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-10",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-11",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-12",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-13",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-14",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-15",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-16",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-17",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-18",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-19",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-20",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-21",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-22",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-23",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-24",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-25",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-26",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-27",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-28",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-29",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-30",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-31",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-32",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-33",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-34",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-35",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-36",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-37",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-38",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-39",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-40",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-41",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-42",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-43",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-44",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-45",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-46",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-47",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-48",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-49",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-50",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-51",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-52",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-53",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-54",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-55",
+      "status": "ALLOWED",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-56",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-57",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-58",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-59",
+      "status": "FORBIDDEN",
+      "operation": "EXPLICIT_REVIEW"
+    },
+    {
+      "attendance_id": "T-60",
+      "status": "ALLOWED",
+      "operation": "EXPLICIT_REVIEW"
+    }
+  ],
+  "coverage": "REVIEWED_CLOSED_SCOPE",
+  "scope_note": "Synthetic T10-EVAL01 closed review universe: 60 attendance rows, 90 registrations, 12 controlled ambiguities. Applies to this model only; no claim about real-world identity completeness.",
+  "closed_scope_attested": true
+}
