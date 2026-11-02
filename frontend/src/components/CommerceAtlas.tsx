@@ -49,7 +49,6 @@ import {
 import {
   commerceDecisionText,
   commerceStatusCopy,
-  commerceWitnessChangeText,
   isCommerceReceiptEligible,
   validateCommerceResult,
 } from "../lib/commerceView";
@@ -58,6 +57,7 @@ import ProductShell, { type Stage } from "./ProductShell";
 import ProofDrawer from "./ProofDrawer";
 import AtlasSwitcher, { type AtlasScenario } from "./AtlasSwitcher";
 import CommerceSourceInspector from "./CommerceSourceInspector";
+import CommerceDecisionCanvas from "./CommerceDecisionCanvas";
 import CommerceReviewEditor, { type CommerceBaselineOption } from "./CommerceReviewEditor";
 import "./CommerceAtlas.css";
 
@@ -1043,85 +1043,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
                 </div>
               ) : (
                 challengeCopy && (
-                  <>
-                    <p>
-                      <strong>{challengeCopy.headline}</strong> {challengeCopy.detail}
-                    </p>
-                    {challenge.result.baseline && (
-                      <p>
-                        Baseline (verified):{" "}
-                        {commerceDecisionText(
-                          challenge.result.baseline.clean_fulfilled_count,
-                          orderCount,
-                          challenge.result.threshold_k,
-                          challenge.result.baseline.decision,
-                        )}
-                      </p>
-                    )}
-                    {challenge.result.status === "REVERSED_EXHAUSTIVE" && challenge.result.witness && (
-                      <>
-                        <p>
-                          Permitted alternative:{" "}
-                          {commerceDecisionText(
-                            challenge.result.witness.clean_fulfilled_count,
-                            orderCount,
-                            challenge.result.threshold_k,
-                            challenge.result.witness.decision,
-                          )}
-                        </p>
-                        <p>
-                          Changed source records:{" "}
-                          <strong>
-                            {commerceWitnessChangeText(challenge.result.witness.reference_changes)}
-                          </strong>
-                        </p>
-                        <p>
-                          Fewest changed assignments:{" "}
-                          <strong>{challenge.result.witness.link_distance}</strong> — proven
-                          minimum within the reviewed scope.
-                        </p>
-                      </>
-                    )}
-                    <details className="evidence-details">
-                      <summary>Technical evidence</summary>
-                      <p>
-                        Status: <code>{challenge.result.status}</code>
-                        {challenge.result.reason && (
-                          <> · reason <code>{challenge.result.reason}</code></>
-                        )}{" "}
-                        · checker <code>{challenge.result.checker_status}</code> · proof{" "}
-                        <code>{challenge.result.proof_basis}</code>
-                      </p>
-                      <div className="table-scroll">
-                        <table aria-label="Challenge coverage">
-                          <thead>
-                            <tr>
-                              <th>Coverage key</th>
-                              <th>Value</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {(
-                              Object.keys(challenge.result.coverage) as Array<
-                                keyof typeof challenge.result.coverage
-                              >
-                            ).map((key) => (
-                              <tr key={key}>
-                                <td>
-                                  <code>{key}</code>
-                                </td>
-                                <td>{String(challenge.result.coverage[key])}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      <p className="muted">
-                        Scope: reviewer-authorised finite worlds only — nothing about real-world
-                        identity or all possible links.
-                      </p>
-                    </details>
-                  </>
+                  <CommerceDecisionCanvas result={challenge.result} orderCount={orderCount} />
                 )
               )}
               <div className="row">
