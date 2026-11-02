@@ -53,6 +53,11 @@ import {
   validateCommerceResult,
 } from "../lib/commerceView";
 import { bytesToBase64 } from "../lib/encoding";
+import {
+  FICTIONAL_COMMERCE_BLURB,
+  fictionalCommerceBundle,
+  loadFictionalCommerceFiles,
+} from "../lib/commerceExample";
 import ProductShell, { type Stage } from "./ProductShell";
 import ProofDrawer from "./ProofDrawer";
 import AtlasSwitcher, { type AtlasScenario } from "./AtlasSwitcher";
@@ -142,6 +147,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
   const [staleNote, setStaleNote] = useState<string | null>(null);
   const [timeBudget, setTimeBudget] = useState(10000);
   const [maxSuggestions, setMaxSuggestions] = useState(5);
+  const [isExample, setIsExample] = useState(false);
   const fileRefs = useRef<Record<CommerceFileName, HTMLInputElement | null>>({
     "orders.csv": null,
     "payments.csv": null,
@@ -149,6 +155,9 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
     "refunds.csv": null,
   });
   const opEpoch = useRef(0);
+  /** Synchronous in-flight import guard: React state settles a render too late
+   * to dedupe rapid clicks, so this ref is the duplicate-submission lock. */
+  const importActive = useRef(false);
   const stageHeadRef = useRef<HTMLHeadingElement>(null);
 
   const manual: CommerceManualCandidate[] = draft?.manual ?? [];
@@ -362,6 +371,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
         policy_revision: 0,
       });
       setDraft(emptyCommerceDraft(keys));
+      setIsExample(false);
       setStaleNote(null);
       setStage(2);
     } catch (e) {
@@ -372,9 +382,62 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
     }
   }
 
+  /** One-click fictional example: bundled bytes through the real parse route.
+   *
+   * Import and parse only. Nothing is permitted, adopted, attested, or solved:
+   * the user lands in Review with an empty draft and makes every human
+   * decision in the Workbench. Always starts a fresh investigation: prior
+   * sessions, revisions, proofs, and receipts are discarded first.
+   */
+  async function runExample() {
+    if (busy || importActive.current) return;
+    importActive.current = true;
+    const epoch = ++opEpoch.current;
+    setBusy("import");
+    setError(null);
+    try {
+      const bundle = fictionalCommerceBundle();
+      const res = await commerceParse(bundle);
+      if (opEpoch.current !== epoch) return;
+      const keys: string[] = [];
+      for (const r of res.validated_source_rows.payments) keys.push(makeRecordKey("payment", r.payment_id));
+      for (const r of res.validated_source_rows.deliveries) keys.push(makeRecordKey("delivery", r.delivery_id));
+      for (const r of res.validated_source_rows.refunds) keys.push(makeRecordKey("refund", r.refund_id));
+      keys.sort();
+      const bundled = loadFictionalCommerceFiles();
+      setFiles({
+        "orders.csv": { name: "orders.csv (fictional example)", text: bundled[0].text, b64: bundled[0].b64 },
+        "payments.csv": { name: "payments.csv (fictional example)", text: bundled[1].text, b64: bundled[1].b64 },
+        "deliveries.csv": { name: "deliveries.csv (fictional example)", text: bundled[2].text, b64: bundled[2].b64 },
+        "refunds.csv": { name: "refunds.csv (fictional example)", text: bundled[3].text, b64: bundled[3].b64 },
+      });
+      invalidateFrom("source");
+      setParse(res);
+      setServerRevisions({
+        source_revision: res.source_revision,
+        candidate_revision: res.candidate_revision,
+        policy_revision: 0,
+      });
+      setDraft(emptyCommerceDraft(keys));
+      setIsExample(true);
+      setStaleNote(null);
+      setStage(2);
+      for (const n of COMMERCE_FILE_NAMES) {
+        if (fileRefs.current[n]) fileRefs.current[n]!.value = "";
+      }
+    } catch (e) {
+      if (opEpoch.current !== epoch) return;
+      fail("Import", e);
+    } finally {
+      importActive.current = false;
+      if (opEpoch.current === epoch) setBusy(null);
+    }
+  }
+
   function clearAll() {
     opEpoch.current += 1;
     setBusy(null);
+    setIsExample(false);
     setFiles({ "orders.csv": null, "payments.csv": null, "deliveries.csv": null, "refunds.csv": null });
     setParse(null);
     setServerRevisions(null);
@@ -683,19 +746,29 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
         Exactly four CSVs. Cleanly fulfilled means one full same-currency SETTLED payment, one
         DELIVERED delivery, and no linked COMPLETED refund. K stays a draft until you adopt it.
       </p>
+      <p className="lede-sub">{FICTIONAL_COMMERCE_BLURB}</p>
       <div className="row hero-cta">
         <button
           type="button"
           className="primary"
+          onClick={() => void runExample()}
+          disabled={busy === "import"}
+        >
+          {busy === "import" ? "Loading fictional example…" : "Explore fictional commerce example"}
+        </button>
+        <button
+          type="button"
           onClick={() => {
             stageHeadRef.current?.focus({ preventScroll: true });
             stageHeadRef.current?.scrollIntoView?.({ block: "start" });
           }}
         >
-          Import four fictional CSVs
+          Upload my own four CSV files
         </button>
       </div>
-      <p className="honest-label" role="status">New investigation · not yet analyzed</p>
+      <p className="honest-label" role="status">
+        Fictional demonstration data · not real business information · not yet analyzed
+      </p>
       <p className="trust-line">
         AI suggests · You decide · Mathematics checks. Commerce results appear only after the real
         backend answers.
@@ -805,6 +878,11 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
           <div className="row row-nav">
             <button type="button" onClick={() => goBack(1)}>← Back to Import</button>
           </div>
+          {isExample && parse && (
+            <p className="fiction-note" role="status">
+              Fictional demonstration data · not real business information. {FICTIONAL_COMMERCE_BLURB}
+            </p>
+          )}
           <div className="decision-guide">
             <span className="guide-icon" aria-hidden="true">?</span>
             <div>

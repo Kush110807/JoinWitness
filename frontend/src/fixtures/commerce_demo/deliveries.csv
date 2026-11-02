@@ -1,0 +1,4 @@
+delivery_id,order_ref,status
+D1,O1,DELIVERED
+D2,O2,DELIVERED
+D3,O3,IN_TRANSIT
