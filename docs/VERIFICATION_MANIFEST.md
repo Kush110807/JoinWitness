@@ -1,4 +1,20 @@
-# Verification record — Decision Atlas R2
+# Verification record — JoinWitness Decision Atlas
+
+## Current unified frontend — later release evidence
+
+**Public integration:** [`578003707b972289433c022ca893ecad88e58234`](https://github.com/Kush110807/JoinWitness/commit/578003707b972289433c022ca893ecad88e58234), merging frontend-only changes from `d4522e35de0f0f4fc967b9383ca81f61b872e802`. The original R2 engine at `483fc95` remains unchanged.
+
+**Muse-reported local verification:** TypeScript compile clean; Vite production build PASS; **152/152 frontend tests PASS** (15 files). This adds six tests over the earlier R2 checkpoint.
+
+**Browser evidence:** Committed [screen captures and results](../results/atlas-unification/) cover both scenarios and all four stages at 1440×900, 1728×1080, 390×844 and 375×812. The browser-results JSON records 32/32 stage/viewport document-width checks `ok:true`. These checks indicate no horizontal document overflow; they are not an independent assessment of visual design or all accessibility behaviour.
+
+**Keyboard findings:** The [targeted audit](../results/ux-keyboard/keyboard-audit.txt) recorded 13/13 checks passing for skip link, focus, selection and evidence dialogue. The [prepared flow](../results/ux-keyboard/keyboard-prepared.json) records 12 Case A and 11 Case B checks passing. However the [extended keyboard run](../results/ux-keyboard/keyboard-full.txt) contains two **FAIL** entries for custom-draft adoption, and a subsequent Challenge/Verify segment was **SKIP**. Muse attributed these to incomplete single-seed review setup and a missing reviewer label in the automation; that explanation is **not independent confirmation** that every custom-data keyboard path works.
+
+**Scope:** All these results were locally executed/reported during development, not independently rerun through public CI. No backend, mathematical engine, fixtures, frozen contracts or HTTP schemas were changed by the UI integration. The remaining limitations, particularly custom-data review flows, should be disclosed to anyone evaluating accessibility claims.
+
+---
+
+## Historical R2 baseline — retained for traceability
 
 **Application release:** [`483fc95807df59528ccd4ea5e2541018b6f80966`](https://github.com/Kush110807/JoinWitness/commit/483fc95807df59528ccd4ea5e2541018b6f80966)  
 **UI lineage:** audited R2 `d100eebc9151bba748b322b9f5b1d08f92cd711c`, integrated onto stable G4 `cefe055370807ce580593e101bf3e95463170aeb`.  
