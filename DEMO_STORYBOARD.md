@@ -1,7 +1,7 @@
 # JoinWitness — Three-minute demonstration storyboard
 
 **Target:** ~170 seconds (maximum 180 seconds).  
-**Environment:** verified R2 local release, fictional fixture data, Chrome; backend \`127.0.0.1:8001\`, frontend \`127.0.0.1:5178\`.  
+**Environment:** verified R2 local release, fictional fixture data, Chrome; backend `127.0.0.1:8001`, frontend `127.0.0.1:5178`.  
 **Purpose:** show decision robustness rather than a generic reconciliation dashboard. This document is a freshly authored public demo guide based on observed release evidence.
 
 | Time | Screen / live action | Suggested narration |
@@ -33,4 +33,4 @@
 
 ## Honest limitations to state if asked
 
-The demonstration is local, uses synthetic records, and is not production-hosted. A model may eventually suggest candidate links, but it cannot make review decisions; during verified release tests the app showed \`AI_UNAVAILABLE\`. In particular, coding with Muse Code is genuine development-tool use, **not** evidence of live inference inside JoinWitness.
+The demonstration is local, uses synthetic records, and is not production-hosted. A model may eventually suggest candidate links, but it cannot make review decisions; during verified release tests the app showed `AI_UNAVAILABLE`. In particular, coding with Muse Code is genuine development-tool use, **not** evidence of live inference inside JoinWitness.
