@@ -170,6 +170,8 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
    * to dedupe rapid clicks, so this ref is the duplicate-submission lock. */
   const importActive = useRef(false);
   const stageHeadRef = useRef<HTMLHeadingElement>(null);
+  const continueReviewRef = useRef<HTMLButtonElement>(null);
+  const continueChallengeRef = useRef<HTMLButtonElement>(null);
 
   const manual: CommerceManualCandidate[] = draft?.manual ?? [];
   const catalog: CommerceCatalogTarget[] = useMemo(
@@ -279,16 +281,30 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
     if (stage > maxStage) setStage(maxStage);
   }, [stage, maxStage]);
 
-  const stageFocusArmed = useRef(false);
+  const prevStageRef = useRef<Stage | null>(null);
   useEffect(() => {
-    if (!stageFocusArmed.current) {
-      stageFocusArmed.current = true;
+    if (prevStageRef.current === null) {
+      prevStageRef.current = stage;
       return;
     }
+    if (prevStageRef.current === stage) return;
+    prevStageRef.current = stage;
     const el = stageHeadRef.current;
     el?.focus({ preventScroll: true });
     if (typeof el?.scrollIntoView === "function") el.scrollIntoView({ block: "nearest" });
   }, [stage]);
+
+  const challengeArmed = useRef(false);
+  useEffect(() => {
+    if (!challenge) {
+      challengeArmed.current = false;
+      return;
+    }
+    if (challengeArmed.current) return;
+    challengeArmed.current = true;
+    continueChallengeRef.current?.focus({ preventScroll: true });
+    continueChallengeRef.current?.scrollIntoView?.({ block: "nearest" });
+  }, [challenge]);
 
   function gotoStage(n: Stage) {
     if (n <= maxStage && !busy) setStage(n);
@@ -799,7 +815,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
   return (
     <ProductShell
       atlasMode="commerce"
-      bare={stage === 2 || stage === 3}
+      bare={true}
       stage={stage}
       maxStage={maxStage}
       busy={busy}
@@ -828,68 +844,130 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
       )}
 
       {stage === 1 && (
-        <section aria-labelledby="h-c-import" className="card commerce">
-          <h2 id="h-c-import" ref={stageHeadRef} tabIndex={-1}>
-            1 · Import — Which four files are we testing?
-          </h2>
-          {!parse && (
-            <>
-              <p>
-                Select exactly the four named CSVs. Files are read byte-exactly in your browser and
-                sent only to the local backend for validation. Required headers:{" "}
-                <code>order_id,customer_id,order_total,currency</code>,{" "}
-                <code>payment_id,order_ref,amount,currency,status</code>,{" "}
-                <code>delivery_id,order_ref,status</code>,{" "}
-                <code>refund_id,payment_ref,amount,status</code> (1–50 orders, 0–60 rows per other
-                file, max 64 KiB each).
-              </p>
-              <div className="file-grid">
-                {COMMERCE_FILE_NAMES.map((name) => (
-                  <label key={name}>
-                    {name}{" "}
-                    <input
-                      type="file"
-                      accept=".csv,text/csv"
-                      aria-label={`Upload ${name}`}
-                      ref={(el) => {
-                        fileRefs.current[name] = el;
-                      }}
-                    />
-                  </label>
-                ))}
+        <>
+          <DecisionAtlasExperience
+            {...buildCommerceExperience({
+              reviewRecords,
+              targetsFor: (key) => targetsByRecord.get(key) ?? [],
+              draft,
+              blockedRows: blocked,
+              validation,
+              challenge,
+              replay,
+              suggest,
+              orderCount,
+              isExample,
+              stage,
+              maxStage,
+            })}
+            onStage={(s) => gotoStage(atlasToStage(s))}
+            primaryAction={
+              <div className="atlas-actions">
+                <h2 id="h-c-import" ref={stageHeadRef} tabIndex={-1}>
+                  1 · Import — Which four files are we testing?
+                </h2>
+                {!parse && (
+                  <>
+                    <p className="kicker">Fictional worked example · local only · new</p>
+                    <p className="lede">
+                      Four related files — orders, payments, deliveries, refunds — hold uncertain links. You set
+                      a threshold K, review every permitted link by hand, then test whether any permitted
+                      alternative crosses K, using only fictional data.
+                    </p>
+                    <p className="lede-sub">
+                      Exactly four CSVs. Cleanly fulfilled means one full same-currency SETTLED payment, one
+                      DELIVERED delivery, and no linked COMPLETED refund. K stays a draft until you adopt it.
+                    </p>
+                    <p className="lede-sub">{FICTIONAL_COMMERCE_BLURB}</p>
+                    <div className="row hero-cta">
+                      <button
+                        type="button"
+                        className="primary"
+                        onClick={() => void runExample()}
+                        disabled={busy === "import"}
+                      >
+                        {busy === "import" ? "Loading fictional example…" : "Explore fictional commerce example"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          stageHeadRef.current?.focus({ preventScroll: true });
+                          stageHeadRef.current?.scrollIntoView?.({ block: "start" });
+                        }}
+                      >
+                        Upload my own four CSV files
+                      </button>
+                    </div>
+                    <p className="honest-label" role="status">
+                      Fictional demonstration data · not real business information · not yet analyzed
+                    </p>
+                    <p className="trust-line">
+                      AI suggests · You decide · Mathematics checks. Commerce results appear only after the real
+                      backend answers.
+                    </p>
+                    <p>
+                      Select exactly the four named CSVs. Files are read byte-exactly in your browser and
+                      sent only to the local backend for validation. Required headers:{" "}
+                      <code>order_id,customer_id,order_total,currency</code>,{" "}
+                      <code>payment_id,order_ref,amount,currency,status</code>,{" "}
+                      <code>delivery_id,order_ref,status</code>,{" "}
+                      <code>refund_id,payment_ref,amount,status</code> (1–50 orders, 0–60 rows per other
+                      file, max 64 KiB each).
+                    </p>
+                    <div className="file-grid">
+                      {COMMERCE_FILE_NAMES.map((name) => (
+                        <label key={name}>
+                          {name}{" "}
+                          <input
+                            type="file"
+                            accept=".csv,text/csv"
+                            aria-label={`Upload ${name}`}
+                            ref={(el) => {
+                              fileRefs.current[name] = el;
+                            }}
+                          />
+                        </label>
+                      ))}
+                    </div>
+                    <div className="row">
+                      <button type="button" onClick={runImport} disabled={busy === "import"}>
+                        {busy === "import" ? "Parsing…" : "Import and parse four CSVs"}
+                      </button>
+                    </div>
+                    <p className="muted">
+                      Commerce API status is checked on first Import. If the backend router is not yet
+                      integrated, Import reports unavailable — nothing is fabricated.
+                    </p>
+                  </>
+                )}
+                {parse && (
+                  <>
+                    <p>
+                      Four commerce files parsed. Reloading or clearing invalidates all review, challenge,
+                      and receipt state. Original bytes are retained locally only for this session and
+                      replay.
+                    </p>
+                    <div className="row">
+                      <button type="button" className="primary" onClick={() => gotoStage(2)}>
+                        Continue to Review
+                      </button>
+                      <button type="button" onClick={clearAll}>
+                        Clear commerce import
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
-              <div className="row">
-                <button type="button" onClick={runImport} disabled={busy === "import"}>
-                  {busy === "import" ? "Parsing…" : "Import and parse four CSVs"}
-                </button>
-              </div>
-              <p className="muted">
-                Commerce API status is checked on first Import. If the backend router is not yet
-                integrated, Import reports unavailable — nothing is fabricated.
-              </p>
-            </>
-          )}
+            }
+          />
           {parse && (
-            <>
-              <p>
-                Four commerce files parsed. Reloading or clearing invalidates all review, challenge,
-                and receipt state. Original bytes are retained locally only for this session and
-                replay.
-              </p>
-              <div className="row">
-                <button type="button" className="primary" onClick={() => gotoStage(2)}>
-                  Continue to Review
-                </button>
-                <button type="button" onClick={clearAll}>
-                  Clear commerce import
-                </button>
-              </div>
+            <section className="atlas-supplement" aria-label="Commerce import details">
               <div aria-live="polite">
                 <CommerceSourceInspector parse={parse} catalog={catalog} adopted={adopted} />
               </div>
-            </>
+            </section>
           )}
-        </section>
+        </>
       )}
 
       {stage === 2 && draft && (
@@ -1029,7 +1107,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
                       <p className="muted">Authorised by: {validation.authorised_by}</p>
                     </details>
                     <div className="row">
-                      <button type="button" onClick={() => gotoStage(3)}>
+                      <button type="button" ref={continueReviewRef} onClick={() => gotoStage(3)}>
                         Continue to Challenge
                       </button>
                     </div>
@@ -1101,13 +1179,9 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
                 </div>
               )}
             </div>
-            <div className="meta-box">
-              <h3>Not yet available here</h3>
-              <p>
-                Live Meta verification traces are not shipped: this page only shows what the local
-                backend server reports. Human review above is fully available without Meta.
-              </p>
-            </div>
+            <p className="meta-status">
+              Not yet available here — live Meta verification traces are not shipped: this page only shows what the local backend server reports. Human review above is fully available without Meta.
+            </p>
           </section>
         </>
       )}
@@ -1134,6 +1208,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
               <div className="row row-nav">
                 <button type="button" onClick={() => goBack(2)}>← Back to Review</button>
               </div>
+              <h2 id="h-c-challenge" ref={stageHeadRef} tabIndex={-1}>3 · Challenge — Does any permitted alternative cross K?</h2>
               <p>
                 Fixed question: <strong>{COMMERCE_QUESTION}</strong>
               </p>
@@ -1180,7 +1255,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
               )}
               {challenge && (
                 <div className="row">
-                  <button type="button" onClick={() => gotoStage(4)}>
+                  <button type="button" ref={continueChallengeRef} onClick={() => gotoStage(4)}>
                     Continue to Verify
                   </button>
                 </div>
@@ -1191,131 +1266,160 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
       )}
 
       {stage === 4 && (
-        <section aria-labelledby="h-c-verify" className="card commerce">
-          <h2 id="h-c-verify" ref={stageHeadRef} tabIndex={-1}>
-            4 · Verify — Can anyone reproduce it?
-          </h2>
-          <div className="row row-nav">
-            <button type="button" onClick={() => goBack(3)}>← Back to Challenge</button>
-          </div>
-          {!challenge && <p className="muted">Run the Challenge first; receipts and replay unlock after.</p>}
-          {challenge && (
-            <ProofDrawer
-              statusBlock={
-                replayVerified && replay ? (
-                  <div aria-live="polite">
-                    <ol className="ladder" aria-label="Proof checks">
-                      <li>
-                        <strong>The receipt came from the current checked run.</strong>
-                        <span>
-                          {" "}Export succeeded only after exhaustive enumeration and independent
-                          recomputation passed for this exact review.
-                        </span>
-                      </li>
-                      <li>
-                        <strong>Stateless replay recomputed the same outcome.</strong>
-                        <span>
-                          {" "}Source, policy, receipt integrity, and the independent checker all
-                          report <code>MATCH</code>/<code>PASSED</code> on the original file bytes.
-                        </span>
-                      </li>
-                      <li>
-                        <strong>Historical receipt only.</strong>
-                        <span>
-                          {" "}Replay is consistency evidence from the saved receipt — it does not
-                          restore a live session or prove signer authenticity.
-                        </span>
-                      </li>
-                    </ol>
-                  </div>
-                ) : replay ? (
-                  <div aria-live="polite">
-                    <p>
-                      Replay status: <code>{replay.verification_status}</code> — not verified. No
-                      proof is claimed.
-                    </p>
-                  </div>
-                ) : (
+        <>
+          <DecisionAtlasExperience
+            {...buildCommerceExperience({
+              reviewRecords,
+              targetsFor: (key) => targetsByRecord.get(key) ?? [],
+              draft,
+              blockedRows: blocked,
+              validation,
+              challenge,
+              replay,
+              suggest,
+              orderCount,
+              isExample,
+              stage,
+              maxStage,
+            })}
+            onStage={(s) => gotoStage(atlasToStage(s))}
+            primaryAction={
+              <div className="atlas-actions">
+                <div className="row row-nav">
+                  <button type="button" onClick={() => goBack(3)}>← Back to Challenge</button>
+                </div>
+                <h2 id="h-c-verify" ref={stageHeadRef} tabIndex={-1}>
+                  4 · Verify — Can anyone reproduce it?
+                </h2>
+                {!challenge && <p className="muted">Run the Challenge first; receipts and replay unlock after.</p>}
+                {challenge && !receipt && (
                   <p className="muted">
                     Export a receipt and run the replay below. The independent check is claimed only
                     after the backend replay succeeds — never before.
                   </p>
-                )
-              }
-              actions={
-                <>
-                  <button
-                    type="button"
-                    className="primary"
-                    onClick={exportReceipt}
-                    disabled={!receiptEligible || busy === "receipt"}
-                    title={
-                      receiptEligible
-                        ? "Export the current checked run"
-                        : "Available only after a complete checker-passed run"
-                    }
-                  >
-                    {busy === "receipt" ? "Exporting…" : "Export receipt"}
-                  </button>
-                  {receipt && (
-                    <>
-                      <button type="button" onClick={downloadReceipt}>
-                        Download receipt JSON
-                      </button>
-                      <button type="button" onClick={replayReceipt} disabled={busy === "replay"}>
-                        {busy === "replay" ? "Replaying…" : "Replay receipt"}
-                      </button>
-                    </>
-                  )}
-                </>
-              }
-              evidence={
-                <>
-                  {receipt && (
+                )}
+              </div>
+            }
+          />
+          <section className="atlas-supplement" aria-label="Commerce verification details">
+            {challenge && (
+              <ProofDrawer
+                statusBlock={
+                  replayVerified && replay ? (
+                    <div aria-live="polite">
+                      <ol className="ladder" aria-label="Proof checks">
+                        <li>
+                          <strong>The receipt came from the current checked run.</strong>
+                          <span>
+                            {" "}Export succeeded only after exhaustive enumeration and independent
+                            recomputation passed for this exact review.
+                          </span>
+                        </li>
+                        <li>
+                          <strong>Stateless replay recomputed the same outcome.</strong>
+                          <span>
+                            {" "}Source, policy, receipt integrity, and the independent checker all
+                            report <code>MATCH</code>/<code>PASSED</code> on the original file bytes.
+                          </span>
+                        </li>
+                        <li>
+                          <strong>Historical receipt only.</strong>
+                          <span>
+                            {" "}Replay is consistency evidence from the saved receipt — it does not
+                            restore a live session or prove signer authenticity.
+                          </span>
+                        </li>
+                      </ol>
+                    </div>
+                  ) : replay ? (
                     <div aria-live="polite">
                       <p>
-                        Receipt: <code>{receipt.receipt.receipt_sha256.slice(0, 12)}…</code> · result{" "}
-                        <code>{receipt.receipt.result.status}</code> ·{" "}
-                        <code>{receipt.attestation}</code>
-                      </p>
-                      <p className="muted">
-                        Consistency hash only, not a signature: integrity comparison without
-                        authentication. Source bundle{" "}
-                        <code>{receipt.receipt.source_bundle_sha256.slice(0, 12)}…</code> · policy{" "}
-                        <code>{receipt.receipt.policy_sha256.slice(0, 12)}…</code> · engine{" "}
-                        <code>{receipt.receipt.engine_identity}</code>.
+                        Replay status: <code>{replay.verification_status}</code> — not verified. No
+                        proof is claimed.
                       </p>
                     </div>
-                  )}
-                  {replay && (
-                    <div aria-live="polite">
-                      <p>
-                        Replay: <code>{replay.verification_status}</code> · source{" "}
-                        <code>{replay.source_binding}</code> · policy{" "}
-                        <code>{replay.policy_binding}</code> · integrity{" "}
-                        <code>{replay.receipt_integrity}</code> · checker{" "}
-                        <code>{replay.independent_checker}</code>
-                      </p>
-                      <p>
-                        Recomputed baseline clean count: {replay.recomputed.baseline_clean_count}
-                        {replay.recomputed.witness_clean_count !== null && (
-                          <> · witness clean count: {replay.recomputed.witness_clean_count}</>
-                        )}
-                        {replay.recomputed.link_distance !== null && (
-                          <> · link distance: {replay.recomputed.link_distance}</>
-                        )}
-                      </p>
-                      <p className="muted">
-                        Historical receipt only: {String(replay.historical_receipt_only)}.
-                      </p>
-                    </div>
-                  )}
-                </>
-              }
-              hasEvidence={!!(receipt || replay)}
-            />
-          )}
-        </section>
+                  ) : (
+                    <p className="muted">
+                      Export a receipt and run the replay below. The independent check is claimed only
+                      after the backend replay succeeds — never before.
+                    </p>
+                  )
+                }
+                actions={
+                  <>
+                    <button
+                      type="button"
+                      className="primary"
+                      onClick={exportReceipt}
+                      disabled={!receiptEligible || busy === "receipt"}
+                      title={
+                        receiptEligible
+                          ? "Export the current checked run"
+                          : "Available only after a complete checker-passed run"
+                      }
+                    >
+                      {busy === "receipt" ? "Exporting…" : "Export receipt"}
+                    </button>
+                    {receipt && (
+                      <>
+                        <button type="button" onClick={downloadReceipt}>
+                          Download receipt JSON
+                        </button>
+                        <button type="button" onClick={replayReceipt} disabled={busy === "replay"}>
+                          {busy === "replay" ? "Replaying…" : "Replay receipt"}
+                        </button>
+                      </>
+                    )}
+                  </>
+                }
+                evidence={
+                  <>
+                    {receipt && (
+                      <div aria-live="polite">
+                        <p>
+                          Receipt: <code>{receipt.receipt.receipt_sha256.slice(0, 12)}…</code> · result{" "}
+                          <code>{receipt.receipt.result.status}</code> ·{" "}
+                          <code>{receipt.attestation}</code>
+                        </p>
+                        <p className="muted">
+                          Consistency hash only, not a signature: integrity comparison without
+                          authentication. Source bundle{" "}
+                          <code>{receipt.receipt.source_bundle_sha256.slice(0, 12)}…</code> · policy{" "}
+                          <code>{receipt.receipt.policy_sha256.slice(0, 12)}…</code> · engine{" "}
+                          <code>{receipt.receipt.engine_identity}</code>.
+                        </p>
+                      </div>
+                    )}
+                    {replay && (
+                      <div aria-live="polite">
+                        <p>
+                          Replay: <code>{replay.verification_status}</code> · source{" "}
+                          <code>{replay.source_binding}</code> · policy{" "}
+                          <code>{replay.policy_binding}</code> · integrity{" "}
+                          <code>{replay.receipt_integrity}</code> · checker{" "}
+                          <code>{replay.independent_checker}</code>
+                        </p>
+                        <p>
+                          Recomputed baseline clean count: {replay.recomputed.baseline_clean_count}
+                          {replay.recomputed.witness_clean_count !== null && (
+                            <> · witness clean count: {replay.recomputed.witness_clean_count}</>
+                          )}
+                          {replay.recomputed.link_distance !== null && (
+                            <> · link distance: {replay.recomputed.link_distance}</>
+                          )}
+                        </p>
+                        <p className="muted">
+                          Historical receipt only: {String(replay.historical_receipt_only)}.
+                        </p>
+                      </div>
+                    )}
+                  </>
+                }
+                hasEvidence={!!(receipt || replay)}
+              />
+            )}
+          </section>
+        </>
       )}
     </ProductShell>
   );

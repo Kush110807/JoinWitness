@@ -387,3 +387,603 @@
     padding: 1rem 20px 6rem;
   }
 }
+
+/* G4 Atlas unification: Import/Verify stages in the dark scene.
+ * Reuses the existing Atlas tokens; no light dashboard surfaces.
+ */
+
+/* Full-bleed dark workspace: no light page margins in any Atlas stage. */
+.page.atlas-bare {
+  max-width: none;
+  margin: 0;
+  padding: 0 0 2rem;
+  background: #080c10;
+  min-height: 100vh;
+}
+.page.atlas-bare .skip:focus,
+.page.atlas-bare .skip:focus-visible {
+  background: #c5f1d3;
+  color: #09201a;
+  outline: 3px solid #70e3c0;
+}
+
+/* Bare shell switcher (investigations stay reachable in every Atlas stage). */
+.page.atlas-bare .atlas-switcher-bar {
+  background: #080c10;
+  padding: 0.9rem 42px 0;
+  max-width: 1760px;
+  margin: 0 auto;
+  width: 100%;
+}
+.page.atlas-bare .atlas-switcher {
+  display: grid;
+  grid-template-columns: 11.8rem repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: stretch;
+}
+.page.atlas-bare .atlas-switcher-label span,
+.page.atlas-bare .atlas-switcher-label strong {
+  color: #9db4ad;
+}
+.page.atlas-bare .atlas-option {
+  background: #0d1217;
+  border: 1px solid #26313a;
+  color: #e8efeb;
+}
+.page.atlas-bare .atlas-option small {
+  color: #9eafb3;
+}
+.page.atlas-bare .atlas-option-copy strong {
+  color: #e8efeb;
+}
+
+/* Scene skip link stays off-screen until focused (bare shell owns first Tab). */
+.page.atlas-bare .jw-atlas-skip {
+  left: 12px;
+  top: 0;
+  transform: translateY(-300%);
+  opacity: 0;
+  pointer-events: none;
+}
+.page.atlas-bare .jw-atlas-skip:focus,
+.page.atlas-bare .jw-atlas-skip:focus-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.page.atlas-bare .atlas-option.is-selected {
+  border-color: #70e3c0;
+  background: #12211d;
+}
+.page.atlas-bare .atlas-option-mark {
+  background: #1a2a28;
+  color: #9db4ad;
+}
+.page.atlas-bare .atlas-option.is-selected .atlas-option-mark {
+  background: #c5f1d3;
+  color: #09201a;
+}
+.page.atlas-bare .atlas-option-arrow {
+  color: #6b7d80;
+}
+.page.atlas-bare .atlas-option.is-selected .atlas-option-arrow {
+  color: #70e3c0;
+}
+@media (max-width: 950px) {
+  .page.atlas-bare .atlas-switcher-bar {
+    padding: 0.8rem 20px 0;
+  }
+  .page.atlas-bare .atlas-switcher {
+    grid-template-columns: 1fr;
+  }
+  .page.atlas-bare .atlas-switcher-label {
+    display: none;
+  }
+}
+
+/* Error above the scene (bare stages): dark, never light. */
+.page.atlas-bare > main > .alert {
+  background: #2a1518;
+  border: 1px solid #7a4a4a;
+  color: #f2d7d7;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  margin: 1rem auto;
+  max-width: 1760px;
+  width: calc(100% - 84px);
+}
+.page.atlas-bare > main > .alert code {
+  color: #f2d7d7;
+}
+.page.atlas-bare > main > .alert .muted {
+  color: #d7a9a9;
+}
+@media (max-width: 950px) {
+  .page.atlas-bare > main > .alert {
+    width: calc(100% - 40px);
+  }
+}
+
+/* Stage headings inside the scene. */
+.jw-atlas-experience .atlas-actions h2 {
+  color: #e8efeb;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin: 0.2rem 0 0.4rem;
+  line-height: 1.35;
+}
+.jw-atlas-experience .atlas-actions h3 {
+  color: #d2e7df;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0.8rem 0 0.3rem;
+  line-height: 1.4;
+}
+
+/* Landing intro inside Import (no duplicate h1; the scene owns the question). */
+.jw-atlas-experience .atlas-actions .kicker {
+  color: #70e3c0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.jw-atlas-experience .atlas-actions .lede,
+.jw-atlas-experience .atlas-actions .lede-sub {
+  color: #b1bfc4;
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 0.5rem 0 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.jw-atlas-experience .atlas-actions .hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0.7rem 0;
+}
+.jw-atlas-experience .atlas-actions .csvs-note,
+.jw-atlas-experience .atlas-actions .trust-line {
+  font-size: 11px;
+}
+.jw-atlas-experience .atlas-actions .honest-label {
+  display: inline-block;
+  border: 1px solid #3b514e;
+  background: #17302b;
+  color: #c4e8d2;
+  border-radius: 99px;
+  padding: 0.35rem 0.7rem;
+  font-size: 11px;
+  font-weight: 700;
+  margin: 0.4rem 0 0;
+}
+
+/* File inputs in the dark scene. */
+.jw-atlas-experience input[type="file"],
+.atlas-supplement input[type="file"] {
+  font: inherit;
+  font-size: 12px;
+  color: #e8efeb;
+  background: #111c22;
+  border: 1px solid #29383e;
+  border-radius: 10px;
+  padding: 9px 10px;
+  min-height: 42px;
+  max-width: 100%;
+  width: 100%;
+}
+.jw-atlas-experience input[type="file"]::file-selector-button,
+.atlas-supplement input[type="file"]::file-selector-button {
+  background: #1a2a28;
+  color: #e2eee6;
+  border: 1px solid #405f56;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-right: 0.6rem;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+}
+.jw-atlas-experience :is(input, select, summary):focus-visible,
+.atlas-supplement :is(input, select, summary, button):focus-visible {
+  outline: 2px solid #c3f3d3;
+  outline-offset: 2px;
+}
+
+/* Upload grids: never overflow the narrow narrative or mobile. */
+.jw-atlas-experience .upload-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  margin: 0.6rem 0;
+  min-width: 0;
+}
+.jw-atlas-experience .upload-grid label,
+.atlas-supplement .file-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 0;
+}
+.jw-atlas-experience .file-grid,
+.atlas-supplement .file-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  margin: 0.6rem 0;
+  min-width: 0;
+}
+@media (min-width: 951px) {
+  .atlas-supplement .file-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 950px) and (min-width: 601px) {
+  .atlas-supplement .file-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Source cards in the supplement (Import details). */
+.atlas-supplement .source-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0.8rem 0;
+  min-width: 0;
+}
+.atlas-supplement .source-card {
+  border: 1px solid #2b3940;
+  border-radius: 12px;
+  background: #0d1217;
+  padding: 0.9rem 1rem;
+  min-width: 0;
+}
+.atlas-supplement .source-card h3 {
+  color: #e8efeb;
+  font-size: 13px;
+  margin: 0 0 0.4rem;
+}
+.atlas-supplement .source-card .source-count {
+  color: #9eafb3;
+  font-size: 12px;
+  margin: 0 0 0.5rem;
+  overflow-wrap: anywhere;
+}
+.atlas-supplement .source-card .mono-wrap,
+.atlas-supplement .mono-wrap {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.atlas-supplement .evidence-details {
+  border: 1px solid #2b3940;
+  border-radius: 10px;
+  background: #111c22;
+  margin: 0.5rem 0;
+  padding: 0.6rem 0.8rem;
+  min-width: 0;
+}
+.atlas-supplement .evidence-details summary {
+  cursor: pointer;
+  color: #d2e7df;
+  font-size: 12px;
+  font-weight: 700;
+}
+.atlas-supplement .evidence-details .table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.atlas-supplement table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.5rem 0;
+  font-size: 11px;
+}
+.atlas-supplement th,
+.atlas-supplement td {
+  border: 1px solid #2b3940;
+  padding: 0.35rem 0.5rem;
+  text-align: left;
+  color: #b8c7c7;
+  overflow-wrap: anywhere;
+}
+.atlas-supplement pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #b8c7c7;
+  background: #0b151a;
+  border: 1px solid #2b3940;
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  overflow-x: auto;
+}
+@media (max-width: 950px) {
+  .atlas-supplement .source-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Illustrative entry figure in the supplement (pre-parse Import). */
+.atlas-supplement .entry-figure {
+  margin: 0.8rem 0;
+  max-width: 100%;
+  border: 1px solid #2b3940;
+  border-radius: 12px;
+  background: #0d1217;
+  padding: 0.9rem 1rem;
+}
+.atlas-supplement .entry-figure svg {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+}
+.atlas-supplement .entry-figure figcaption {
+  color: #9eafb3;
+  font-size: 11px;
+  margin-top: 0.5rem;
+}
+.atlas-supplement .fig-source {
+  fill: #1a2a28;
+  stroke: #405f56;
+}
+.atlas-supplement .fig-cand {
+  fill: #111c22;
+  stroke: #2b3940;
+}
+.atlas-supplement .fig-cand-alt {
+  fill: #1a2410;
+  stroke: #8a7648;
+}
+.atlas-supplement .fig-id {
+  fill: #e8efeb;
+  font-size: 12px;
+  font-weight: 700;
+}
+.atlas-supplement .fig-sub {
+  fill: #9eafb3;
+  font-size: 10px;
+}
+.atlas-supplement .fig-on-dark {
+  fill: #e8efeb;
+}
+.atlas-supplement .fig-link {
+  stroke: #70e3c0;
+  stroke-width: 1.5;
+}
+.atlas-supplement .fig-link-alt {
+  stroke: #f3b974;
+  stroke-dasharray: 4 4;
+}
+
+/* Review guide + legend in the scene and supplement. */
+.jw-atlas-experience .decision-guide,
+.atlas-supplement .decision-guide {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  border: 1px solid #2b3940;
+  background: #111c22;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  margin: 0.5rem 0;
+  min-width: 0;
+}
+.jw-atlas-experience .decision-guide strong,
+.atlas-supplement .decision-guide strong {
+  color: #e8efeb;
+  font-size: 12px;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.jw-atlas-experience .decision-guide p,
+.atlas-supplement .decision-guide p {
+  color: #9eafb3;
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 0;
+}
+.jw-atlas-experience .guide-icon,
+.atlas-supplement .guide-icon {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #1a2a28;
+  color: #c5f1d3;
+  font-weight: 800;
+  flex: none;
+}
+.jw-atlas-experience .legend,
+.atlas-supplement .legend {
+  list-style: none;
+  margin: 0.6rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 11px;
+  color: #9eafb3;
+}
+.jw-atlas-experience .legend li,
+.atlas-supplement .legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-wrap: anywhere;
+}
+.jw-atlas-experience .swatch,
+.atlas-supplement .swatch {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 3px;
+  flex: none;
+}
+.jw-atlas-experience .swatch-baseline,
+.atlas-supplement .swatch-baseline {
+  background: #afdeb8;
+}
+.jw-atlas-experience .swatch-suggested,
+.atlas-supplement .swatch-suggested {
+  background: #eaba7d;
+}
+.jw-atlas-experience .swatch-allowed,
+.atlas-supplement .swatch-allowed {
+  background: #9ceac2;
+}
+.jw-atlas-experience .swatch-alternative,
+.atlas-supplement .swatch-alternative {
+  background: #f3b974;
+}
+
+/* Proof ladder in the supplement (Verify details). */
+.atlas-supplement .ladder {
+  list-style: decimal;
+  margin: 0.6rem 0 0.6rem 1.2rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  color: #b8c7c7;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.atlas-supplement .ladder strong {
+  color: #e8efeb;
+}
+.atlas-supplement .ladder li {
+  background: #0d1217;
+  border: 1px solid #2b3940;
+  color: #b8c7c7;
+}
+.atlas-supplement .ladder li::before {
+  background: #c5f1d3;
+  color: #09201a;
+}
+.atlas-supplement .ladder li span {
+  color: #b8c7c7;
+}
+.atlas-supplement .scope-line {
+  color: #9eafb3;
+  font-size: 12px;
+}
+.atlas-supplement .alert {
+  border: 1px solid #7a4a4a;
+  background: #2a1518;
+  color: #f2d7d7;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+}
+.atlas-supplement .alert code {
+  color: #f2d7d7;
+}
+.atlas-supplement .stale-note {
+  border: 1px solid #8a7648;
+  background: #2a2410;
+  color: #ecdfae;
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+}
+.atlas-supplement .proof-evidence .proof-scroll {
+  max-height: 32rem;
+  overflow: auto;
+}
+.atlas-supplement h2 {
+  color: #e8efeb;
+  font-size: 16px;
+}
+.atlas-supplement h3 {
+  color: #d2e7df;
+}
+.atlas-supplement .warnings {
+  border: 1px solid #8a7648;
+  background: #2a2410;
+  color: #ecdfae;
+  border-radius: 10px;
+  padding: 0.6rem 1rem 0.6rem 1.6rem;
+  font-size: 11px;
+}
+
+/* UX correction: compact Review workspace, coherent hierarchy, no dead space. */
+@media (min-width: 951px) {
+  .atlas-supplement {
+    padding: 1rem 42px 2rem;
+  }
+}
+.atlas-supplement h3 {
+  font-size: 13px;
+  margin: 1rem 0 0.4rem;
+}
+.atlas-supplement h3:first-child {
+  margin-top: 0;
+}
+.atlas-supplement .legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.3rem 1rem;
+}
+@media (max-width: 600px) {
+  .atlas-supplement .legend {
+    grid-template-columns: 1fr;
+  }
+}
+.atlas-supplement .technical-details pre {
+  max-height: 16rem;
+  overflow: auto;
+}
+.atlas-supplement .technical-details h4 {
+  color: #d2e7df;
+  font-size: 12px;
+  margin: 0.6rem 0 0.3rem;
+}
+.atlas-supplement .meta-status {
+  font-size: 11px;
+  color: #9eafb3;
+  border-top: 1px solid #2b3940;
+  padding-top: 0.6rem;
+  margin-top: 1rem;
+  line-height: 1.6;
+}
+.atlas-supplement .review-status {
+  font-size: 12px;
+  color: #b8c7c7;
+  margin: 0 0 0.5rem;
+}
+.atlas-supplement .review-status strong {
+  color: #e8efeb;
+}
+
+/* Keyboard: visible focus for every actionable control. */
+.jw-atlas-experience a:focus-visible,
+.atlas-supplement a:focus-visible,
+.page.atlas-bare a:focus-visible {
+  outline: 2px solid #c3f3d3;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.jw-atlas-experience summary:focus-visible,
+.atlas-supplement summary:focus-visible {
+  outline: 2px solid #c3f3d3;
+  outline-offset: 2px;
+}
+
+/* Reduced motion: no transitions or smooth scrolling. */
+@media (prefers-reduced-motion: reduce) {
+  .jw-atlas-experience *,
+  .atlas-supplement *,
+  .page.atlas-bare * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
