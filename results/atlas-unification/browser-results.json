@@ -43,7 +43,7 @@
       "ok": true
     }
   },
-  "KBD-1440x900": "BUTTON primary Explore the verified event",
+  "KBD-1440x900": "A skip Skip to main content",
   "A-1728x1080": {
     "ov1": {
       "scrollWidth": 1728,
@@ -88,7 +88,7 @@
       "ok": true
     }
   },
-  "KBD-1728x1080": "BUTTON primary Explore the verified event",
+  "KBD-1728x1080": "A skip Skip to main content",
   "A-390x844": {
     "ov1": {
       "scrollWidth": 390,
@@ -133,7 +133,7 @@
       "ok": true
     }
   },
-  "KBD-390x844": "BUTTON primary Explore the verified event",
+  "KBD-390x844": "A skip Skip to main content",
   "A-375x812": {
     "ov1": {
       "scrollWidth": 375,
@@ -178,5 +178,5 @@
       "ok": true
     }
   },
-  "KBD-375x812": "BUTTON primary Explore the verified event"
+  "KBD-375x812": "A skip Skip to main content"
 }

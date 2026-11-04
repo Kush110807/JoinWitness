@@ -170,6 +170,8 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
    * to dedupe rapid clicks, so this ref is the duplicate-submission lock. */
   const importActive = useRef(false);
   const stageHeadRef = useRef<HTMLHeadingElement>(null);
+  const continueReviewRef = useRef<HTMLButtonElement>(null);
+  const continueChallengeRef = useRef<HTMLButtonElement>(null);
 
   const manual: CommerceManualCandidate[] = draft?.manual ?? [];
   const catalog: CommerceCatalogTarget[] = useMemo(
@@ -279,16 +281,30 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
     if (stage > maxStage) setStage(maxStage);
   }, [stage, maxStage]);
 
-  const stageFocusArmed = useRef(false);
+  const prevStageRef = useRef<Stage | null>(null);
   useEffect(() => {
-    if (!stageFocusArmed.current) {
-      stageFocusArmed.current = true;
+    if (prevStageRef.current === null) {
+      prevStageRef.current = stage;
       return;
     }
+    if (prevStageRef.current === stage) return;
+    prevStageRef.current = stage;
     const el = stageHeadRef.current;
     el?.focus({ preventScroll: true });
     if (typeof el?.scrollIntoView === "function") el.scrollIntoView({ block: "nearest" });
   }, [stage]);
+
+  const challengeArmed = useRef(false);
+  useEffect(() => {
+    if (!challenge) {
+      challengeArmed.current = false;
+      return;
+    }
+    if (challengeArmed.current) return;
+    challengeArmed.current = true;
+    continueChallengeRef.current?.focus({ preventScroll: true });
+    continueChallengeRef.current?.scrollIntoView?.({ block: "nearest" });
+  }, [challenge]);
 
   function gotoStage(n: Stage) {
     if (n <= maxStage && !busy) setStage(n);
@@ -1091,7 +1107,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
                       <p className="muted">Authorised by: {validation.authorised_by}</p>
                     </details>
                     <div className="row">
-                      <button type="button" onClick={() => gotoStage(3)}>
+                      <button type="button" ref={continueReviewRef} onClick={() => gotoStage(3)}>
                         Continue to Challenge
                       </button>
                     </div>
@@ -1163,13 +1179,9 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
                 </div>
               )}
             </div>
-            <div className="meta-box">
-              <h3>Not yet available here</h3>
-              <p>
-                Live Meta verification traces are not shipped: this page only shows what the local
-                backend server reports. Human review above is fully available without Meta.
-              </p>
-            </div>
+            <p className="meta-status">
+              Not yet available here — live Meta verification traces are not shipped: this page only shows what the local backend server reports. Human review above is fully available without Meta.
+            </p>
           </section>
         </>
       )}
@@ -1196,6 +1208,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
               <div className="row row-nav">
                 <button type="button" onClick={() => goBack(2)}>← Back to Review</button>
               </div>
+              <h2 id="h-c-challenge" ref={stageHeadRef} tabIndex={-1}>3 · Challenge — Does any permitted alternative cross K?</h2>
               <p>
                 Fixed question: <strong>{COMMERCE_QUESTION}</strong>
               </p>
@@ -1242,7 +1255,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
               )}
               {challenge && (
                 <div className="row">
-                  <button type="button" onClick={() => gotoStage(4)}>
+                  <button type="button" ref={continueChallengeRef} onClick={() => gotoStage(4)}>
                     Continue to Verify
                   </button>
                 </div>

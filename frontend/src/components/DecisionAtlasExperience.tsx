@@ -222,14 +222,14 @@ export default function DecisionAtlasExperience(props: AtlasExperienceProps) {
                 key={d.id} cx={d.x} cy={d.y}
                 r={d.id===selected?.id?7:d.kind==='critical'?6.4:d.kind==='uncertain'?5:3.1}
                 className={`jw-atlas-node jw-atlas-node-${d.kind} ${d.id===selected?.id?'is-selected':''} ${isDim(d.kind)?'is-dim':''}`}
-                role="button" tabIndex={d.kind==='settled' ? -1 : 0}
+                role="button" tabIndex={isDim(d.kind) ? -1 : 0}
                 aria-label={`Inspect ${d.id}, ${d.kind} record`}
                 onClick={() => select(d.id)}
                 onKeyDown={e => { if (e.key==='Enter' || e.key===' ') { e.preventDefault(); select(d.id); } }}
               />)}
-              {dots.filter(d => d.kind !== 'settled').map(d => <circle
+              {dots.filter(d => !isDim(d.kind)).map(d => <circle
                 key={`hit:${d.id}`} cx={d.x} cy={d.y}
-                r={d.kind === 'critical' ? 17 : 13}
+                r={d.kind === 'critical' ? 17 : d.kind === 'uncertain' ? 13 : 10}
                 fill="transparent" aria-hidden="true" style={{ cursor: 'pointer' }}
                 onClick={() => select(d.id)}
               />)}

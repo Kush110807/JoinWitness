@@ -114,6 +114,8 @@ export default function App() {
   const reference60 = useMemo(() => demo60Reference(), []);
   /** Latest Atlas-inspected record (selection itself lives in the scene). */
   const [, setQueueSel] = useState<string | null>(null);
+  const continueReviewRef = useRef<HTMLButtonElement>(null);
+  const continueChallengeRef = useRef<HTMLButtonElement>(null);
 
   /** Registration id → name/group, from the accepted parse (demo or upload). */
   const regTable = useMemo(() => {
@@ -144,21 +146,37 @@ export default function App() {
     if (stage > maxStage) setStage(maxStage);
   }, [stage, maxStage]);
 
-  const stageFocusArmed = useRef(false);
+  const prevStageRef = useRef<Stage | null>(null);
   /**
    * Move keyboard focus to the new stage heading after a user-driven stage
-   * change. Skipped on first mount so the first keyboard Tab still lands on
-   * the "Skip to main content" link instead of a programmatically focused heading.
+   * change. Skipped on first mount (including StrictMode double-mount) so the
+   * first keyboard Tab still lands on the "Skip to main content" link instead
+   * of a programmatically focused heading.
    */
   useEffect(() => {
-    if (!stageFocusArmed.current) {
-      stageFocusArmed.current = true;
+    if (prevStageRef.current === null) {
+      prevStageRef.current = stage;
       return;
     }
+    if (prevStageRef.current === stage) return;
+    prevStageRef.current = stage;
     const el = stageHeadRef.current;
     el?.focus({ preventScroll: true });
     if (typeof el?.scrollIntoView === "function") el.scrollIntoView({ block: "nearest" });
   }, [stage]);
+
+  /** After Challenge, move focus to the Verify next action (Continue). */
+  const analysisArmed = useRef(false);
+  useEffect(() => {
+    if (!analysis) {
+      analysisArmed.current = false;
+      return;
+    }
+    if (analysisArmed.current) return;
+    analysisArmed.current = true;
+    continueChallengeRef.current?.focus({ preventScroll: true });
+    continueChallengeRef.current?.scrollIntoView?.({ block: "nearest" });
+  }, [analysis]);
 
   function gotoStage(n: Stage) {
     if (n <= maxStage && !busy) setStage(n);
@@ -975,25 +993,6 @@ export default function App() {
                   </div>
                   <h2 id="h-review" ref={stageHeadRef} tabIndex={-1}>2 · Review — Which links are legitimately possible?</h2>
                   <div className="decision-guide"><span className="guide-icon" aria-hidden="true">?</span><div>{sourceKind === "demo60" ? (<><strong>Twelve genuinely ambiguous records</strong><p>Twelve attendance records each match two or more people across the groups — for example T-49 could be R-A07 or R-B12. A candidate is only a possibility, never an approval.</p></>) : (<><strong>The important ambiguity: Kim / Kym Rao</strong><p>For one attendance record, two different people could be a permissible match — one in each group. A candidate is only a possibility, never an approval.</p></>)}</div></div>
-                  <p className="muted" aria-live="polite">
-                    {adopted
-                      ? "Each candidate is permitted under this example's reviewed policy. Only the explicit adoption below records the review decision."
-                      : "Each candidate is a possible link awaiting review — not yet permitted — adoption required. Viewing or selecting it grants no permission."}
-                  </p>
-                  {sourceKind === "demo" ? (
-                    <p className="muted">
-                      The prepared policy below is a clearly identified <strong>fictional sample</strong>, not
-                      independent human verification of real people. Selecting a record or candidate
-                      only inspects it — only the explicit adoption button below records the review
-                      decision.
-                    </p>
-                  ) : (
-                    <p className="muted">
-                      Your uploads are being reviewed by you, the human in this browser. Shortlist
-                      entries are advisory only; every permission below is your explicit decision
-                      until you adopt it.
-                    </p>
-                  )}
                   {staleNote && (
                     <p className="stale-note" role="status">
                       {staleNote}
@@ -1053,18 +1052,8 @@ export default function App() {
                         {validation.baseline_counts?.b} (A&gt;B:{" "}
                         {String(validation.baseline_counts?.a_greater_than_b)})
                       </p>
-                      <details className="evidence-details">
-                        <summary>Technical evidence · review record</summary>
-                        <p>
-                          Status: <code>{validation.status}</code> · coverage{" "}
-                          <code>{validation.coverage}</code> · review{" "}
-                          <code>{validation.review_sha256.slice(0, 12)}…</code> rev{" "}
-                          {validation.review_revision} · reference{" "}
-                          <code>{validation.reference_sha256?.slice(0, 12)}…</code>
-                        </p>
-                      </details>
                       <div className="row">
-                        <button type="button" onClick={() => gotoStage(3)}>
+                        <button type="button" ref={continueReviewRef} onClick={() => gotoStage(3)}>
                           Continue to Challenge
                         </button>
                       </div>
@@ -1074,14 +1063,21 @@ export default function App() {
               }
             />
             <section className="atlas-supplement" aria-label="Review details">
-              <ul className="legend" aria-label="How to read the links">
-                <li><span className="swatch swatch-baseline" aria-hidden="true" /> Confirmed link — settled by the prepared fictional policy</li>
-                <li><span className="swatch swatch-suggested" aria-hidden="true" /> Possible link — a permitted alternative, allowed only after adoption below</li>
-                <li><span className="swatch swatch-allowed" aria-hidden="true" /> Original baseline — the reported matching</li>
-                <li><span className="swatch swatch-alternative" aria-hidden="true" /> Checked alternative — only after Challenge verifies it</li>
-              </ul>
+              <p className="review-status" aria-live="polite">
+                {adopted
+                  ? "Each candidate is permitted under this example's reviewed policy. Only the explicit adoption above records the review decision."
+                  : "Each candidate is a possible link awaiting review — not yet permitted — adoption required. Viewing or selecting it grants no permission."}
+              </p>
+              <p className="review-status muted">
+                {sourceKind === "custom" ? (
+                  <>Your uploads are being reviewed by you, the human in this browser. Shortlist entries are advisory only; every permission above is your explicit decision until you adopt it.</>
+                ) : (
+                  <>The prepared policy is a clearly identified <strong>fictional sample</strong>, not independent human verification of real people. Selecting a record or candidate only inspects it — only the explicit adoption button above records the review decision.</>
+                )}
+              </p>
               {suggest && (
                 <div aria-live="polite">
+                  <h3>Deterministic shortlist (advisory)</h3>
                   <p>
                     Shortlist status: <code>UNREVIEWED_SHORTLIST</code> (backend reports{" "}
                     <code>{suggest.model_status}</code>). These are unreviewed suggestions from
@@ -1101,30 +1097,45 @@ export default function App() {
                   </ul>
                 </div>
               )}
-              {(sourceKind === "demo" || sourceKind === "demo60") && (
-                <>
-                  <details className="evidence-details">
-                    <summary>Advanced · review_policy.json (jw.review.v1)</summary>
-                    <pre>
-                      {sourceKind === "demo60" ? DEMO60_REVIEW_POLICY_TEXT : DEMO_REVIEW_POLICY_TEXT}
-                    </pre>
-                  </details>
-                  <details className="evidence-details">
-                    <summary>Advanced · reference.json (jw.reference.v1)</summary>
-                    <pre>
-                      {sourceKind === "demo60" ? DEMO60_REFERENCE_TEXT : DEMO_REFERENCE_TEXT}
-                    </pre>
-                  </details>
-                </>
+              <h3>Link key</h3>
+              <ul className="legend" aria-label="How to read the links">
+                <li><span className="swatch swatch-baseline" aria-hidden="true" /> Confirmed link — settled by the prepared fictional policy</li>
+                <li><span className="swatch swatch-suggested" aria-hidden="true" /> Possible link — a permitted alternative, allowed only after adoption above</li>
+                <li><span className="swatch swatch-allowed" aria-hidden="true" /> Original baseline — the reported matching</li>
+                <li><span className="swatch swatch-alternative" aria-hidden="true" /> Checked alternative — only after Challenge verifies it</li>
+              </ul>
+              {((sourceKind === "demo" || sourceKind === "demo60") || validation) && (
+                <details className="evidence-details technical-details">
+                  <summary>Technical details</summary>
+                  {(sourceKind === "demo" || sourceKind === "demo60") && (
+                    <>
+                      <h4>review_policy.json (jw.review.v1)</h4>
+                      <pre>
+                        {sourceKind === "demo60" ? DEMO60_REVIEW_POLICY_TEXT : DEMO_REVIEW_POLICY_TEXT}
+                      </pre>
+                      <h4>reference.json (jw.reference.v1)</h4>
+                      <pre>
+                        {sourceKind === "demo60" ? DEMO60_REFERENCE_TEXT : DEMO_REFERENCE_TEXT}
+                      </pre>
+                    </>
+                  )}
+                  {validation && (
+                    <>
+                      <h4>Review record</h4>
+                      <p>
+                        Status: <code>{validation.status}</code> · coverage{" "}
+                        <code>{validation.coverage}</code> · review{" "}
+                        <code>{validation.review_sha256.slice(0, 12)}…</code> rev{" "}
+                        {validation.review_revision} · reference{" "}
+                        <code>{validation.reference_sha256?.slice(0, 12)}…</code>
+                      </p>
+                    </>
+                  )}
+                </details>
               )}
-              <div className="meta-box">
-                <h3>Not yet available here</h3>
-                <p>
-                  The Meta browser integration is not shipped: this page makes zero
-                  Meta requests. Human review of your own CSVs above is available;
-                  the prepared fictional policy remains demo-only.
-                </p>
-              </div>
+              <p className="meta-status">
+                Not yet available here — the Meta browser integration is not shipped: this page makes zero Meta requests. Human review of your own CSVs above is available; the prepared fictional policy remains demo-only.
+              </p>
             </section>
           </>
         )}
@@ -1154,6 +1165,7 @@ export default function App() {
                 <div className="row row-nav">
                   <button type="button" onClick={() => goBack(2)}>← Back to Review</button>
                 </div>
+                <h2 id="h-challenge" ref={stageHeadRef} tabIndex={-1}>3 · Challenge — Could the conclusion reverse?</h2>
                 <p>
                   Fixed question: <strong>{FIXED_QUESTION}</strong>
                 </p>
@@ -1169,7 +1181,7 @@ export default function App() {
                     {busy === "analyze" ? "Running…" : "Run Challenge"}
                   </button>
                   {analysis && (
-                    <button type="button" onClick={() => gotoStage(4)}>
+                    <button type="button" ref={continueChallengeRef} onClick={() => gotoStage(4)}>
                       Continue to Verify
                     </button>
                   )}
