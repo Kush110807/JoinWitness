@@ -6,7 +6,7 @@ JoinWitness is an actively developed decision-robustness application. It lets a 
 
 **Creator, lead developer and product architect:** Kushaagra Gupta. Built for the **Meta Global AI Developer Hackathon 2026**, JoinWitness combines a working local application with ongoing research into reliable human–AI review and verifiable decision support. It is **not yet publicly deployed**, and its included datasets are fictional.
 
-**Maintainer:** Kushaagra Gupta · **Verified application release:** [`483fc95`](https://github.com/Kush110807/JoinWitness/commit/483fc95807df59528ccd4ea5e2541018b6f80966) · **Current status:** [Release notes](docs/RELEASE_STATUS.md)
+**Maintainer:** Kushaagra Gupta · **Current unified application:** [`5780037`](https://github.com/Kush110807/JoinWitness/commit/578003707b972289433c022ca893ecad88e58234) · **Preserved backend baseline:** [`483fc95`](https://github.com/Kush110807/JoinWitness/commit/483fc95807df59528ccd4ea5e2541018b6f80966) · [Release notes](docs/RELEASE_STATUS.md)
 
 ## The question
 
@@ -41,7 +41,9 @@ The interface follows four stages: **Import → Review → Challenge → Verify*
 
 The central uncertainty field connects source records to reviewed possibilities. A selected-record inspector provides context, an outcome lens compares the reference decision with an admissible counterexample, and an evidence drawer exposes the checker and proof qualifications. An inspected possibility never becomes authorised merely because somebody clicked it.
 
-The two investigations intentionally share a visual language **without pretending to share the same proof algorithm**. Some Import, Verify and Event Review surfaces retain earlier interface styling; the verified release prioritises the inspectable Challenge and Commerce Review scenes.
+The two investigations share the same dark Atlas experience across **Import, Review, Challenge and Verify**, with different controls appropriate to their distinct mathematical models. This frontend-only unification was merged after the original R2 release; it **does not** change either engine's proof basis.
+
+**Real browser captures:** [Case A — revised Review](results/ux-keyboard/review-after.png) · [Case A — Challenge](results/atlas-unification/caseA-1440x900-03-challenge.png) · [Case B — Review](results/atlas-unification/caseB-1440x900-02-review.png) · [Case B — Verify](results/atlas-unification/caseB-1440x900-04-verify.png). The captures show tested fictional data and should not be mistaken for a public live deployment.
 
 ## Repository map
 
@@ -63,7 +65,7 @@ The verified configuration runs the backend on **127.0.0.1:8001** and the fronte
 
 Start with [Windows setup and launch](docs/SETUP_AND_LAUNCH_WINDOWS.md). The [demo storyboard](docs/DEMO_STORYBOARD.md) follows the two investigations in under three minutes. A public URL to the running application is **not** provided.
 
-**Reported release evidence:** 452/452 backend tests, 146/146 frontend tests, a successful TypeScript/Vite build and eight real-Chrome journeys across four desktop/mobile viewports. These were locally executed and reported during release preparation; they have **not** been independently reproduced in public CI. The [verification record](docs/VERIFICATION_MANIFEST.md) documents the source, interpretation and known probe limitations.
+**Reported local evidence:** 452/452 backend tests on the preserved R2 engine; **152/152 frontend tests** and a successful TypeScript/Vite build for the unified UI. Browser evidence covers **both cases, all four stages, and four desktop/mobile viewports** with no documented page-level horizontal overflow. A prepared keyboard walkthrough reported 23/23 checks passing, while **two additional custom-draft keyboard automation assertions failed** and remain openly documented. These results were reported from the Windows development environment, **not independently rerun in public CI**. See the [verification record](docs/VERIFICATION_MANIFEST.md).
 
 ## Development, research and tool use
 
