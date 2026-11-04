@@ -36,10 +36,10 @@ A successful checker evaluation supports the **reported witness**. Minimum-dista
 
 The two frozen Commerce documents are:
 
-- [`docs/COMMERCE_CONTRACT.md`](docs/COMMERCE_CONTRACT.md) — raw SHA-256: `7fcfbed0768cf789265394b9544df3bd41021ae7c1f05fee5262e05a57cba1af`.
-- [`docs/COMMERCE_API_EXAMPLES.json`](docs/COMMERCE_API_EXAMPLES.json) — raw SHA-256: `5aac810f4dd72fd2ee9db69d922fcc16a6e9cfeb565ffb31b5eb1d61fc518148`.
+- [`docs/COMMERCE_CONTRACT.md`](COMMERCE_CONTRACT.md) — raw SHA-256: `7fcfbed0768cf789265394b9544df3bd41021ae7c1f05fee5262e05a57cba1af`.
+- [`docs/COMMERCE_API_EXAMPLES.json`](COMMERCE_API_EXAMPLES.json) — raw SHA-256: `5aac810f4dd72fd2ee9db69d922fcc16a6e9cfeb565ffb31b5eb1d61fc518148`.
 
-These are **file-content SHA-256 values**, not Git blob object IDs. The normative bytes were frozen by the [HQ decision](docs/HQ_G1_FREEZE_2026-11-01.md). The Commerce contract's original “draft / NOT FROZEN” header is retained for exact-byte continuity and must be interpreted alongside the later ruling.
+These are **file-content SHA-256 values**, not Git blob object IDs. The normative bytes were frozen by the [HQ decision](HQ_G1_FREEZE_2026-11-01.md). The Commerce contract's original “draft / NOT FROZEN” header is retained for exact-byte continuity and must be interpreted alongside the later ruling.
 
 ## Independent reproduction
 

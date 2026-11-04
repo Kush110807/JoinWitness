@@ -108,4 +108,4 @@ No action on either screen should automatically approve an AI suggestion. The un
 
 The API is **local-only**; this setup is not a deployment recipe. Receipts establish consistency of recorded inputs and policy, not a digital signature or factual validation of an ambiguous real-world link.
 
-See [Methodology](docs/METHODOLOGY.md), [Data](docs/DATASETS.md) and the [short demo plan](DEMO_STORYBOARD.md).
+See [Methodology](METHODOLOGY.md), [Data](DATASETS.md) and the [short demo plan](DEMO_STORYBOARD.md).
