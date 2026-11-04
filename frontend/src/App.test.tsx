@@ -170,10 +170,21 @@ async function adoptToChallenge(user: ReturnType<typeof userEvent.setup>) {
   await user.click(
     screen.getByRole("button", { name: /adopt fictional review rules/i }),
   );
+  await waitForChallengeScene();
+}
+
+/** Challenge renders the prototype-faithful scene: the rail + outcome lens mark it. */
+async function waitForChallengeScene() {
   await waitFor(() =>
-    expect(
-      screen.getByRole("heading", { name: /could the conclusion reverse/i }),
-    ).toBeTruthy(),
+    expect(screen.getByRole("group", { name: /compare outcomes/i })).toBeTruthy(),
+  );
+}
+
+/** The evidence drawer is the technical-evidence surface on the new scene. */
+async function openEvidence(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(screen.getByRole("button", { name: /open verification evidence/i }));
+  await waitFor(() =>
+    expect(screen.getByRole("dialog", { name: /verification evidence/i })).toBeTruthy(),
   );
 }
 
@@ -185,7 +196,7 @@ async function reachChallenge(user: ReturnType<typeof userEvent.setup>) {
 async function runChallenge(user: ReturnType<typeof userEvent.setup>) {
   await user.click(screen.getByRole("button", { name: /run challenge/i }));
   await waitFor(() =>
-    expect(screen.getAllByText(/ANALYSIS_VERIFIED|NOT_VERIFIED/).length).toBeGreaterThan(0),
+    expect(screen.getByRole("button", { name: /continue to verify/i })).toBeTruthy(),
   );
 }
 
@@ -220,14 +231,19 @@ describe("T09A browser states", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
-    expect(screen.getAllByText(/REVERSIBLE_MINIMUM_PROVEN/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Changed row/)).toBeTruthy();
-    // Data-driven old → new registration IDs for the changed row.
-    expect(screen.getByText("T-02: R-A2 → R-B2")).toBeTruthy();
-    // The same change explained by name and group.
-    expect(screen.getByText(/Kim Rao of Group A → Kym Rao of Group B/)).toBeTruthy();
+    // The visible proof names the changed link; codes live in the evidence drawer.
+    expect(screen.getByText(/Changed:/)).toBeTruthy();
+    expect(screen.getByText(/T-02: R-A2 → R-B2/)).toBeTruthy();
     expect(screen.getAllByText(/R-A2/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/R-B2/).length).toBeGreaterThan(0);
+    // The same change inspectable by record, with baseline and alternative marked.
+    await user.click(screen.getByRole("button", { name: /inspect t-02, critical record/i }));
+    const inspector = screen.getByRole("complementary", { name: /selected record inspector/i });
+    expect(within(inspector).getByText(/Original assignment/)).toBeTruthy();
+    expect(within(inspector).getByText(/Possible link/)).toBeTruthy();
+    expect(within(inspector).getByText(/Checked alternative from the completed challenge/)).toBeTruthy();
+    await openEvidence(user);
+    expect(screen.getAllByText(/REVERSIBLE_MINIMUM_PROVEN/).length).toBeGreaterThan(0);
     expect(screen.getByText(/SOLVER_AND_SMALL_ORACLE/)).toBeTruthy();
     expect(screen.queryByText(/Inconclusive/)).toBeNull();
   });
@@ -238,10 +254,11 @@ describe("T09A browser states", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
+    await openEvidence(user);
     await waitFor(() =>
       expect(screen.getAllByText(/STABLE_WITHIN_REVIEWED_POLICY/).length).toBeGreaterThan(0),
     );
-    expect(screen.queryByText(/Changed row/)).toBeNull();
+    expect(screen.queryByText(/Changed:/)).toBeNull();
     expect(screen.queryByText(/Inconclusive/)).toBeNull();
     expect(screen.queryByText(/minimum verified/i)).toBeNull();
   });
@@ -252,6 +269,7 @@ describe("T09A browser states", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
+    await openEvidence(user);
     await waitFor(() =>
       expect(screen.getAllByText(/REVERSIBLE_WITNESS_ONLY/).length).toBeGreaterThan(0),
     );
@@ -266,11 +284,12 @@ describe("T09A browser states", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
+    expect(screen.getByText(/inconclusive: the backend/i)).toBeTruthy();
+    expect(screen.queryByText(/Changed:/)).toBeNull();
+    await openEvidence(user);
     await waitFor(() =>
       expect(screen.getAllByText(/NOT_VERIFIED/).length).toBeGreaterThan(0),
     );
-    expect(screen.getByText(/inconclusive: the backend/i)).toBeTruthy();
-    expect(screen.queryByText(/Changed row/)).toBeNull();
     expect(screen.queryByText(/minimum verified/i)).toBeNull();
   });
 
@@ -448,15 +467,14 @@ describe("T09-UX02 guided experience", () => {
     await reachChallenge(user);
     await runChallenge(user);
     expect(
-      screen.queryByRole("heading", {
-        name: /can one uncertain match change who came out ahead/i,
-      }),
+      screen.queryByRole("button", { name: /try the fictional example/i }),
     ).toBeNull();
     expect(
       screen.getByText(/one permitted identity change reverses the result/i),
     ).toBeTruthy();
-    expect(screen.getByText(/minimum verified/i)).toBeTruthy();
-    expect(screen.getByText(/only within the reviewed matching rules/i)).toBeTruthy();
+    expect(screen.getByText("2 : 1")).toBeTruthy();
+    await openEvidence(user);
+    expect(screen.getByText(/no real-world identity is determined/i)).toBeTruthy();
   });
 
   it("challenge offers a labeled view toggle between the checked baseline and witness", async () => {
@@ -465,16 +483,25 @@ describe("T09-UX02 guided experience", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
-    expect(screen.getByText("ORIGINAL MATCHING")).toBeTruthy();
-    expect(screen.getByText("PERMITTED ALTERNATIVE")).toBeTruthy();
-    expect(screen.getByText("T-02: R-A2 → R-B2")).toBeTruthy();
-    const baselineView = screen.getByRole("radio", { name: /view baseline matching/i });
-    const witnessView = screen.getByRole("radio", { name: /view permitted alternative/i });
-    expect(witnessView).toHaveProperty("checked", true);
-    await user.click(baselineView);
-    expect(baselineView).toHaveProperty("checked", true);
-    // Still the same checked result — the toggle never reruns analysis.
-    expect(screen.getByText("T-02: R-A2 → R-B2")).toBeTruthy();
+    expect(screen.getByText("ORIGINAL OUTCOME")).toBeTruthy();
+    expect(screen.getByText(/T-02: R-A2 → R-B2/)).toBeTruthy();
+    const callsBefore = (globalThis.fetch as unknown as { mock: { calls: unknown[][] } }).mock.calls.length;
+    const lens = screen.getByRole("group", { name: /compare outcomes/i });
+    const original = within(lens).getByRole("button", { name: /^original$/i });
+    const alternative = within(lens).getByRole("button", { name: /checked alternative/i });
+    expect(original.getAttribute("aria-pressed")).toBe("true");
+    await user.click(alternative);
+    expect(alternative.getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByText("CHECKED ALTERNATIVE")).toBeTruthy();
+    expect(screen.getByText("1 : 2")).toBeTruthy();
+    await user.click(original);
+    expect(original.getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByText("ORIGINAL OUTCOME")).toBeTruthy();
+    // Still the same checked result — the lens never reruns analysis.
+    expect(screen.getByText(/T-02: R-A2 → R-B2/)).toBeTruthy();
+    expect(
+      (globalThis.fetch as unknown as { mock: { calls: unknown[][] } }).mock.calls.length,
+    ).toBe(callsBefore);
   });
 
   it("issues and replays receipts through the real API, never fabricated browser proof", async () => {
@@ -687,9 +714,15 @@ describe("T09A UX presentation contract", () => {
         screen.getByText(/one permitted identity change reverses the result/i),
       ).toBeTruthy(),
     );
-    expect(screen.getByText("ORIGINAL MATCHING")).toBeTruthy();
-    expect(screen.getByText("PERMITTED ALTERNATIVE")).toBeTruthy();
-    expect(screen.getByText("T-02: R-A2 → R-B2")).toBeTruthy();
+    expect(screen.getByText("ORIGINAL OUTCOME")).toBeTruthy();
+    expect(screen.getByText(/T-02: R-A2 → R-B2/)).toBeTruthy();
+    await user.click(
+      within(screen.getByRole("group", { name: /compare outcomes/i })).getByRole("button", {
+        name: /checked alternative/i,
+      }),
+    );
+    expect(screen.getByText("CHECKED ALTERNATIVE")).toBeTruthy();
+    expect(screen.getByText("1 : 2")).toBeTruthy();
   });
 });
 
@@ -749,13 +782,12 @@ describe("T09-UX03 decision canvas", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
-    await waitFor(() => expect(screen.getByText("T-02: R-A2 → R-B2")).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/T-02: R-A2 → R-B2/)).toBeTruthy());
+    expect(screen.getByText(/one permitted identity change reverses the result/i)).toBeTruthy();
+    expect(screen.getByText(/fewest changed assignments/i)).toBeTruthy();
+    await openEvidence(user);
     expect(screen.getByText(/Original: Group A 2 · Group B 1/)).toBeTruthy();
     expect(screen.getByText(/Permitted alternative: Group A 1 · Group B 2/)).toBeTruthy();
-    expect(
-      screen.getByText(/this one permitted change reverses which group leads/i),
-    ).toBeTruthy();
-    expect(screen.getByText(/fewest changed assignments/i)).toBeTruthy();
   });
 
   it("(e) stable replay keeps honest stability copy with no minimum claim", async () => {
@@ -951,14 +983,14 @@ describe("T09-INT-01 integrated shell", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
-    await waitFor(() => expect(screen.getByText("T-02: R-A2 → R-B2")).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/T-02: R-A2 → R-B2/)).toBeTruthy());
     const callsBefore = fetchUrls().length;
-    const row = screen.getByRole("button", { name: /kim rao of group a → kym rao of group b/i });
-    await user.click(row);
-    expect(row.getAttribute("aria-pressed")).toBe("true");
-    expect(screen.getByText(/selecting inspects only/i)).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: /inspect t-02, critical record/i }));
+    const inspector = screen.getByRole("complementary", { name: /selected record inspector/i });
+    expect(within(inspector).getByText("T-02")).toBeTruthy();
+    expect(screen.getByText(/inspection alone does not authorise/i)).toBeTruthy();
     expect(fetchUrls().length).toBe(callsBefore);
-    expect(screen.getByText("T-02: R-A2 → R-B2")).toBeTruthy();
+    expect(screen.getByText(/T-02: R-A2 → R-B2/)).toBeTruthy();
   });
 
   it("inconclusive analysis blocks receipt issuance with an honest error", async () => {
@@ -1143,11 +1175,7 @@ describe("T09-INT-02 real import and human review", () => {
     await seedFirstRow(user);
     await user.selectOptions(screen.getByLabelText("Link status for T-1 to R-X1"), "CONFIRMED");
     await user.click(screen.getByRole("button", { name: /adopt my review and baseline/i }));
-    await waitFor(() =>
-      expect(
-        screen.getByRole("heading", { name: /could the conclusion reverse/i }),
-      ).toBeTruthy(),
-    );
+    await waitForChallengeScene();
     const body = validateBody();
     const policy = body["policy"] as { edges: Array<{ status: string; operation: string }> };
     expect(
@@ -1155,10 +1183,10 @@ describe("T09-INT-02 real import and human review", () => {
     ).toBe(true);
     await user.click(screen.getByRole("button", { name: /run challenge/i }));
     await waitFor(() =>
-      expect(
-        screen.getByText(/permitted alternative: group a 0 · group b 2/i),
-      ).toBeTruthy(),
+      expect(screen.getByRole("button", { name: /continue to verify/i })).toBeTruthy(),
     );
+    await openEvidence(user);
+    expect(screen.getByText(/permitted alternative: group a 0 · group b 2/i)).toBeTruthy();
     const mock = globalThis.fetch as unknown as { mock: { calls: unknown[][] } };
     expect(mock.mock.calls.some((c) => String(c[0]).includes("/api/meta"))).toBe(false);
   });
@@ -1170,11 +1198,7 @@ describe("T09-INT-02 real import and human review", () => {
     await uploadCustom(user);
     await seedFirstRow(user);
     await user.click(screen.getByRole("button", { name: /adopt my review and baseline/i }));
-    await waitFor(() =>
-      expect(
-        screen.getByRole("heading", { name: /could the conclusion reverse/i }),
-      ).toBeTruthy(),
-    );
+    await waitForChallengeScene();
     await user.click(screen.getByRole("button", { name: /back to review/i }));
     await user.selectOptions(screen.getByLabelText("Unmatched rule for T-1"), "REQUIRED");
     await waitFor(() =>
@@ -1270,7 +1294,7 @@ describe("T09-INT-02 real import and human review", () => {
     await adoptToChallenge(user);
     await runChallenge(user);
     await waitFor(() =>
-      expect(screen.getByLabelText(/decision canvas: original and permitted alternative/i)).toBeTruthy(),
+      expect(screen.getByRole("group", { name: /compare outcomes/i })).toBeTruthy(),
     );
     expect(screen.getByText(/fewest changed assignments/i)).toBeTruthy();
   });
@@ -1341,6 +1365,7 @@ describe("T09-INT-01-FIX01 verdict-copy and provenance correction", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
+    await openEvidence(user);
     await waitFor(() =>
       expect(
         screen.getAllByText(/no permitted reversal exists within the reviewed set/i).length,
@@ -1355,6 +1380,7 @@ describe("T09-INT-01-FIX01 verdict-copy and provenance correction", () => {
     const user = userEvent.setup();
     await reachChallenge(user);
     await runChallenge(user);
+    await openEvidence(user);
     await waitFor(() =>
       expect(
         screen.getAllByText(/inconclusive — no reversal or stability established/i).length,
@@ -1502,22 +1528,19 @@ describe("T09-DEMO01 verified flagship demonstration", () => {
     await user.click(
       screen.getByRole("button", { name: /adopt the verified 60\/90 review rules/i }),
     );
-    await waitFor(() =>
-      expect(
-        screen.getByRole("heading", { name: /could the conclusion reverse/i }),
-      ).toBeTruthy(),
-    );
+    await waitForChallengeScene();
     await user.click(screen.getByRole("button", { name: /run challenge/i }));
     await waitFor(() =>
       expect(screen.getByText(/T-49: R-A07 → R-B12/)).toBeTruthy(),
     );
     // Second real changed link from the observed engine witness.
     expect(screen.getByText(/T-52: R-A31 → R-B45/)).toBeTruthy();
+    expect(screen.getByText(/two permitted identity changes reverse the result/i)).toBeTruthy();
+    expect(screen.getByText(/fewest changed assignments/i)).toBeTruthy();
+    await openEvidence(user);
     // Every analytical number below comes from the mocked engine response.
     expect(screen.getByText(/original: group a 32 · group b 28/i)).toBeTruthy();
     expect(screen.getByText(/permitted alternative: group a 30 · group b 30/i)).toBeTruthy();
-    expect(screen.getByText(/two permitted identity changes reverse the result/i)).toBeTruthy();
-    expect(screen.getByText(/fewest changed assignments/i)).toBeTruthy();
     expect(fetchUrls().some((u) => u.includes("/api/meta"))).toBe(false);
   });
 
@@ -1540,11 +1563,7 @@ describe("T09-DEMO01 verified flagship demonstration", () => {
     await user.click(
       screen.getByRole("button", { name: /adopt the verified 60\/90 review rules/i }),
     );
-    await waitFor(() =>
-      expect(
-        screen.getByRole("heading", { name: /could the conclusion reverse/i }),
-      ).toBeTruthy(),
-    );
+    await waitForChallengeScene();
     await user.click(screen.getByRole("button", { name: /run challenge/i }));
     await waitFor(() =>
       expect(screen.getByText(/two permitted identity changes/i)).toBeTruthy(),

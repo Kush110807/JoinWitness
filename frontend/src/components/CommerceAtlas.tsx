@@ -19,7 +19,6 @@ import {
   commerceSuggest,
   isCommerceRouterMissing,
   type CommerceChallengeResponse,
-  type CommerceDisposition,
   type CommerceFileBundle,
   type CommerceFileName,
   type CommerceManualCandidate,
@@ -62,9 +61,17 @@ import ProductShell, { type Stage } from "./ProductShell";
 import ProofDrawer from "./ProofDrawer";
 import AtlasSwitcher, { type AtlasScenario } from "./AtlasSwitcher";
 import CommerceSourceInspector from "./CommerceSourceInspector";
-import CommerceDecisionCanvas from "./CommerceDecisionCanvas";
-import CommerceReviewEditor, { type CommerceBaselineOption } from "./CommerceReviewEditor";
+import type { CommerceBaselineOption } from "./CommerceReviewEditor";
+import {
+  CommerceBaselinePreviewDetails,
+  CommerceManualList,
+  CommerceRecordControls,
+  CommerceReviewCommit,
+} from "./CommerceRecordInspector";
+import DecisionAtlasExperience from "./DecisionAtlasExperience";
+import { atlasToStage, buildCommerceExperience } from "../lib/atlasExperience";
 import "./CommerceAtlas.css";
+import "./DecisionAtlasBindings.css";
 
 const COMMERCE_QUESTION = "Are at least K of N orders cleanly fulfilled?";
 
@@ -148,6 +155,10 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
   const [timeBudget, setTimeBudget] = useState(10000);
   const [maxSuggestions, setMaxSuggestions] = useState(5);
   const [isExample, setIsExample] = useState(false);
+  /** Ephemeral per-record manual-candidate inputs (draft text only, never authority). */
+  const [targetInputs, setTargetInputs] = useState<Record<string, string>>({});
+  const [reasonInputs, setReasonInputs] = useState<Record<string, string>>({});
+  const [addErrors, setAddErrors] = useState<Record<string, string | null>>({});
   const fileRefs = useRef<Record<CommerceFileName, HTMLInputElement | null>>({
     "orders.csv": null,
     "payments.csv": null,
@@ -371,6 +382,9 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
         policy_revision: 0,
       });
       setDraft(emptyCommerceDraft(keys));
+      setTargetInputs({});
+      setReasonInputs({});
+      setAddErrors({});
       setIsExample(false);
       setStaleNote(null);
       setStage(2);
@@ -419,6 +433,9 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
         policy_revision: 0,
       });
       setDraft(emptyCommerceDraft(keys));
+      setTargetInputs({});
+      setReasonInputs({});
+      setAddErrors({});
       setIsExample(true);
       setStaleNote(null);
       setStage(2);
@@ -441,6 +458,9 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
     setFiles({ "orders.csv": null, "payments.csv": null, "deliveries.csv": null, "refunds.csv": null });
     setParse(null);
     setServerRevisions(null);
+    setTargetInputs({});
+    setReasonInputs({});
+    setAddErrors({});
     invalidateFrom("source");
     setError(null);
     setStaleNote(null);
@@ -779,6 +799,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
   return (
     <ProductShell
       atlasMode="commerce"
+      bare={stage === 2 || stage === 3}
       stage={stage}
       maxStage={maxStage}
       busy={busy}
@@ -871,244 +892,280 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
         </section>
       )}
 
-      {stage === 2 && (
-        <section aria-labelledby="h-c-review" className="card commerce">
-          <h2 id="h-c-review" ref={stageHeadRef} tabIndex={-1}>
-            2 · Review — Which links may be considered?
-          </h2>
-          <div className="row row-nav">
-            <button type="button" onClick={() => goBack(1)}>← Back to Import</button>
-          </div>
-          {isExample && parse && (
-            <p className="fiction-note" role="status">
-              Fictional demonstration data · not real business information. {FICTIONAL_COMMERCE_BLURB}
-            </p>
-          )}
-          <div className="decision-guide">
-            <span className="guide-icon" aria-hidden="true">?</span>
-            <div>
-              <strong>Every link needs your explicit permission</strong>
-              <p>
-                Source references are hints, Meta entries are untrusted suggestions, and manual
-                entries are your own proposals. Set each disposition yourself — only the Adopt
-                action below records the review, and K freezes only then.
-              </p>
-            </div>
-          </div>
-          <ul className="legend" aria-label="How to read the links">
-            <li><span className="swatch swatch-baseline" aria-hidden="true" /> Source hint — a reference written in the file</li>
-            <li><span className="swatch swatch-suggested" aria-hidden="true" /> Possible link — permitted only after adoption below</li>
-            <li><span className="swatch swatch-allowed" aria-hidden="true" /> Original baseline — the reported matching</li>
-            <li><span className="swatch swatch-alternative" aria-hidden="true" /> Checked alternative — only after Challenge verifies it</li>
-          </ul>
-
-          {staleNote && (
-            <p className="stale-note" role="status">{staleNote}</p>
-          )}
-
-          <div className="suggest-panel">
-            <h3>Optional Meta suggestions (untrusted until adopted)</h3>
-            <div className="row">
-              <label>
-                Max suggestions (1–5){" "}
-                <input
-                  type="number"
-                  aria-label="Max suggestions"
-                  min={1}
-                  max={5}
-                  value={maxSuggestions}
-                  onChange={(e) => setMaxSuggestions(Number(e.target.value))}
+      {stage === 2 && draft && (
+        <>
+          <DecisionAtlasExperience
+            {...buildCommerceExperience({
+              reviewRecords,
+              targetsFor: (key) => targetsByRecord.get(key) ?? [],
+              draft,
+              blockedRows: blocked,
+              validation,
+              challenge,
+              replay,
+              suggest,
+              orderCount,
+              isExample,
+              stage,
+              maxStage,
+            })}
+            onStage={(s) => gotoStage(atlasToStage(s))}
+            inspectorActions={(record) => (
+              <form aria-label="Decision inspector" onSubmit={(e) => e.preventDefault()}>
+                <CommerceRecordControls
+                  recordKey={record.id}
+                  targets={targetsByRecord.get(record.id) ?? []}
+                  dispositionFor={(targetId) =>
+                    (draft.edges[record.id] ?? {})[targetId] ?? "PROHIBITED"
+                  }
+                  unmatched={draft.unmatched[record.id] ?? "PROHIBITED"}
+                  onEdge={(targetId, d) =>
+                    touchDraft(setCommerceEdge(draft, record.id, targetId, d))
+                  }
+                  onUnmatched={(d) => touchDraft(setCommerceUnmatched(draft, record.id, d))}
+                  onSeedRow={() => touchDraft(seedRowFromSourceRefs(draft, catalog, record.id))}
+                  baselinePicked={draft.baseline[record.id]}
+                  baselineOptions={baselineOptionsFor(record.id)}
+                  onBaseline={(target) => touchDraft(setCommerceBaseline(draft, record.id, target))}
+                  onAddManual={(targetId, reason) => addManual(record.id, targetId, reason)}
+                  inputs={{
+                    targetInputs,
+                    reasonInputs,
+                    addErrors,
+                    setTargetInputs,
+                    setReasonInputs,
+                    setAddErrors,
+                  }}
                 />
-              </label>
-              <button type="button" onClick={() => void requestSuggest()} disabled={busy === "suggest"}>
-                {busy === "suggest" ? "Requesting…" : "Request Meta suggestions"}
-              </button>
-            </div>
-            {suggest && (
-              <div aria-live="polite">
-                {suggest.ai_status === "AI_UNAVAILABLE" ? (
-                  <p>
-                    Meta status: <code>AI_UNAVAILABLE</code> — deterministic review continues below.
-                    No permissions changed.
+              </form>
+            )}
+            primaryAction={
+              <div className="atlas-actions">
+                <div className="row row-nav">
+                  <button type="button" onClick={() => goBack(1)}>← Back to Import</button>
+                </div>
+                {isExample && parse && (
+                  <p className="fiction-note" role="status">
+                    Fictional demonstration data · not real business information. {FICTIONAL_COMMERCE_BLURB}
                   </p>
-                ) : (
-                  <>
+                )}
+                {staleNote && (
+                  <p className="stale-note" role="status">{staleNote}</p>
+                )}
+                <p className="muted" aria-live="polite">
+                  Reviewing session revisions: source{" "}
+                  {serverRevisions?.source_revision ?? parse?.source_revision ?? 1} · candidates{" "}
+                  {serverRevisions?.candidate_revision ?? parse?.candidate_revision ?? 1} · policy{" "}
+                  {serverRevisions?.policy_revision ?? 0}.{" "}
+                  {validation ? (
+                    <>
+                      Accepted review: <code>{validation.review_sha256.slice(0, 12)}…</code>.{" "}
+                    </>
+                  ) : (
+                    <>No accepted review yet. </>
+                  )}
+                  {(!adopted || staleNote !== null) && (
+                    <strong className="draft-badge">UNCOMMITTED DRAFT — not yet adopted</strong>
+                  )}
+                </p>
+                {reviewRecords.length > 0 && (
+                  <div className="row">
+                    <button
+                      type="button"
+                      onClick={() => touchDraft(seedAllSourceRefs(draft, catalog))}
+                    >
+                      Seed all source hints as possible (draft only)
+                    </button>
+                  </div>
+                )}
+                <CommerceReviewCommit
+                  progressText={
+                    reviewRecords.length === 0
+                      ? "No source records."
+                      : blocked.length === 0
+                        ? `All ${reviewRecords.length} rows have an allowed choice.`
+                        : `${blocked.length} of ${reviewRecords.length} ${blocked.length === 1 ? "needs" : "need"} a decision.`
+                  }
+                  thresholdK={draft.thresholdK}
+                  orderCount={orderCount}
+                  onThresholdK={(k) => touchDraft({ ...draft, thresholdK: k })}
+                  reviewerLabel={draft.reviewerLabel}
+                  onReviewerLabel={(s) => touchDraft({ ...draft, reviewerLabel: s })}
+                  attestation={draft.attestation}
+                  onAttestation={(key, v) =>
+                    touchDraft({ ...draft, attestation: { ...draft.attestation, [key]: v } })
+                  }
+                  onAdopt={() => void adoptReview()}
+                  adoptBusy={busy === "adopt"}
+                />
+                <CommerceManualList
+                  manual={draft.manual}
+                  onRemoveManual={(i) =>
+                    touchDraft({ ...draft, manual: draft.manual.filter((_, j) => j !== i) })
+                  }
+                />
+                <CommerceBaselinePreviewDetails baselinePreview={baselinePreview} />
+                {validation && (
+                  <div aria-live="polite">
                     <p>
-                      Meta status: <code>AI_SUGGESTED</code> ({suggest.suggestions.length}{" "}
-                      {suggest.suggestions.length === 1 ? "proposal" : "proposals"}). These are
-                      unreviewed suggestions — they grant <strong>no permission</strong> until your
-                      full review adopts them.
+                      Reviewed and frozen: K={validation.threshold_k} · policy rev{" "}
+                      {validation.policy_revision} · candidates rev {validation.candidate_revision}
                     </p>
-                    {suggest.model_call && (
-                      <p className="muted">
-                        Server-reported call: provider <code>{suggest.model_call.provider}</code>,
-                        model <code>{suggest.model_call.model}</code> (server claim, not an
-                        independently verified trace).
+                    <details className="evidence-details">
+                      <summary>Technical evidence · frozen review record</summary>
+                      <p>
+                        Status: <code>{validation.state}</code> · review{" "}
+                        <code>{validation.review_sha256.slice(0, 12)}…</code> · policy{" "}
+                        <code>{validation.policy_sha256.slice(0, 12)}…</code> · baseline{" "}
+                        <code>{validation.baseline_sha256.slice(0, 12)}…</code>
                       </p>
-                    )}
-                    {suggest.suggestions.length > 0 && (
-                      <ul className="candidate-list">
-                        {suggest.suggestions.map((s) => (
-                          <li key={`${s.record_key}-${s.target_id}-${s.server_call_id}`}>
-                            <code>{s.record_key}</code> → <code>{s.target_id}</code> ·{" "}
-                            {s.catalog_effect} · <code>authorised=false</code>
-                            <span className="meta-evidence">Server note: {s.evidence}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    {suggest.rejected_proposals.length > 0 && (
-                      <p className="muted">
-                        Rejected proposals:{" "}
-                        {suggest.rejected_proposals.map((r) => `${r.reason_code}×${r.count}`).join(", ")}
+                      <p>
+                        Review preflight (not challenge proof): {validation.raw_worlds} raw worlds ·{" "}
+                        {validation.admissible_worlds} admissible · {validation.invalid_worlds} invalid ·{" "}
+                        {validation.variable_records} variable{" "}
+                        {validation.variable_records === 1 ? "record" : "records"} · baseline{" "}
+                        {validation.baseline_valid ? "valid" : "INVALID"}
                       </p>
-                    )}
-                  </>
+                      <p className="muted">Authorised by: {validation.authorised_by}</p>
+                    </details>
+                    <div className="row">
+                      <button type="button" onClick={() => gotoStage(3)}>
+                        Continue to Challenge
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
-            )}
-          </div>
-
-          {draft && (
-            <CommerceReviewEditor
-              records={reviewRecords}
-              targetsFor={(key) => targetsByRecord.get(key) ?? []}
-              dispositionFor={(key, target) =>
-                (draft.edges[key] ?? {})[target] ?? "PROHIBITED"
-              }
-              unmatchedFor={(key) => draft.unmatched[key] ?? "PROHIBITED"}
-              onEdge={(key, target, d: CommerceDisposition) =>
-                touchDraft(setCommerceEdge(draft, key, target, d))
-              }
-              onUnmatched={(key, d: CommerceDisposition) =>
-                touchDraft(setCommerceUnmatched(draft, key, d))
-              }
-              onSeedRow={(key) => touchDraft(seedRowFromSourceRefs(draft, catalog, key))}
-              baselineFor={(key) => draft.baseline[key]}
-              baselineOptions={baselineOptionsFor}
-              onBaseline={(key, target) => touchDraft(setCommerceBaseline(draft, key, target))}
-              manual={draft.manual}
-              onAddManual={addManual}
-              onRemoveManual={(i) =>
-                touchDraft({ ...draft, manual: draft.manual.filter((_, j) => j !== i) })
-              }
-              orderIds={orderIds}
-              paymentIds={paymentIds}
-              thresholdK={draft.thresholdK}
-              orderCount={orderCount}
-              onThresholdK={(k) => touchDraft({ ...draft, thresholdK: k })}
-              reviewerLabel={draft.reviewerLabel}
-              onReviewerLabel={(s) => touchDraft({ ...draft, reviewerLabel: s })}
-              attestation={draft.attestation}
-              onAttestation={(key, v) =>
-                touchDraft({ ...draft, attestation: { ...draft.attestation, [key]: v } })
-              }
-              baselinePreview={baselinePreview}
-              blockedRows={blocked}
-              adoptedReviewSha={validation?.review_sha256 ?? null}
-              isDirty={!adopted || staleNote !== null}
-              epochs={{
-                sourceRevision: serverRevisions?.source_revision ?? parse?.source_revision ?? 1,
-                candidateRevision:
-                  serverRevisions?.candidate_revision ?? parse?.candidate_revision ?? 1,
-                policyRevision: serverRevisions?.policy_revision ?? 0,
-              }}
-              onAdopt={() => void adoptReview()}
-              adoptBusy={busy === "adopt"}
-            />
-          )}
-          {draft && reviewRecords.length > 0 && (
-            <div className="row">
-              <button
-                type="button"
-                onClick={() => touchDraft(seedAllSourceRefs(draft, catalog))}
-              >
-                Seed all source hints as possible (draft only)
-              </button>
-            </div>
-          )}
-          {validation && (
-            <div aria-live="polite">
-              <p>
-                Reviewed and frozen: K={validation.threshold_k} · policy rev{" "}
-                {validation.policy_revision} · candidates rev {validation.candidate_revision}
-              </p>
-              <details className="evidence-details">
-                <summary>Technical evidence · frozen review record</summary>
-                <p>
-                  Status: <code>{validation.state}</code> · review{" "}
-                  <code>{validation.review_sha256.slice(0, 12)}…</code> · policy{" "}
-                  <code>{validation.policy_sha256.slice(0, 12)}…</code> · baseline{" "}
-                  <code>{validation.baseline_sha256.slice(0, 12)}…</code>
-                </p>
-                <p>
-                  Review preflight (not challenge proof): {validation.raw_worlds} raw worlds ·{" "}
-                  {validation.admissible_worlds} admissible · {validation.invalid_worlds} invalid ·{" "}
-                  {validation.variable_records} variable{" "}
-                  {validation.variable_records === 1 ? "record" : "records"} · baseline{" "}
-                  {validation.baseline_valid ? "valid" : "INVALID"}
-                </p>
-                <p className="muted">Authorised by: {validation.authorised_by}</p>
-              </details>
+            }
+          />
+          <section className="atlas-supplement" aria-label="Suggestions and review notes">
+            <div className="suggest-panel">
+              <h3>Optional Meta suggestions (untrusted until adopted)</h3>
               <div className="row">
-                <button type="button" onClick={() => gotoStage(3)}>
-                  Continue to Challenge
+                <label>
+                  Max suggestions (1–5){" "}
+                  <input
+                    type="number"
+                    aria-label="Max suggestions"
+                    min={1}
+                    max={5}
+                    value={maxSuggestions}
+                    onChange={(e) => setMaxSuggestions(Number(e.target.value))}
+                  />
+                </label>
+                <button type="button" onClick={() => void requestSuggest()} disabled={busy === "suggest"}>
+                  {busy === "suggest" ? "Requesting…" : "Request Meta suggestions"}
                 </button>
               </div>
+              {suggest && (
+                <div aria-live="polite">
+                  {suggest.ai_status === "AI_UNAVAILABLE" ? (
+                    <p>
+                      Meta status: <code>AI_UNAVAILABLE</code> — deterministic review continues below.
+                      No permissions changed.
+                    </p>
+                  ) : (
+                    <>
+                      <p>
+                        Meta status: <code>AI_SUGGESTED</code> ({suggest.suggestions.length}{" "}
+                        {suggest.suggestions.length === 1 ? "proposal" : "proposals"}). These are
+                        unreviewed suggestions — they grant <strong>no permission</strong> until your
+                        full review adopts them.
+                      </p>
+                      {suggest.model_call && (
+                        <p className="muted">
+                          Server-reported call: provider <code>{suggest.model_call.provider}</code>,
+                          model <code>{suggest.model_call.model}</code> (server claim, not an
+                          independently verified trace).
+                        </p>
+                      )}
+                      {suggest.suggestions.length > 0 && (
+                        <ul className="candidate-list">
+                          {suggest.suggestions.map((s) => (
+                            <li key={`${s.record_key}-${s.target_id}-${s.server_call_id}`}>
+                              <code>{s.record_key}</code> → <code>{s.target_id}</code> ·{" "}
+                              {s.catalog_effect} · <code>authorised=false</code>
+                              <span className="meta-evidence">Server note: {s.evidence}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {suggest.rejected_proposals.length > 0 && (
+                        <p className="muted">
+                          Rejected proposals:{" "}
+                          {suggest.rejected_proposals.map((r) => `${r.reason_code}×${r.count}`).join(", ")}
+                        </p>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
             </div>
-          )}
-          <div className="meta-box">
-            <h3>Not yet available here</h3>
-            <p>
-              Live Meta verification traces are not shipped: this page only shows what the local
-              backend server reports. Human review above is fully available without Meta.
-            </p>
-          </div>
-        </section>
+            <div className="meta-box">
+              <h3>Not yet available here</h3>
+              <p>
+                Live Meta verification traces are not shipped: this page only shows what the local
+                backend server reports. Human review above is fully available without Meta.
+              </p>
+            </div>
+          </section>
+        </>
       )}
 
       {stage === 3 && (
-        <section aria-labelledby="h-c-challenge" className="card commerce">
-          <h2 id="h-c-challenge" ref={stageHeadRef} tabIndex={-1}>
-            3 · Challenge — Could the conclusion reverse?
-          </h2>
-          <div className="row row-nav">
-            <button type="button" onClick={() => goBack(2)}>← Back to Review</button>
-          </div>
-          <p>
-            Fixed question: <strong>{COMMERCE_QUESTION}</strong>
-          </p>
-          {validation && (
-            <p aria-live="polite">
-              Frozen threshold: <strong>K={validation.threshold_k}</strong> of {orderCount}{" "}
-              {orderCount === 1 ? "order" : "orders"} · review{" "}
-              <code>{validation.review_sha256.slice(0, 12)}…</code>
-            </p>
-          )}
-          <div className="row">
-            <label>
-              Time budget, ms (100–10000){" "}
-              <input
-                type="number"
-                aria-label="Time budget in milliseconds"
-                min={100}
-                max={10000}
-                value={timeBudget}
-                onChange={(e) => setTimeBudget(Number(e.target.value))}
-              />
-            </label>
-            <button
-              type="button"
-              className="primary"
-              onClick={runChallenge}
-              disabled={!validation || busy === "challenge"}
-            >
-              {busy === "challenge" ? "Running…" : "Run Challenge"}
-            </button>
-          </div>
-          {challenge && (
-            <div aria-live="polite">
-              {challengeProblems.length > 0 ? (
+        <DecisionAtlasExperience
+          {...buildCommerceExperience({
+            reviewRecords,
+            targetsFor: (key) => targetsByRecord.get(key) ?? [],
+            draft,
+            blockedRows: blocked,
+            validation,
+            challenge,
+            replay,
+            suggest,
+            orderCount,
+            isExample,
+            stage,
+            maxStage,
+          })}
+          onStage={(s) => gotoStage(atlasToStage(s))}
+          primaryAction={
+            <div className="atlas-actions">
+              <div className="row row-nav">
+                <button type="button" onClick={() => goBack(2)}>← Back to Review</button>
+              </div>
+              <p>
+                Fixed question: <strong>{COMMERCE_QUESTION}</strong>
+              </p>
+              {validation && (
+                <p aria-live="polite">
+                  Frozen threshold: <strong>K={validation.threshold_k}</strong> of {orderCount}{" "}
+                  {orderCount === 1 ? "order" : "orders"} · review{" "}
+                  <code>{validation.review_sha256.slice(0, 12)}…</code>
+                </p>
+              )}
+              <div className="row">
+                <label>
+                  Time budget, ms (100–10000){" "}
+                  <input
+                    type="number"
+                    aria-label="Time budget in milliseconds"
+                    min={100}
+                    max={10000}
+                    value={timeBudget}
+                    onChange={(e) => setTimeBudget(Number(e.target.value))}
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={runChallenge}
+                  disabled={!validation || busy === "challenge"}
+                >
+                  {busy === "challenge" ? "Running…" : "Run Challenge"}
+                </button>
+              </div>
+              {challenge && challengeProblems.length > 0 && (
                 <div className="alert" role="alert">
                   <strong>Unverified contract error:</strong> the backend response contradicts the
                   frozen result shape, so no verdict is shown.
@@ -1120,19 +1177,17 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
                     ))}
                   </ul>
                 </div>
-              ) : (
-                challengeCopy && (
-                  <CommerceDecisionCanvas result={challenge.result} orderCount={orderCount} />
-                )
               )}
-              <div className="row">
-                <button type="button" onClick={() => gotoStage(4)}>
-                  Continue to Verify
-                </button>
-              </div>
+              {challenge && (
+                <div className="row">
+                  <button type="button" onClick={() => gotoStage(4)}>
+                    Continue to Verify
+                  </button>
+                </div>
+              )}
             </div>
-          )}
-        </section>
+          }
+        />
       )}
 
       {stage === 4 && (

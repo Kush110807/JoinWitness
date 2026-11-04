@@ -1,0 +1,389 @@
+/* G4 binding layer: host the REAL review/challenge controls inside the
+ * prototype-faithful DecisionAtlasExperience scene.
+ *
+ * Everything here is scoped under `.jw-atlas-experience` (or the bare shell
+ * and supplement section) so the older light stages keep their exact look.
+ * No layout, copy, or composition of the supplied scene is altered: this
+ * only re-skins reused control classnames for the dark field and stacks the
+ * parent-provided action slots.
+ */
+
+.page.atlas-bare {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.page.atlas-bare #main {
+  padding: 0;
+  max-width: none;
+  outline: none;
+}
+
+/* Parent-provided action slots inside the scene. */
+.jw-atlas-experience .atlas-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-size: 12px;
+}
+
+.jw-atlas-experience .atlas-actions .row {
+  margin: 0;
+  gap: 0.55rem;
+}
+
+.jw-atlas-experience .atlas-actions p {
+  margin: 0;
+  line-height: 1.6;
+  color: #b8c7c7;
+}
+
+/* Reused controls, dark-field skinned. */
+.jw-atlas-experience button:not(.jw-atlas-proof-link):not([class*="jw-atlas-"]) {
+  background: #152421;
+  color: #e2eee6;
+  border: 1px solid #405f56;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  min-height: 42px;
+}
+
+.jw-atlas-experience button.primary {
+  background: #c5f1d3;
+  border-color: #c5f1d3;
+  color: #09201a;
+  font-weight: 720;
+}
+
+.jw-atlas-experience button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.jw-atlas-experience select,
+.jw-atlas-experience input[type="text"],
+.jw-atlas-experience input[type="number"] {
+  font: inherit;
+  font-size: 12px;
+  color: #e8efeb;
+  background: #111c22;
+  border: 1px solid #29383e;
+  border-radius: 10px;
+  padding: 9px 10px;
+  min-height: 42px;
+  max-width: 100%;
+}
+
+.jw-atlas-experience select:disabled,
+.jw-atlas-experience option:disabled {
+  color: #6b7d80;
+}
+
+.jw-atlas-experience input::placeholder {
+  color: #6b7d80;
+}
+
+.jw-atlas-experience input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: #c5f1d3;
+}
+
+.jw-atlas-experience label {
+  color: #b8c7c7;
+}
+
+.jw-atlas-experience .muted {
+  color: #9eafb3;
+}
+
+.jw-atlas-experience code {
+  color: #d7e8de;
+  font-size: 0.95em;
+  overflow-wrap: anywhere;
+}
+
+.jw-atlas-experience strong {
+  color: #e8efeb;
+}
+
+.jw-atlas-experience .alert {
+  border: 1px solid #7a4a4a;
+  background: #2a1518;
+  color: #f2d7d7;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+}
+
+.jw-atlas-experience .alert code {
+  color: #f2d7d7;
+}
+
+.jw-atlas-experience .stale-note {
+  border: 1px solid #8a7648;
+  background: #2a2410;
+  color: #ecdfae;
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+}
+
+.jw-atlas-experience .fiction-note {
+  border: 1px solid #3b514e;
+  background: #17302b;
+  color: #c4e8d2;
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+}
+
+.jw-atlas-experience .review-summary {
+  position: static;
+  background: transparent;
+  border: none;
+  border-top: 1px solid #2b3940;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0.7rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: auto;
+}
+
+.jw-atlas-experience .summary-progress {
+  margin: 0;
+}
+
+.jw-atlas-experience .editor-scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  align-items: center;
+  margin: 0;
+}
+
+.jw-atlas-experience .attest-group {
+  border: 1px solid #2b3940;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.jw-atlas-experience .attest-group legend {
+  color: #b8c7c7;
+  font-size: 11px;
+  padding: 0 0.4rem;
+}
+
+.jw-atlas-experience .attest-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.jw-atlas-experience .summary-actions {
+  margin: 0;
+}
+
+.jw-atlas-experience .manual-list {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.jw-atlas-experience .manual-list h3 {
+  font-size: 12px;
+  color: #b8c7c7;
+  margin: 0.2rem 0;
+}
+
+.jw-atlas-experience .editor-edges {
+  list-style: none;
+  margin: 0.4rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 12px;
+}
+
+.jw-atlas-experience .editor-edges li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  color: #b8c7c7;
+}
+
+.jw-atlas-experience .editor-unmatched {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin-top: 0.6rem;
+}
+
+.jw-atlas-experience .field-error {
+  color: #f0b9b9;
+  font-size: 11px;
+  font-weight: 700;
+  margin: 0.4rem 0 0;
+  width: 100%;
+}
+
+.jw-atlas-experience .evidence-details {
+  border: 1px solid #2b3940;
+  border-radius: 10px;
+  background: #111c22;
+  margin: 0.4rem 0;
+  padding: 0.6rem 0.8rem;
+}
+
+.jw-atlas-experience .evidence-details summary {
+  cursor: pointer;
+  color: #d2e7df;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.jw-atlas-experience .evidence-details .table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.jw-atlas-experience table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.5rem 0;
+  font-size: 11px;
+}
+
+.jw-atlas-experience th,
+.jw-atlas-experience td {
+  border: 1px solid #2b3940;
+  padding: 0.35rem 0.5rem;
+  text-align: left;
+  color: #b8c7c7;
+  background: transparent;
+}
+
+.jw-atlas-experience .warnings {
+  border: 1px solid #8a7648;
+  background: #2a2410;
+  color: #ecdfae;
+  border-radius: 10px;
+  padding: 0.6rem 1rem 0.6rem 1.6rem;
+  font-size: 11px;
+}
+
+/* Long server evidence strings (proof basis enums, digests) must wrap. */
+.jw-atlas-experience .jw-atlas-evidence-row strong {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* Inspector form hosting the real per-record controls. */
+.jw-atlas-experience .jw-atlas-inspector form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.8rem;
+  border-top: 1px solid #29343d;
+  padding-top: 0.8rem;
+}
+
+/* Below-scene supplement: secondary panels stay reachable, off first viewport. */
+.atlas-supplement {
+  background: #080c10;
+  color: #b8c7c7;
+  padding: 1.2rem 42px 3rem;
+  max-width: 1760px;
+  margin: 0 auto;
+  font-size: 13px;
+}
+
+.atlas-supplement h3 {
+  color: #e8efeb;
+  font-size: 14px;
+}
+
+.atlas-supplement button {
+  background: #152421;
+  color: #e2eee6;
+  border: 1px solid #405f56;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  min-height: 42px;
+}
+
+.atlas-supplement select,
+.atlas-supplement input[type="text"],
+.atlas-supplement input[type="number"] {
+  font: inherit;
+  font-size: 12px;
+  color: #e8efeb;
+  background: #111c22;
+  border: 1px solid #29383e;
+  border-radius: 10px;
+  padding: 9px 10px;
+  min-height: 42px;
+}
+
+.atlas-supplement code {
+  color: #d7e8de;
+}
+
+.atlas-supplement .muted {
+  color: #9eafb3;
+}
+
+.atlas-supplement .row {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0.7rem 0;
+}
+
+.atlas-supplement .candidate-list {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.atlas-supplement .meta-evidence {
+  display: block;
+  color: #9eafb3;
+  font-size: 11px;
+}
+
+.atlas-supplement .meta-box {
+  border: 1px solid #2b3940;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-top: 1rem;
+  background: transparent;
+}
+
+.atlas-supplement .suggest-panel,
+.atlas-supplement table,
+.atlas-supplement th,
+.atlas-supplement td {
+  background: transparent;
+}
+
+@media (max-width: 950px) {
+  .atlas-supplement {
+    padding: 1rem 20px 6rem;
+  }
+}

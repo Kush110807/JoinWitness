@@ -46,6 +46,8 @@ interface ProductShellProps {
   /** Optional verdict summary used when no event `analysis` is present. */
   verdictSummary?: ReactNode;
   atlasMode?: "event" | "commerce";
+  /** Full-viewport scene mode: skip link + stage content only, no shell chrome. */
+  bare?: boolean;
 }
 
 export default function ProductShell({
@@ -63,7 +65,21 @@ export default function ProductShell({
   stageNow,
   verdictSummary,
   atlasMode = "event",
+  bare = false,
 }: ProductShellProps) {
+  if (bare) {
+    return (
+      <div className="page atlas-bare">
+        <a className="skip" href="#main">
+          Skip to main content
+        </a>
+        <main id="main" tabIndex={-1} aria-label="Decision canvas">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="page">
       <a className="skip" href="#main">

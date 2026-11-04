@@ -140,10 +140,28 @@ async function importCommerce(user: ReturnType<typeof userEvent.setup>) {
   await switchToCommerce(user);
   await uploadFour(user);
   await user.click(screen.getByRole("button", { name: /import and parse four csvs/i }));
+  await waitForReviewScene();
+}
+
+/** Review renders the prototype-faithful scene: the Adopt action marks it. */
+async function waitForReviewScene() {
   await waitFor(() =>
-    expect(
-      screen.getByRole("heading", { name: /which links may be considered/i }),
-    ).toBeTruthy(),
+    expect(screen.getByRole("button", { name: /adopt & freeze review/i })).toBeTruthy(),
+  );
+}
+
+/** Challenge renders the scene with run controls: the time budget marks it. */
+async function waitForChallengeScene() {
+  await waitFor(() =>
+    expect(screen.getByLabelText(/time budget in milliseconds/i)).toBeTruthy(),
+  );
+}
+
+/** The evidence drawer is the technical-evidence surface on the new scene. */
+async function openEvidence(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(screen.getByRole("button", { name: /open verification evidence/i }));
+  await waitFor(() =>
+    expect(screen.getByRole("dialog", { name: /verification evidence/i })).toBeTruthy(),
   );
 }
 
@@ -256,9 +274,7 @@ describe("G2-C01 commerce human-only adoption and inconclusive challenge", () =>
     await fillAndAdopt(user);
     await waitFor(() => expect(screen.getByText(/STALE_STATE/)).toBeTruthy());
     expect(screen.queryByText(/REVIEW_FROZEN/)).toBeNull();
-    expect(
-      screen.getByRole("heading", { name: /which links may be considered/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("button", { name: /adopt & freeze review/i })).toBeTruthy();
     expect(screen.queryByRole("button", { name: /run challenge/i })).toBeNull();
   });
 
@@ -273,13 +289,12 @@ describe("G2-C01 commerce human-only adoption and inconclusive challenge", () =>
     const user = userEvent.setup();
     await importCommerce(user);
     await fillAndAdopt(user);
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /could the conclusion reverse/i })).toBeTruthy(),
-    );
+    await waitForChallengeScene();
     await user.click(screen.getByRole("button", { name: /run challenge/i }));
     await waitFor(() =>
       expect(screen.getAllByText(/analysis incomplete/i).length).toBeGreaterThan(0),
     );
+    await openEvidence(user);
     expect(screen.getAllByText(/TIMEOUT/).length).toBeGreaterThan(0);
     expect(screen.queryByText(/fewest changed assignments/i)).toBeNull();
     await user.click(screen.getByRole("button", { name: /continue to verify/i }));
@@ -333,15 +348,9 @@ describe("G2-C02 re-adopt revision regression (PRE-009)", () => {
   async function adoptThenEdit(user: ReturnType<typeof userEvent.setup>) {
     await importCommerce(user);
     await fillAndAdopt(user);
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /could the conclusion reverse/i })).toBeTruthy(),
-    );
+    await waitForChallengeScene();
     await user.click(screen.getByRole("button", { name: /back to review/i }));
-    await waitFor(() =>
-      expect(
-        screen.getByRole("heading", { name: /which links may be considered/i }),
-      ).toBeTruthy(),
-    );
+    await waitForReviewScene();
     const k = screen.getByLabelText("Threshold K");
     await user.clear(k);
     await user.type(k, "2");
@@ -355,9 +364,7 @@ describe("G2-C02 re-adopt revision regression (PRE-009)", () => {
     const user = userEvent.setup();
     await adoptThenEdit(user);
     await user.click(screen.getByRole("button", { name: /adopt & freeze review/i }));
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /could the conclusion reverse/i })).toBeTruthy(),
-    );
+    await waitForChallengeScene();
     expect(reviewBodies.length).toBe(2);
     expect(reviewBodies[0].expected_candidate_revision).toBe(1);
     expect(reviewBodies[0].expected_policy_revision).toBe(0);
@@ -382,9 +389,7 @@ describe("G2-C02 re-adopt revision regression (PRE-009)", () => {
     expect(reviewBodies[1].expected_candidate_revision).toBe(2);
     expect(reviewBodies[1].expected_policy_revision).toBe(1);
     expect(screen.queryByText(/REVIEW_FROZEN/)).toBeNull();
-    expect(
-      screen.getByRole("heading", { name: /which links may be considered/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("button", { name: /adopt & freeze review/i })).toBeTruthy();
     expect(screen.queryByRole("button", { name: /run challenge/i })).toBeNull();
   });
 });

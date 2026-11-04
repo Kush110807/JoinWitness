@@ -6,14 +6,17 @@
  */
 import { useEffect, useRef, useState } from "react";
 import RelationshipField from "./RelationshipField";
-import type {
-  CommerceCandidateOrigin,
-  CommerceDisposition,
-  CommerceManualCandidate,
-} from "../lib/commerceApi";
+import type { CommerceDisposition, CommerceManualCandidate } from "../lib/commerceApi";
 import type { CommerceCatalogTarget, CommerceBaselinePreview } from "../lib/commerceDraft";
-
-const DISPOSITIONS: CommerceDisposition[] = ["CONFIRMED", "POSSIBLE", "PROHIBITED"];
+import {
+  CommerceBaselinePreviewDetails,
+  CommerceManualList,
+  CommerceRecordControls,
+  CommerceReviewCommit,
+  dispositionLabel,
+  originShort,
+  provenanceBadge,
+} from "./CommerceRecordInspector";
 
 export interface CommerceReviewRecord {
   recordKey: string;
@@ -64,25 +67,6 @@ interface CommerceReviewEditorProps {
   adoptBusy: boolean;
 }
 
-function originShort(o: CommerceCandidateOrigin): string {
-  return o === "SOURCE_REF" ? "source" : o === "META_SUGGESTED" ? "meta" : "manual";
-}
-
-function provenanceBadge(o: CommerceCandidateOrigin) {
-  return (
-    <span
-      key={o}
-      className={`prov prov-${o === "SOURCE_REF" ? "source" : o === "META_SUGGESTED" ? "meta" : "manual"}`}
-    >
-      {o === "SOURCE_REF" ? "Source hint" : o === "META_SUGGESTED" ? "Meta suggestion" : "Manual"}
-    </span>
-  );
-}
-
-function dispositionLabel(d: CommerceDisposition): string {
-  return d === "CONFIRMED" ? "Confirmed" : d === "POSSIBLE" ? "Possible" : "Prohibited";
-}
-
 export default function CommerceReviewEditor(props: CommerceReviewEditorProps) {
   const {
     records, targetsFor, dispositionFor, unmatchedFor, onEdge, onUnmatched, onSeedRow,
@@ -125,25 +109,11 @@ export default function CommerceReviewEditor(props: CommerceReviewEditorProps) {
     return () => document.removeEventListener("keydown", onKey);
   }, [sheetOpen]);
 
-  function addFor(recordKey: string) {
-    const err = onAddManual(
-      recordKey,
-      (targetInputs[recordKey] ?? "").trim(),
-      (reasonInputs[recordKey] ?? "").trim(),
-    );
-    setAddErrors({ ...addErrors, [recordKey]: err });
-    if (!err) {
-      setTargetInputs({ ...targetInputs, [recordKey]: "" });
-      setReasonInputs({ ...reasonInputs, [recordKey]: "" });
-    }
-  }
-
   const selected = records.find((r) => r.recordKey === selectedKey) ?? records[0] ?? null;
   const selectedTargets = selected ? targetsFor(selected.recordKey) : [];
   const selectedUnmatched = selected ? unmatchedFor(selected.recordKey) : "PROHIBITED";
   const selectedPicked = selected ? baselineFor(selected.recordKey) : undefined;
   const selectedOptions = selected ? baselineOptions(selected.recordKey) : [];
-  const hasSourceTargets = selectedTargets.some((t) => t.origins.includes("SOURCE_REF"));
   const selectedIndex = selected ? records.findIndex((r) => r.recordKey === selected.recordKey) : -1;
 
   function gotoRecord(delta: number) {
@@ -320,230 +290,48 @@ export default function CommerceReviewEditor(props: CommerceReviewEditorProps) {
               </button>
             </div>
             {selected && (
-              <>
-                <p className="muted">
-                  <code>{selected.recordKey}</code> · decisions are draft-only until Adopt.
-                </p>
-                {hasSourceTargets && (
-                  <button type="button" onClick={() => onSeedRow(selected.recordKey)}>
-                    Seed source hints as possible (draft only)
-                  </button>
-                )}
-                {selectedTargets.length > 0 && (
-                  <ul className="editor-edges">
-                    {selectedTargets.map((t) => (
-                      <li key={t.targetId}>
-                        <code>{t.targetId}</code>{" "}
-                        <span className="muted">({t.origins.map(originShort).join("+")})</span>{" "}
-                        <label>
-                          Link disposition{" "}
-                          <select
-                            aria-label={`Link disposition for ${selected.recordKey} to ${t.targetId}`}
-                            value={dispositionFor(selected.recordKey, t.targetId)}
-                            onChange={(e) =>
-                              onEdge(selected.recordKey, t.targetId, e.target.value as CommerceDisposition)
-                            }
-                          >
-                            {DISPOSITIONS.map((d) => (
-                              <option key={d} value={d}>
-                                {dispositionLabel(d)}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <div className="editor-unmatched">
-                  <label>
-                    If unmatched{" "}
-                    <select
-                      aria-label={`Unmatched rule for ${selected.recordKey}`}
-                      value={selectedUnmatched}
-                      onChange={(e) => onUnmatched(selected.recordKey, e.target.value as CommerceDisposition)}
-                    >
-                      {DISPOSITIONS.map((d) => (
-                        <option key={d} value={d}>
-                          {dispositionLabel(d)}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Baseline choice{" "}
-                    <select
-                      aria-label={`Baseline choice for ${selected.recordKey}`}
-                      value={selectedPicked === null ? "__null__" : (selectedPicked ?? "")}
-                      onChange={(e) =>
-                        onBaseline(
-                          selected.recordKey,
-                          e.target.value === "__null__" ? null : e.target.value,
-                        )
-                      }
-                    >
-                      <option value="">Preview default</option>
-                      {selectedOptions.map((o) => (
-                        <option key={o.value ?? "__null__"} value={o.value ?? "__null__"} disabled={!o.allowed}>
-                          {o.label}
-                          {o.allowed ? "" : " (not allowed)"}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-                <div className="editor-unmatched">
-                  <label>
-                    Add target ID{" "}
-                    <input
-                      type="text"
-                      aria-label={`Add target ID for ${selected.recordKey}`}
-                      value={targetInputs[selected.recordKey] ?? ""}
-                      placeholder={selected.recordKey.startsWith("refund:") ? "P-…" : "O-…"}
-                      onChange={(e) => setTargetInputs({ ...targetInputs, [selected.recordKey]: e.target.value })}
-                    />
-                  </label>
-                  <label className="scope-note-label">
-                    Reason{" "}
-                    <input
-                      type="text"
-                      aria-label={`Manual reason for ${selected.recordKey}`}
-                      value={reasonInputs[selected.recordKey] ?? ""}
-                      maxLength={200}
-                      placeholder="Why is this link possible?"
-                      onChange={(e) => setReasonInputs({ ...reasonInputs, [selected.recordKey]: e.target.value })}
-                    />
-                  </label>
-                  <button type="button" onClick={() => addFor(selected.recordKey)}>
-                    Add manual candidate
-                  </button>
-                  {addErrors[selected.recordKey] && (
-                    <p className="field-error" role="alert">
-                      {addErrors[selected.recordKey]} — no request was sent.
-                    </p>
-                  )}
-                </div>
-              </>
+              <CommerceRecordControls
+                recordKey={selected.recordKey}
+                targets={selectedTargets}
+                dispositionFor={(targetId) => dispositionFor(selected.recordKey, targetId)}
+                unmatched={selectedUnmatched}
+                onEdge={(targetId, d) => onEdge(selected.recordKey, targetId, d)}
+                onUnmatched={(d) => onUnmatched(selected.recordKey, d)}
+                onSeedRow={() => onSeedRow(selected.recordKey)}
+                baselinePicked={selectedPicked}
+                baselineOptions={selectedOptions}
+                onBaseline={(target) => onBaseline(selected.recordKey, target)}
+                onAddManual={(targetId, reason) => onAddManual(selected.recordKey, targetId, reason)}
+                inputs={{
+                  targetInputs,
+                  reasonInputs,
+                  addErrors,
+                  setTargetInputs,
+                  setReasonInputs,
+                  setAddErrors,
+                }}
+              />
             )}
           </form>
         </div>
       </div>
 
-      {manual.length > 0 && (
-        <div className="manual-list">
-          <h3>Manual candidates in this draft ({manual.length})</h3>
-          <ul className="editor-edges">
-            {manual.map((m, i) => (
-              <li key={`${m.record_type}:${m.record_id}-${m.target_id}-${i}`}>
-                <code>
-                  {m.record_type}:{m.record_id}
-                </code>{" "}
-                → <code>{m.target_id}</code> · {m.reason}{" "}
-                <button type="button" onClick={() => onRemoveManual(i)}>
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <CommerceManualList manual={manual} onRemoveManual={onRemoveManual} />
 
-      <details className="evidence-details">
-        <summary>Proposed baseline (preview only — the backend validates it)</summary>
-        {baselinePreview.warnings.length > 0 && (
-          <ul className="warnings" aria-label="Baseline warnings">
-            {baselinePreview.warnings.map((w, i) => (
-              <li key={i}>{w}</li>
-            ))}
-          </ul>
-        )}
-        <div className="table-scroll">
-          <table aria-label="Proposed commerce baseline preview">
-            <thead>
-              <tr>
-                <th>Source record</th>
-                <th>Baseline link</th>
-              </tr>
-            </thead>
-            <tbody>
-              {baselinePreview.assignments.map((a) => (
-                <tr key={a.record_key}>
-                  <td>
-                    <code>{a.record_key}</code>
-                  </td>
-                  <td>{a.target_id ? <code>{a.target_id}</code> : <em>unmatched</em>}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </details>
+      <CommerceBaselinePreviewDetails baselinePreview={baselinePreview} />
 
-      <div data-testid="commerce-review-summary" className="review-summary" aria-live="polite">
-        <p className="summary-progress">
-          <strong>{progressText}</strong>
-        </p>
-        <div className="editor-scope">
-          <label>
-            Threshold K (1–{orderCount}){" "}
-            <input
-              type="number"
-              aria-label="Threshold K"
-              min={1}
-              max={Math.max(orderCount, 1)}
-              value={thresholdK ?? ""}
-              placeholder="draft until adopted"
-              onChange={(e) => {
-                const v = e.target.value === "" ? null : Number(e.target.value);
-                onThresholdK(Number.isInteger(v) ? v : null);
-              }}
-            />
-          </label>
-          <label className="scope-note-label">
-            Reviewer label (display only, not identity){" "}
-            <input
-              type="text"
-              aria-label="Reviewer label"
-              value={reviewerLabel}
-              maxLength={200}
-              placeholder="e.g. demo-reviewer"
-              onChange={(e) => onReviewerLabel(e.target.value)}
-            />
-          </label>
-        </div>
-        <fieldset className="attest-group">
-          <legend>Human attestation (all three required)</legend>
-          <label className="attest-label">
-            <input
-              type="checkbox"
-              checked={attestation.all_rows_reviewed}
-              onChange={(e) => onAttestation("all_rows_reviewed", e.target.checked)}
-            />{" "}
-            I reviewed every source record above
-          </label>
-          <label className="attest-label">
-            <input
-              type="checkbox"
-              checked={attestation.understands_bounded_predicate}
-              onChange={(e) => onAttestation("understands_bounded_predicate", e.target.checked)}
-            />{" "}
-            I understand the bounded clean-fulfilment rule being tested
-          </label>
-          <label className="attest-label">
-            <input
-              type="checkbox"
-              checked={attestation.conflicting_source_ref_overrides_explained}
-              onChange={(e) => onAttestation("conflicting_source_ref_overrides_explained", e.target.checked)}
-            />{" "}
-            Conflicting source-reference overrides are explained by my reasons
-          </label>
-        </fieldset>
-        <div className="row summary-actions">
-          <button type="button" className="primary" onClick={onAdopt} disabled={adoptBusy}>
-            {adoptBusy ? "Validating…" : "Adopt & freeze review"}
-          </button>
-        </div>
-      </div>
+      <CommerceReviewCommit
+        progressText={progressText}
+        thresholdK={thresholdK}
+        orderCount={orderCount}
+        onThresholdK={onThresholdK}
+        reviewerLabel={reviewerLabel}
+        onReviewerLabel={onReviewerLabel}
+        attestation={attestation}
+        onAttestation={onAttestation}
+        onAdopt={onAdopt}
+        adoptBusy={adoptBusy}
+      />
     </div>
   );
 }

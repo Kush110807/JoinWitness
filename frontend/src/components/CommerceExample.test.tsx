@@ -107,8 +107,20 @@ async function switchToCommerce(user: ReturnType<typeof userEvent.setup>) {
 
 async function clickExample(user: ReturnType<typeof userEvent.setup>) {
   await user.click(screen.getByRole("button", { name: /explore fictional commerce example/i }));
+  await waitForReviewScene();
+}
+
+/** Review renders the prototype-faithful scene: the Adopt action marks it. */
+async function waitForReviewScene() {
   await waitFor(() =>
-    expect(screen.getByRole("heading", { name: /which links may be considered/i })).toBeTruthy(),
+    expect(screen.getByRole("button", { name: /adopt & freeze review/i })).toBeTruthy(),
+  );
+}
+
+/** Challenge renders the scene with run controls: the time budget marks it. */
+async function waitForChallengeScene() {
+  await waitFor(() =>
+    expect(screen.getByLabelText(/time budget in milliseconds/i)).toBeTruthy(),
   );
 }
 
@@ -167,8 +179,7 @@ describe("G4-B03 one-click example import", () => {
     await switchToCommerce(user);
     expect(screen.getByText(/fictional demonstration data/i)).toBeTruthy();
     await clickExample(user);
-    const queue = screen.getByRole("listbox", { name: /source queue/i });
-    expect(within(queue).getByRole("option", { name: /payment:P1/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /inspect payment:P1/i })).toBeTruthy();
     expect(screen.getByText(/fictional demonstration data · not real business information/i)).toBeTruthy();
   });
 
@@ -194,7 +205,7 @@ describe("G4-B03 one-click example import", () => {
     await user.click(screen.getByRole("button", { name: /adopt & freeze review/i }));
     await waitFor(() => expect(screen.getByText(/ATTESTATION_INCOMPLETE/)).toBeTruthy());
     expect((globalThis.fetch as unknown as { mock: { calls: unknown[][] } }).mock.calls.length).toBe(1);
-    expect(screen.getByRole("heading", { name: /which links may be considered/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /adopt & freeze review/i })).toBeTruthy();
   });
 
   it("keeps manual four-file import working", async () => {
@@ -213,9 +224,7 @@ describe("G4-B03 one-click example import", () => {
       await user.upload(screen.getByLabelText(label), new File([text], name, { type: "text/csv" }));
     }
     await user.click(screen.getByRole("button", { name: /import and parse four csvs/i }));
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /which links may be considered/i })).toBeTruthy(),
-    );
+    await waitForReviewScene();
     expect(screen.queryByText(/fictional demonstration data · not real business information/i)).toBeNull();
   });
 
@@ -232,7 +241,7 @@ describe("G4-B03 one-click example import", () => {
     await user.click(screen.getByRole("button", { name: /explore fictional commerce example/i }));
     await waitFor(() => expect(screen.getByText(/COMMERCE_CSV_INVALID/)).toBeTruthy());
     expect(screen.getByRole("heading", { name: /which four files are we testing/i })).toBeTruthy();
-    expect(screen.queryByRole("listbox", { name: /source queue/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /inspect payment:P1/i })).toBeNull();
   });
 
   it("rapid repeated clicks trigger a single active import", async () => {
@@ -244,9 +253,7 @@ describe("G4-B03 one-click example import", () => {
     fireEvent.click(btn);
     fireEvent.click(btn);
     fireEvent.click(btn);
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /which links may be considered/i })).toBeTruthy(),
-    );
+    await waitForReviewScene();
     expect((globalThis.fetch as unknown as { mock: { calls: unknown[][] } }).mock.calls.length).toBe(1);
   });
 
@@ -268,11 +275,14 @@ describe("G4-B03 one-click example import", () => {
       (screen.getByRole("button", { name: /case a · event decision/i }) as HTMLButtonElement).disabled,
     ).toBe(true);
     resolveParse(okJson(parseOk));
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /which links may be considered/i })).toBeTruthy(),
-    );
+    await waitForReviewScene();
     // Commerce mounts separately: leaving and returning starts over, with no
-    // reused session, review, or proof state.
+    // reused session, review, or proof state. Case switching lives on the
+    // full shell, so the flow returns via Import before switching.
+    await user.click(screen.getByRole("button", { name: /back to import/i }));
+    await waitFor(() =>
+      expect(screen.getByRole("heading", { name: /which four files are we testing/i })).toBeTruthy(),
+    );
     await user.click(screen.getByRole("button", { name: /case a · event decision/i }));
     await waitFor(() =>
       expect(screen.getByRole("heading", { name: /can one uncertain match change/i })).toBeTruthy(),
@@ -281,8 +291,8 @@ describe("G4-B03 one-click example import", () => {
     await waitFor(() =>
       expect(screen.getByRole("heading", { name: /are at least k of n orders/i })).toBeTruthy(),
     );
-    expect(screen.queryByRole("heading", { name: /which links may be considered/i })).toBeNull();
-    expect(screen.queryByRole("listbox", { name: /source queue/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /adopt & freeze review/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /inspect payment:P1/i })).toBeNull();
   });
 
   it("restarting the example starts a fresh investigation", async () => {
@@ -311,13 +321,9 @@ describe("G4-B03 one-click example import", () => {
     await user.click(screen.getByRole("checkbox", { name: /conflicting source-reference overrides/i }));
     await user.click(screen.getByRole("button", { name: /seed all source hints as possible/i }));
     await user.click(screen.getByRole("button", { name: /adopt & freeze review/i }));
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /could the conclusion reverse/i })).toBeTruthy(),
-    );
+    await waitForChallengeScene();
     await user.click(screen.getByRole("button", { name: /back to review/i }));
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /which links may be considered/i })).toBeTruthy(),
-    );
+    await waitForReviewScene();
     await user.click(screen.getByRole("button", { name: /back to import/i }));
     await user.click(screen.getByRole("button", { name: /clear commerce import/i }));
     await waitFor(() =>
