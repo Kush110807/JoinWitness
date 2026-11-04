@@ -1,5 +1,8 @@
 # JoinWitness — Authoritative Engineering State
 
+> **HISTORICAL SNAPSHOT — 29 October 2026.** This document records the engineering state at that time. It is **not** the current product status: the final audited Decision Atlas R2 release was subsequently integrated and published. See [Current Release Status](RELEASE_STATUS.md) and the [submission README](../README.md). Do not interpret the old "G5 not started" or "current program T07" statements below as describing November 2026. The historical content is retained for auditability.
+
+
 **As of:** 2026-10-29 IST (reconciled from GitHub commits and owner-supplied Windows output)
 **Governing specification:** `JW-RD-3.0 FINAL` (28 October 2026), superseding earlier proposals.
 **Last integrated commit:** `7d1fecb4cd75f22ebe961194053e75c6846d87a2` (`main`, T07A).
