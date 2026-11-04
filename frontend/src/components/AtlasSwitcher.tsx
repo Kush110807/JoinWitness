@@ -13,25 +13,20 @@ interface AtlasSwitcherProps {
 export default function AtlasSwitcher({ value, onChange, disabled }: AtlasSwitcherProps) {
   return (
     <div className="atlas-switcher" role="group" aria-label="Choose investigation">
-      <button
-        type="button"
-        className={`atlas-option ${value === "event" ? "is-selected" : ""}`}
-        aria-pressed={value === "event"}
-        disabled={disabled}
-        onClick={() => onChange("event")}
-      >
-        <strong>Case A · Event decision</strong>
-        <small>Attendance vs registrations · two files · verified path</small>
+      <div className="atlas-switcher-label" aria-hidden="true">
+        <span>01 / 02</span><strong>INVESTIGATIONS</strong>
+      </div>
+      <button type="button" className={`atlas-option ${value === "event" ? "is-selected" : ""}`}
+        aria-pressed={value === "event"} disabled={disabled} onClick={() => onChange("event")}>
+        <span className="atlas-option-mark" aria-hidden="true">A</span>
+        <span className="atlas-option-copy"><strong>Case A · Event decision</strong><small>Attendance / registrations</small></span>
+        <span className="atlas-option-arrow" aria-hidden="true">↗</span>
       </button>
-      <button
-        type="button"
-        className={`atlas-option ${value === "commerce" ? "is-selected" : ""}`}
-        aria-pressed={value === "commerce"}
-        disabled={disabled}
-        onClick={() => onChange("commerce")}
-      >
-        <strong>Case B · Commerce decision</strong>
-        <small>Orders, payments, deliveries, refunds · four files · new</small>
+      <button type="button" className={`atlas-option ${value === "commerce" ? "is-selected" : ""}`}
+        aria-pressed={value === "commerce"} disabled={disabled} onClick={() => onChange("commerce")}>
+        <span className="atlas-option-mark" aria-hidden="true">B</span>
+        <span className="atlas-option-copy"><strong>Case B · Commerce decision</strong><small>Orders / payments / delivery / refunds</small></span>
+        <span className="atlas-option-arrow" aria-hidden="true">↗</span>
       </button>
     </div>
   );

@@ -5,6 +5,7 @@
  * from the live server challenge response. Nothing is hardcoded.
  */
 import { useState } from "react";
+import DecisionShift from "./DecisionShift";
 import type { CommerceChallengeResult } from "../lib/commerceApi";
 import {
   commerceDecisionText,
@@ -64,6 +65,13 @@ export default function CommerceDecisionCanvas({ result, orderCount }: CommerceD
 
       {result.status === "REVERSED_EXHAUSTIVE" && baseline && witness && (
         <>
+          <DecisionShift
+            baseline={baseline}
+            alternative={witness}
+            total={orderCount}
+            thresholdK={result.threshold_k}
+            changedLinks={witness.link_distance}
+          />
           <div className="canvas" aria-label="Decision canvas: original and permitted alternative">
             <div className="comparison-panel">
               <span className="comparison-caption">ORIGINAL MATCHING</span>

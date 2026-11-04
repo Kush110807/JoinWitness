@@ -61,6 +61,7 @@ import {
 } from "./lib/demo";
 import { bytesToBase64, previewCsv } from "./lib/encoding";
 import "./App.css";
+import "./DecisionAtlasSkin.css";
 
 const FIXED_QUESTION = "Did Group A have more attendance records than Group B?";
 
@@ -707,6 +708,7 @@ export default function App() {
 
   return (
     <ProductShell
+      atlasMode="event"
       stage={stage}
       maxStage={maxStage}
       busy={busy}

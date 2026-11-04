@@ -5,6 +5,7 @@
  * Selection only inspects; only Adopt records the review.
  */
 import { useEffect, useRef, useState } from "react";
+import RelationshipField from "./RelationshipField";
 import type {
   CommerceCandidateOrigin,
   CommerceDisposition,
@@ -161,12 +162,11 @@ export default function CommerceReviewEditor(props: CommerceReviewEditorProps) {
 
   return (
     <div className="editor commerce-workbench">
-      <h3>Your review decisions</h3>
-      <p className="muted">
-        Work one source record at a time. Set each candidate link, unmatched rule, and baseline
-        choice yourself. Nothing below takes effect until you explicitly adopt it; the backend
-        validates every choice. Selecting a record only inspects it.
-      </p>
+      <div className="workbench-heading">
+        <div><span className="atlas-eyebrow">02 / HUMAN REVIEW</span><h3>Map the uncertainty.</h3>
+        <p>Inspect the source, compare its possible links, then authorise only the relationships you can defend.</p></div>
+        <div className="workbench-safety"><span aria-hidden="true">◇</span><strong>Human authority</strong><small>Draft changes take effect only after Adopt.</small></div>
+      </div>
       <p className="muted" aria-live="polite">
         Reviewing session revisions: source {epochs.sourceRevision} · candidates{" "}
         {epochs.candidateRevision} · policy {epochs.policyRevision}.{" "}
@@ -246,6 +246,13 @@ export default function CommerceReviewEditor(props: CommerceReviewEditorProps) {
                 )}
                 {selectedTargets.length === 0 && <>No candidates registered for this record.</>}
               </p>
+              <RelationshipField
+                recordKey={selected.recordKey}
+                sourceHint={selected.sourceHint}
+                targets={selectedTargets}
+                dispositionFor={(targetId) => dispositionFor(selected.recordKey, targetId)}
+                baselineTarget={selectedPicked}
+              />
               {selectedTargets.length > 0 && (
                 <ul className="editor-edges relationship-links" aria-label="Candidate links">
                   {selectedTargets.map((t) => {

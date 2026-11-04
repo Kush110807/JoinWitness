@@ -778,6 +778,7 @@ export default function CommerceAtlas({ scenario, onScenario }: CommerceAtlasPro
 
   return (
     <ProductShell
+      atlasMode="commerce"
       stage={stage}
       maxStage={maxStage}
       busy={busy}
