@@ -1,5 +1,8 @@
 # JoinWitness — Authoritative Decision Register
 
+> **HISTORICAL DECISION REGISTER.** This register preserves contemporaneous T01–T07 rulings. Later G1–G4 implementation and the final audited R2 release are documented in [Current Release Status](RELEASE_STATUS.md), [G1 freeze](HQ_G1_FREEZE_2026-11-01.md), and [G3 evidence](G3/G3_INTEGRATION_EVIDENCE.md). Earlier "next ticket" language is historical and should not be treated as current instructions.
+
+
 ## JW-D-001 — 2026-10-28: Operating authority
 - JW-RD-3.0 FINAL is authoritative over earlier drafts.
 - One writer, local-first, no automatic push, public deployment or expense.
