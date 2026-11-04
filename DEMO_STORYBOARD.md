@@ -1,36 +1,31 @@
-# JoinWitness — Three-minute demonstration storyboard
+# Three-minute demonstration: JoinWitness
 
-**Target:** ~170 seconds (maximum 180 seconds).  
-**Environment:** verified R2 local release, fictional fixture data, Chrome; backend `127.0.0.1:8001`, frontend `127.0.0.1:5178`.  
-**Purpose:** show decision robustness rather than a generic reconciliation dashboard. This document is a freshly authored public demo guide based on observed release evidence.
+A short research demonstration should show **the question, the permitted uncertainty and the counterexample**. It does not need to imply that the prototype is deployed or that a model made a decision.
 
-| Time | Screen / live action | Suggested narration |
-|---|---|---|
-| 0:00–0:20 | Decision Atlas home; show Case A and Case B launchers. | “A result can look certain even when its underlying record matches are not. JoinWitness tests whether a conclusion survives permissible uncertainty.” |
-| 0:20–0:40 | Select **Commerce**. Click **Explore fictional commerce example**, showing the four CSV sources. | “We begin with fictional orders, payments, deliveries and refunds. Importing them creates a draft, not an approval.” |
-| 0:40–1:15 | Review: inspect delivery **D2**, candidate **O2** versus **O3**, and actual human permission controls. Show adoption/attestations/K=2. | “Suggestions and source hints are only possibilities. A person must explicitly permit the alternatives and freeze the review. The threshold is two cleanly fulfilled orders.” |
-| 1:15–1:45 | Challenge: show the interactive constellation and the decision-changing server witness. | “Within the reviewed finite scope, the original **2/3** falls to **1/3** if D2 is assigned to O3 instead of O2. The exhaustive search proves one change suffices; the independent checker validates it.” |
-| 1:45–2:10 | Open verification evidence, export receipt and replay it. | “Proof claims show their bounded scope. A receipt supports verification and replay, but does not claim which real-world match is true.” |
-| 2:10–2:38 | Switch to Event 60/90, prepared review → Challenge. Show **32:28 → 30:30** and minimum two. | “A different engine tests an event result. Two permitted identity changes remove the original lead. We qualify the solver's proof basis rather than pretending every proof is exhaustive.” |
-| 2:38–2:50 | Show explicit offline AI status and closing scene. | “The release demonstrates deterministic analysis and human control. Meta Muse Code supported development; live Model API suggestions are not active in this recorded build.” |
+**Target length:** about **170 seconds** (limit: three minutes). Use the actual accepted local build with fictional data. Rehearse the review steps before recording; they must still appear as genuine human actions on screen.
 
-## Before recording
+| Time | On-screen sequence | Narration cue |
+| --- | --- | --- |
+| **0:00–0:18** | Decision Atlas landing and the two investigation choices | “A result can depend on a relationship the data does not settle. This project asks whether the conclusion still holds under a permitted alternative.” |
+| **0:18–0:38** | Select Commerce; open its one-click fictional example and inspect the four sources | “These are fictional orders, payments, deliveries and refunds. Importing establishes a source, not permission to relink it.” |
+| **0:38–1:12** | Review, highlight D2, inspect original O2 and alternative O3; show explicit candidate permissions, K=2, attestation and adoption | “I decide which links are legitimately in scope. The engine cannot silently promote a suggestion into an approved match.” |
+| **1:12–1:38** | Run Challenge. Hold on the central relationship and `2/3 → 1/3` lens | “One permitted delivery reassignment crosses the threshold. The exhaustive bounded search finds minimum one change, and an independent checker recomputes it.” |
+| **1:38–2:02** | Open the evidence drawer; export the receipt and replay | “The result is accompanied by its scope and proof basis. The receipt supports replay—not proof of which shipment was actually correct.” |
+| **2:02–2:32** | Switch to the fictional 60/90 event, adopt prepared policy and run Challenge | “In a separate event investigation, two permitted identity changes change **32:28** to **30:30**. The original lead disappears. Here the minimum is solver-attributed rather than independently exhaustive.” |
+| **2:32–2:50** | Show Case A proof or replay; return to the Atlas overview | “The same interaction helps examine two different questions, while preserving each engine’s different mathematical qualification.” |
+| **2:50–2:58** | Title and concise limitation | “The current prototype is local and works on synthetic records; live in-app Meta inference is not part of this verified demo.” |
 
-1. Start the verified backend and frontend using [Windows setup](SETUP_AND_LAUNCH_WINDOWS.md).
-2. Rehearse the exact human-review actions before recording; the Case B frozen policy requires explicit candidate permissions, baselines and attestations.
-3. Keep the application in its truthful offline mode and do not invent a successful Meta API response.
-4. Record **actual product interactions** rather than still-image slides. Cuts are permissible to keep the video under three minutes, but avoid deceptive cuts that imply a step happened when it did not.
-5. Prefer a 1440px or 1728px desktop viewport and zoom/pan carefully so reviewers can read the central relationship and proof qualification.
-6. If a live action fails, repeat it transparently; do not label screenshots or mocks as proof of the successful call.
+## Recording checklist
 
-## Final upload and accessibility
+- Show the **real browser** connected to the local backend. Do not substitute a simulated response for a successful call.
+- Keep the constellation and the decision-changing record visible long enough to read. Prefer a 1440×900 or 1728×1080 desktop capture.
+- Record the **human** review and attestation action. A clicked record is only inspection.
+- Inspect the accepted response labels: `REVERSED_EXHAUSTIVE`, `PASSED`, `VERIFIED_REPLAY`, `REVERSIBLE_MINIMUM_PROVEN`.
+- Cuts to shorten the demonstration are acceptable, but do not edit them to imply a failed or unperformed step succeeded.
+- The event alternative is a **tie**, not a Group B win.
+- Do not claim a live Meta Model API response. Muse Code was a development assistant; the runtime shows `AI_UNAVAILABLE` when its suggestion path is unavailable.
+- Check the actual MP4 duration and upload to YouTube as Public or Unlisted. Test the link from a signed-out window before submitting.
 
-- Export an MP4 under three minutes; check the final duration.
-- Publish on YouTube as **Unlisted** or Public, ensuring judges can view it without logging in or requesting access.
-- Title suggestion: **JoinWitness — Can Your Decision Survive Uncertainty? | Meta AI Hackathon 2026**.
-- Provide captions or clear spoken narration for the key outcome/witness claims.
-- Paste the actual YouTube URL into the mandatory submission field. No video URL exists until the owner uploads it.
+If the live demonstration cannot be reproduced, report the failure rather than substituting the old screenshot archive as new evidence.
 
-## Honest limitations to state if asked
-
-The demonstration is local, uses synthetic records, and is not production-hosted. A model may eventually suggest candidate links, but it cannot make review decisions; during verified release tests the app showed `AI_UNAVAILABLE`. In particular, coding with Muse Code is genuine development-tool use, **not** evidence of live inference inside JoinWitness.
+See [Windows setup](SETUP_AND_LAUNCH_WINDOWS.md) and [the release verification record](VERIFICATION_MANIFEST.md).
