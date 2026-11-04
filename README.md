@@ -1,10 +1,10 @@
 # JoinWitness
 
-**Can a conclusion survive uncertainty in the records used to reach it?**
+**Decision Atlas — developer-built software for examining how uncertain record links affect real decisions.**
 
-JoinWitness is an experimental decision-robustness auditor for uncertain record linkage. It asks a narrower, more testable question than whether a dataset is simply “clean”: *within an explicitly reviewed set of possible links, could a different admissible assignment change the decision?*
+JoinWitness is an actively developed decision-robustness application. It lets a reviewer inspect ambiguous relationships, explicitly authorise plausible alternatives, and test whether a decision still holds when those links change. The mathematical guarantees are deliberately restricted to the reviewed set of possibilities.
 
-The project was developed for the **Meta Global AI Developer Hackathon 2026**. It is a local research prototype using fictional data, not a hosted service or a general-purpose entity-resolution product.
+**Creator, lead developer and product architect:** Kushaagra Gupta. Built for the **Meta Global AI Developer Hackathon 2026**, JoinWitness combines a working local application with ongoing research into reliable human–AI review and verifiable decision support. It is **not yet publicly deployed**, and its included datasets are fictional.
 
 **Maintainer:** Kushaagra Gupta · **Verified application release:** [`483fc95`](https://github.com/Kush110807/JoinWitness/commit/483fc95807df59528ccd4ea5e2541018b6f80966) · **Current status:** [Release notes](docs/RELEASE_STATUS.md)
 
@@ -65,11 +65,13 @@ Start with [Windows setup and launch](docs/SETUP_AND_LAUNCH_WINDOWS.md). The [de
 
 **Reported release evidence:** 452/452 backend tests, 146/146 frontend tests, a successful TypeScript/Vite build and eight real-Chrome journeys across four desktop/mobile viewports. These were locally executed and reported during release preparation; they have **not** been independently reproduced in public CI. The [verification record](docs/VERIFICATION_MANIFEST.md) documents the source, interpretation and known probe limitations.
 
-## AI use and authorship
+## Development, research and tool use
 
-I led the problem framing, product decisions, permitted-authority model, visual reviews and final acceptance process. I used development assistants—including **Meta Muse Code** and **ChatGPT**—for implementation and review support. The repository retains the engineering history and the tests used to check the result; it should not be read as a claim that every line was written manually or that all outputs received an independent external audit.
+JoinWitness is principally **a software product under active development**, not a completed academic study. I defined the problem, designed the human-authority constraints and product experience, directed the implementation, reviewed the browser evidence, and made the release decisions. **Meta Muse Code** and **ChatGPT** assisted with programming, debugging, visual iteration and technical writing. This is an account of a developer-led project using AI tools—not a claim that every line was handwritten or that generated work passed an independent external audit.
 
-The released application is **offline-first**. Its Meta suggestion boundary is present in the code, but **live Meta Model API inference was not demonstrated in the verified release**. When unavailable, the interface reports `AI_UNAVAILABLE` and the deterministic investigation continues. Model suggestions, when present, are not permissions.
+Research continues alongside implementation: candidate-set completeness, mathematical proof qualification, reviewer comprehension and real-data applicability remain open questions. The two fictional demonstrations establish specified software behaviour; they do **not** constitute an empirical field validation.
+
+The verified release is **offline-first**. The Meta suggestion boundary is implemented, but **successful live Meta Model API inference was not demonstrated**. When unavailable, the interface reports `AI_UNAVAILABLE` and deterministic analysis continues. A model suggestion never becomes an authorised link on its own.
 
 ## Limits of the claim
 
