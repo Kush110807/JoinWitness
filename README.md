@@ -1,5 +1,5 @@
 # JoinWitness
-
+<img width="1440" height="900" alt="JoinWitness_Decision_Atlas_Live_Commerce_Challenge" src="https://github.com/user-attachments/assets/77e11e79-74b0-4e5b-9d3b-e44b49afed89" />
 **Decision Atlas — developer-built software for examining how uncertain record links affect real decisions.**
 
 JoinWitness is an actively developed decision-robustness application. It lets a reviewer inspect ambiguous relationships, explicitly authorise plausible alternatives, and test whether a decision still holds when those links change. The mathematical guarantees are deliberately restricted to the reviewed set of possibilities.
