@@ -1,6 +1,6 @@
 # Reproducing JoinWitness on Windows
 
-This guide reproduces the **local fictional-data prototype**, not a public service. The application code was accepted at [commit `483fc95`](https://github.com/Kush110807/JoinWitness/commit/483fc95807df59528ccd4ea5e2541018b6f80966). Later public commits may contain documentation changes.
+This guide reproduces the **local fictional-data prototype**, not a public service. The initial R2 application was accepted at [commit `483fc95`](https://github.com/Kush110807/JoinWitness/commit/483fc95807df59528ccd4ea5e2541018b6f80966). The frontend-unified public application was subsequently integrated by [merge `5780037`](https://github.com/Kush110807/JoinWitness/commit/578003707b972289433c022ca893ecad88e58234). The backend/solver remains at the R2 baseline; the newer frontend has separate local test evidence.
 
 **Expected arrangement:** FastAPI on `127.0.0.1:8001`; React/Vite on `127.0.0.1:5178`; frontend routes `/api` through a same-origin development proxy with `changeOrigin: false`.
 
@@ -45,7 +45,7 @@ npm test
 npm run build
 ```
 
-Historical local release evidence reported **452 backend** and **146 frontend** passing tests. Treat new test output as a fresh observation; a failure on your machine should be reported, not overwritten by the historical numbers.
+Local release evidence reported **452 backend** tests at the preserved R2 baseline and **152 frontend** tests for the unified frontend. Treat new test output as a fresh observation; a failure on your machine should be reported, not overwritten by the historical numbers.
 
 ## Start the backend
 
@@ -59,7 +59,7 @@ Verify `http://127.0.0.1:8001/api/health`. The local health response should iden
 
 ## Start the frontend
 
-The tracked `frontend/vite.config.ts` retains older development defaults (frontend 5173 and API 8000). The accepted R2 browser run used **5178 / 8001**. Rather than rewriting the tracked config, make a disposable copy.
+The tracked `frontend/vite.config.ts` retains older development defaults (frontend 5173 and API 8000). The verified R2 browser run used **5178 / 8001**; the unified frontend can use the same local proxy arrangement. Rather than rewriting the tracked config, make a disposable copy.
 
 In a second PowerShell terminal, change into `frontend`:
 
@@ -91,7 +91,7 @@ The worktree should remain clean. The temporary config is not part of the checke
 
 **Commerce:** Select the fictional four-source example (or the four files in `fixtures/commerce_demo/`). Inspect the delivery alternatives. Set K=2, explicitly grant permissible links, baseline and attestations, and adopt the review before Challenge. The accepted policy produces `REVERSED_EXHAUSTIVE` with delivery **D2: O2 → O3**, **2/3 → 1/3**, minimum **1**, checker `PASSED`. Export a receipt and check its `VERIFIED_REPLAY` response.
 
-**Event:** Open the bundled 60/90 synthetic example, adopt the prepared review policy, run Challenge, then issue and replay its receipt. The reported event change is **32:28 → 30:30** after two permitted identity changes; the minimum is **solver-attributed** and the alternative is a **tie**.
+**Event:** Select **Explore the verified event** (the **60/90**, not the small three-record tutorial), adopt the prepared review policy, run Challenge, then issue and replay its receipt. The reported event change is **32:28 → 30:30** after two permitted identity changes; the minimum is **solver-attributed** and the alternative is a **tie**.
 
 No action on either screen should automatically approve an AI suggestion. The unavailable Meta transport is presented as `AI_UNAVAILABLE`.
 
