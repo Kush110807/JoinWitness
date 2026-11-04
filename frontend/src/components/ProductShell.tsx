@@ -2,6 +2,7 @@
  * Presentational only: all state and backend operations live in App.
  */
 import type { ReactNode } from "react";
+import AtlasSignal from "./AtlasSignal";
 import { nullAlternativeSuffix, verdictHeadline, verdictPill } from "../lib/decisionView";
 
 export type Stage = 1 | 2 | 3 | 4;
@@ -44,6 +45,9 @@ interface ProductShellProps {
   stageNow?: Record<Stage, string>;
   /** Optional verdict summary used when no event `analysis` is present. */
   verdictSummary?: ReactNode;
+  atlasMode?: "event" | "commerce";
+  /** Full-viewport scene mode: skip link + stage content only, no shell chrome. */
+  bare?: boolean;
 }
 
 export default function ProductShell({
@@ -60,7 +64,22 @@ export default function ProductShell({
   contextQuestion,
   stageNow,
   verdictSummary,
+  atlasMode = "event",
+  bare = false,
 }: ProductShellProps) {
+  if (bare) {
+    return (
+      <div className="page atlas-bare">
+        <a className="skip" href="#main">
+          Skip to main content
+        </a>
+        <main id="main" tabIndex={-1} aria-label="Decision canvas">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="page">
       <a className="skip" href="#main">
@@ -69,9 +88,9 @@ export default function ProductShell({
       <div className="topbar">
         <div className="brand" aria-label="JoinWitness">
           <span className="brandmark" aria-hidden="true">
-            J<span>W</span>
+            <svg viewBox="0 0 40 40" focusable="false"><path d="M8 8v24h10V19l14 13V8H22v13L8 8Z" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="20" cy="20" r="3" fill="#C9F06A"/></svg>
           </span>
-          <span>JoinWitness</span>
+          <span className="brand-type"><strong>joinwitness</strong><small>DECISION INTELLIGENCE</small></span>
         </div>
         <div className="topbar-meta">
           <span className="statusdot" aria-hidden="true" /> Local research preview{" "}
@@ -81,7 +100,10 @@ export default function ProductShell({
       {atlasSwitcher && <div className="atlas-switcher-bar">{atlasSwitcher}</div>}
 
       {!hasStarted && !analysis ? (
-        landing
+        <div className="atlas-entry-layout">
+          <div className="atlas-entry-content">{landing}</div>
+          <AtlasSignal mode={atlasMode} />
+        </div>
       ) : (
         <header className="contextbar" aria-label="Current question and result">
           <p className="contextbar-q">

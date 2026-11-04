@@ -17,15 +17,10 @@ import {
 } from "./lib/api";
 import ProductShell from "./components/ProductShell";
 import RecordQueue, { type QueueRecord } from "./components/RecordQueue";
-import DecisionCanvas, { type CanvasChangedRow } from "./components/DecisionCanvas";
 import ProofDrawer from "./components/ProofDrawer";
-import {
-  changedLinkText,
-  formatCanvasCounts,
-  isReversibleVerdict,
-  isValidMinimum,
-  singleCanvasLabel,
-} from "./lib/decisionView";
+import DecisionAtlasExperience from "./components/DecisionAtlasExperience";
+import { isReversibleVerdict } from "./lib/decisionView";
+import { atlasToStage, buildEventChallengeExperience } from "./lib/atlasExperience";
 import ReviewEditor from "./components/ReviewEditor";
 import AtlasSwitcher, { type AtlasScenario } from "./components/AtlasSwitcher";
 import CommerceAtlas from "./components/CommerceAtlas";
@@ -61,6 +56,8 @@ import {
 } from "./lib/demo";
 import { bytesToBase64, previewCsv } from "./lib/encoding";
 import "./App.css";
+import "./DecisionAtlasSkin.css";
+import "./components/DecisionAtlasBindings.css";
 
 const FIXED_QUESTION = "Did Group A have more attendance records than Group B?";
 
@@ -92,7 +89,6 @@ export default function App() {
   const [stage, setStage] = useState<Stage>(1);
   /** Decision Atlas scenario. Commerce mounts separately; event state persists. */
   const [scenario, setScenario] = useState<AtlasScenario>("event");
-  const [inspect, setInspect] = useState<"baseline" | "witness">("witness");
   /** Demo fixtures vs human-uploaded CSVs. Only the source cards and the
    * review path differ; Challenge/Verify consume the same validated state. */
   const [sourceKind, setSourceKind] = useState<"demo" | "demo60" | "custom">("demo");
@@ -137,7 +133,6 @@ export default function App() {
     }
     return m;
   }, [parse]);
-  const regName = (id: string | null) => (id ? (regTable.get(id)?.name ?? id) : "unmatched");
   const regGroup = (id: string | null) => (id ? (regTable.get(id)?.group ?? "?") : "—");
 
   const adopted = validation !== null;
@@ -428,7 +423,6 @@ export default function App() {
       if (opEpoch.current !== epoch) return;
       invalidateFrom("analysis");
       setAnalysis(res);
-      setInspect("witness");
     } catch (e) {
       if (opEpoch.current !== epoch) return;
       // A failed fresh analysis must not leave the previous verdict visible.
@@ -536,8 +530,6 @@ export default function App() {
     : [];
   /** A checked reversibility verdict exists only after /api/analyze says so. */
   const reversible = isReversibleVerdict(analysis?.verdict);
-  /** Exact decisive-link renders, e.g. "T-02: R-A2 → R-B2". */
-  const decisiveLinkText = changedLinkText(witnessChanged);
   /** Original baseline registration per attendance record, from the active reference. */
   const baselineByAtt = useMemo(() => {
     const m = new Map<string, string | null>();
@@ -628,17 +620,6 @@ export default function App() {
     () => (draft ? deriveBaseline(draft, Object.keys(draft.unmatched).sort()) : null),
     [draft],
   );
-  /** Changed rows enriched with names/groups for the canvas inspector. */
-  const canvasRows: CanvasChangedRow[] = witnessChanged.map((c) => ({
-    attendanceId: c.attendance_id,
-    from: c.from,
-    to: c.to,
-    fromName: regName(c.from),
-    fromGroup: regGroup(c.from),
-    toName: regName(c.to),
-    toGroup: regGroup(c.to),
-    recordedName: attTable.get(c.attendance_id) ?? c.attendance_id,
-  }));
   const replayOk = verify?.status === "VERIFIED_REPLAY";
   const evidenceMismatch =
     replayOk && receipt && analysis
@@ -707,6 +688,8 @@ export default function App() {
 
   return (
     <ProductShell
+      atlasMode="event"
+      bare={stage === 3}
       stage={stage}
       maxStage={maxStage}
       busy={busy}
@@ -1081,105 +1064,53 @@ export default function App() {
         )}
 
         {stage === 3 && (
-          <section aria-labelledby="h-challenge" className="card">
-            <h2 id="h-challenge" ref={stageHeadRef} tabIndex={-1}>3 · Challenge — Could the conclusion reverse?</h2>
-            <div className="row row-nav">
-              <button type="button" onClick={() => goBack(2)}>← Back to Review</button>
-            </div>
-            <p>
-              Fixed question: <strong>{FIXED_QUESTION}</strong>
-            </p>
-            {validation && (
-              <p aria-live="polite">
-                Reference baseline (verified): A={validation.baseline_counts?.a} B=
-                {validation.baseline_counts?.b} → A greater than B:{" "}
-                <strong>{String(validation.baseline_counts?.a_greater_than_b)}</strong>
-              </p>
-            )}
-            <div className="row">
-              <button type="button" className="primary" onClick={runChallenge} disabled={!validation || busy === "analyze"}>
-                {busy === "analyze" ? "Running…" : "Run Challenge"}
-              </button>
-            </div>
-            {analysis && (
-              <div aria-live="polite">
-                <DecisionCanvas
-                  key={`${analysis.review_sha256}-${analysis.verdict}`}
-                  baseline={analysis.baseline_counts}
-                  alternative={analysis.alternative_counts}
-                  changedRows={canvasRows}
-                  changedLinkText={decisiveLinkText}
-                  claimReversal={reversible && witnessChanged.length === 1}
-                  countsLine={formatCanvasCounts(
-                    analysis.baseline_counts,
-                    analysis.alternative_counts,
-                    analysis.verdict,
-                  )}
-                  singleAriaLabel={singleCanvasLabel(analysis.verdict)}
-                  inspect={inspect}
-                  onInspectChange={setInspect}
-                />
-                {analysis.verdict === "REVERSIBLE_MINIMUM_PROVEN" &&
-                  (isValidMinimum(analysis.minimum_changed_assignments) ? (
-                    <>
-                      <p className="minimum-line">
-                        Fewest changed assignments:{" "}
-                        <strong>{analysis.minimum_changed_assignments}</strong> — proven minimum.
-                      </p>
-                      <p>
-                        A permitted reassignment flips the answer within the reviewed policy: the
-                        conclusion reverses with {analysis.minimum_changed_assignments} changed
-                        assignment{analysis.minimum_changed_assignments === 1 ? "" : "s"}, and the
-                        minimum distance is proven (solver completed optimization
-                        {analysis.proof_basis === "SOLVER_AND_SMALL_ORACLE"
-                          ? ", independently cross-checked by small-case enumeration"
-                          : "; solver-attributed, not separately enumerated"}).
-                      </p>
-                    </>
-                  ) : (
-                    <p>
-                      A permitted alternative reverses the answer within the reviewed policy,
-                      but the server did not report a valid minimum — so no number of changed
-                      assignments is claimed here.
-                    </p>
-                  ))}
-                {analysis.verdict === "REVERSIBLE_WITNESS_ONLY" && (
-                  <p>
-                    A checked witness flips the answer within the reviewed policy, but the minimum
-                    distance is <strong>not</strong> proven (witness-only: solver found a feasible
-                    witness without completing optimization).
+          <DecisionAtlasExperience
+            {...buildEventChallengeExperience({
+              queueRecords: activeQueueRecords,
+              witnessChanged,
+              validation,
+              analysis,
+              verify,
+              replayOk,
+              evidenceMismatch,
+              sourceKind,
+              sourceCounts: {
+                attendance: parse?.attendance_digest.row_count ?? 0,
+                registrations: parse?.registrations_digest.row_count ?? 0,
+              },
+              stage,
+              maxStage,
+            })}
+            onStage={(s) => gotoStage(atlasToStage(s))}
+            onSelectRecord={setQueueSel}
+            primaryAction={
+              <div className="atlas-actions">
+                <div className="row row-nav">
+                  <button type="button" onClick={() => goBack(2)}>← Back to Review</button>
+                </div>
+                <p>
+                  Fixed question: <strong>{FIXED_QUESTION}</strong>
+                </p>
+                {validation && (
+                  <p aria-live="polite">
+                    Reference baseline (verified): A={validation.baseline_counts?.a} B=
+                    {validation.baseline_counts?.b} → A greater than B:{" "}
+                    <strong>{String(validation.baseline_counts?.a_greater_than_b)}</strong>
                   </p>
                 )}
-                {analysis.verdict === "STABLE_WITHIN_REVIEWED_POLICY" && (
-                  <p>
-                    No permitted reassignment flips the answer within this reviewed policy (stable
-                    within the reviewed policy only — not a claim about real-world identity).
-                  </p>
-                )}
-                {analysis.verdict === "NOT_VERIFIED" && (
-                  <p>Inconclusive: the backend returned no verified reversal for this policy.</p>
-                )}
-                <details className="evidence-details">
-                  <summary>Technical evidence</summary>
-                  <p>
-                    Status: <code>{analysis.status}</code> · verdict <code>{analysis.verdict}</code> ·
-                    solver <code>{analysis.solver_status}</code> · checker{" "}
-                    <code>{analysis.checker_status}</code> · oracle <code>{analysis.oracle_status}</code>
-                  </p>
-                  <p>
-                    Proof source: <code>{analysis.proof_basis}</code> · coverage{" "}
-                    <code>{analysis.coverage}</code>
-                  </p>
-                  <p className="muted">Coverage caveat: {analysis.scope_caveat}</p>
-                </details>
                 <div className="row">
-                  <button type="button" onClick={() => gotoStage(4)}>
-                    Continue to Verify
+                  <button type="button" className="primary" onClick={runChallenge} disabled={!validation || busy === "analyze"}>
+                    {busy === "analyze" ? "Running…" : "Run Challenge"}
                   </button>
+                  {analysis && (
+                    <button type="button" onClick={() => gotoStage(4)}>
+                      Continue to Verify
+                    </button>
+                  )}
                 </div>
               </div>
-            )}
-          </section>
+            }
+          />
         )}
 
         {stage === 4 && (
