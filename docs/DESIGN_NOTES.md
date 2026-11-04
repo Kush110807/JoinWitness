@@ -28,7 +28,7 @@ The first functioning browser slices demonstrated the API flow but remained domi
 
 The Decision Atlas was developed to repair that gap, not simply to apply a dark theme. It places the **question** alongside a visible **uncertainty field**, provides a **selected-record inspector**, compares **reference and alternative outcomes**, and keeps proof details within reach.
 
-Later desktop and mobile review exposed layout problems: critical parts of the scene below the fold, review controls stretching the canvas, and long evidence labels clipping horizontally. The audited R2 revision addressed those concrete defects. The final release was tested locally at 1440×900, 1728×1080, 390×844 and 375×812. Some earlier-stage surfaces retain older styling; visual consistency remains imperfect.
+Later desktop and mobile review exposed layout problems: critical parts of the scene below the fold, review controls stretching the canvas, and long evidence labels clipping horizontally. The audited R2 revision addressed those concrete defects in Challenge and Commerce Review. A **subsequent unified frontend** extended the dark Atlas to Import, Review and Verify for both scenarios, with a separate Case A Review and keyboard refinement. Local screenshots cover 1440×900, 1728×1080, 390×844 and 375×812. The revised visual system is coherent across stages, but independent usability research and complete accessibility attestation remain outstanding.
 
 ## Why two investigations
 
