@@ -14,6 +14,8 @@
  */
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import './DecisionAtlasExperience.css';
+import './DecisionAtlasR2Correction.css';
+import { useAtlasWitnessFocus } from './AtlasWitnessFocus';
 
 export type AtlasStage = 'import' | 'review' | 'challenge' | 'verify';
 export type AtlasRecordKind = 'settled' | 'uncertain' | 'critical';
@@ -126,6 +128,23 @@ export default function DecisionAtlasExperience(props: AtlasExperienceProps) {
   const altAvailable = props.alternative !== null;
   const uncertainCount = dots.filter(d => d.kind !== 'settled').length;
   const criticalCount = dots.filter(d => d.kind === 'critical').length;
+  useAtlasWitnessFocus({
+    records: props.records,
+    stage: props.stage,
+    isLiveResult: props.isLiveResult,
+    hasAlternative: props.alternative !== null,
+    resultFingerprint: JSON.stringify([
+      props.scenario,
+      props.sourceLabel,
+      props.alternative?.headline ?? null,
+      props.alternative?.claim ?? null,
+      props.alternative?.prominentMetric ?? null,
+    ]),
+    onFocus: (id) => {
+      setSelectedId(id);
+      props.onSelectRecord?.(id);
+    },
+  });
 
   useEffect(() => {
     setSelectedId(prev => props.records.some(r => r.id === prev) ? prev : props.records[0]?.id ?? null);
@@ -174,13 +193,6 @@ export default function DecisionAtlasExperience(props: AtlasExperienceProps) {
               <h1>{props.question}</h1>
               <p className="jw-atlas-subtitle">{props.subtitle}</p>
               <p className="jw-atlas-source-qualifier">◇ {props.isLiveResult ? 'Actual backend response' : 'Awaiting a verified challenge'} · {props.sourceLabel}</p>
-            </div>
-            <div className="jw-atlas-narrative-bottom">
-              <div className="jw-atlas-thin-label">{chosen.eyebrow}</div>
-              <div className="jw-atlas-big-number" aria-live="polite">{chosen.prominentMetric}</div>
-              <p className="jw-atlas-microcopy">{chosen.explanation}</p>
-              <div className="jw-atlas-summary">{props.sourceSummary}</div>
-              {props.primaryAction && <div className="jw-atlas-action">{props.primaryAction}</div>}
             </div>
           </section>
           <section className="jw-atlas-field" aria-label="Interactive uncertainty field">
@@ -235,6 +247,13 @@ export default function DecisionAtlasExperience(props: AtlasExperienceProps) {
               <div className="jw-atlas-legend"><i className="jw-atlas-legend-amber"/>Uncertain <i className="jw-atlas-legend-mint"/>Decision-changing</div>
             </div>
           </section>
+            <div className="jw-atlas-narrative-bottom">
+              <div className="jw-atlas-thin-label">{chosen.eyebrow}</div>
+              <div className="jw-atlas-big-number" aria-live="polite">{chosen.prominentMetric}</div>
+              <p className="jw-atlas-microcopy">{chosen.explanation}</p>
+              <div className="jw-atlas-summary">{props.sourceSummary}</div>
+              {props.primaryAction && <div className="jw-atlas-action">{props.primaryAction}</div>}
+            </div>
           <aside className="jw-atlas-inspector" aria-label="Selected record inspector">
             <div className="jw-atlas-inspector-intro">
               <div className="jw-atlas-eyebrow">02 <span>/</span> INVESTIGATE</div>
