@@ -26,4 +26,4 @@ The `commerce_demo_cap8` and `commerce_demo_empty` files exercise bounded import
 
 Do not normalise line endings, overwrite source fixtures or change the frozen Commerce contract to improve presentation. The original bytes participate in the verification record.
 
-See [Methodology](METHODOLOGY.md) for the formal interpretation of the candidate universe, and [Verification](../VERIFICATION_MANIFEST.md) for the reported local results.
+See [Methodology](METHODOLOGY.md) for the formal interpretation of the candidate universe, and [Verification](VERIFICATION_MANIFEST.md) for the reported local results.

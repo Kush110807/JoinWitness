@@ -6,10 +6,10 @@ This directory contains both the **current release record** and the **developmen
 
 1. [Project overview](../README.md) — research question, examples, authorship and principal limitations.
 2. [Methodology](METHODOLOGY.md) — formal problem, admissible worlds, search procedures, checker and validity boundaries.
-3. [Design notes](DESIGN_NOTES.md) — why review authority, uncertainty inspection and proof qualification were designed as they were.
+3. [Data provenance](DATASETS.md) and [design notes](DESIGN_NOTES.md) — why review authority, uncertainty inspection and proof qualification were designed as they were.
 4. [Current release status](RELEASE_STATUS.md) — accepted R2 application lineage and reported local evidence.
-5. [Reproduction guide](../SETUP_AND_LAUNCH_WINDOWS.md) and [verification manifest](../VERIFICATION_MANIFEST.md) — how to rerun the local prototype and how to interpret historical tests.
-6. [Demo storyboard](../DEMO_STORYBOARD.md) — a short, honest walkthrough.
+5. [Reproduction guide](SETUP_AND_LAUNCH_WINDOWS.md) and [verification manifest](VERIFICATION_MANIFEST.md) — how to rerun the local prototype and how to interpret historical tests.
+6. [Demo storyboard](DEMO_STORYBOARD.md) — a short, honest walkthrough.
 
 ## Technical record
 
@@ -37,4 +37,4 @@ Frozen contract/API-example bytes, source fixtures, mathematical routines, UI be
 
 ## Evidence interpretation
 
-Distinguish **(a)** source and contract hashes, **(b)** a valid counterexample, **(c)** proof of the smallest counterexample within the bounded model, and **(d)** truth about external records. These are not interchangeable claims. Local test reports support (a–c) in stated scenarios but do not establish (d). See [Methodology](METHODOLOGY.md) and [Verification](../VERIFICATION_MANIFEST.md).
+Distinguish **(a)** source and contract hashes, **(b)** a valid counterexample, **(c)** proof of the smallest counterexample within the bounded model, and **(d)** truth about external records. These are not interchangeable claims. Local test reports support (a–c) in stated scenarios but do not establish (d). See [Methodology](METHODOLOGY.md) and [Verification](VERIFICATION_MANIFEST.md).

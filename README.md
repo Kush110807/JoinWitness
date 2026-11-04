@@ -61,9 +61,9 @@ The [documentation index](docs/README.md) separates the **current reading path**
 
 The verified configuration runs the backend on **127.0.0.1:8001** and the frontend on **127.0.0.1:5178**, with a same-origin development proxy and no public ingress.
 
-Start with [Windows setup and launch](SETUP_AND_LAUNCH_WINDOWS.md). The [demo storyboard](DEMO_STORYBOARD.md) follows the two investigations in under three minutes. A public URL to the running application is **not** provided.
+Start with [Windows setup and launch](docs/SETUP_AND_LAUNCH_WINDOWS.md). The [demo storyboard](docs/DEMO_STORYBOARD.md) follows the two investigations in under three minutes. A public URL to the running application is **not** provided.
 
-**Reported release evidence:** 452/452 backend tests, 146/146 frontend tests, a successful TypeScript/Vite build and eight real-Chrome journeys across four desktop/mobile viewports. These were locally executed and reported during release preparation; they have **not** been independently reproduced in public CI. The [verification record](VERIFICATION_MANIFEST.md) documents the source, interpretation and known probe limitations.
+**Reported release evidence:** 452/452 backend tests, 146/146 frontend tests, a successful TypeScript/Vite build and eight real-Chrome journeys across four desktop/mobile viewports. These were locally executed and reported during release preparation; they have **not** been independently reproduced in public CI. The [verification record](docs/VERIFICATION_MANIFEST.md) documents the source, interpretation and known probe limitations.
 
 ## AI use and authorship
 
