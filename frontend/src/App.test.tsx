@@ -429,14 +429,18 @@ describe("T09-UX02 guided experience", () => {
       screen.queryByRole("heading", { name: /which links are legitimately possible/i }),
     ).toBeNull();
     expect(screen.queryByRole("button", { name: /run challenge/i })).toBeNull();
-    const challengeStep = screen.getByRole("button", { name: /challenge.*test the answer/i });
+    const rail = screen.getByRole("navigation", { name: /investigation stages/i });
+    const challengeStep = within(rail).getByRole("button", { name: /challenge/i });
     expect(challengeStep).toHaveProperty("disabled", true);
     await loadDemoToReview(user);
     expect(
       screen.getByRole("heading", { name: /which links are legitimately possible/i }),
     ).toBeTruthy();
     expect(
-      screen.queryByRole("heading", { name: /can one uncertain match change who came out ahead/i }),
+      screen.queryByRole("heading", { name: /what are we comparing/i }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: /explore the verified event/i }),
     ).toBeNull();
   });
 
@@ -445,10 +449,13 @@ describe("T09-UX02 guided experience", () => {
     render(<App />);
     const user = userEvent.setup();
     await loadDemoToReview(user);
-    // T-02's prepared-policy candidates are Possible links with a stated origin.
-    expect(screen.getAllByText("Possible link").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Origin: prepared fictional policy").length).toBeGreaterThan(0);
+    // T-02's prepared-policy candidates are inspectable by record with status labels.
+    await user.click(screen.getByRole("button", { name: /inspect t-02, uncertain record/i }));
+    const inspector = screen.getByRole("complementary", { name: /selected record inspector/i });
+    expect(within(inspector).getByText(/original assignment/i)).toBeTruthy();
+    expect(within(inspector).getByText("Possible link")).toBeTruthy();
     expect(screen.getAllByText(/not yet permitted — adoption required/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/meta suggestion/i)).toBeNull();
     expect(
       screen.queryByText(/permitted under this example's reviewed policy/i),
     ).toBeNull();
@@ -631,8 +638,8 @@ describe("T09-UX02-FIX01 verdict-faithful verification copy", () => {
     render(<App />);
     const user = userEvent.setup();
     await reachReplayedVerify(user);
-    expect(screen.getByText(/optimum is solver-proven/i)).toBeTruthy();
-    expect(screen.getByText(/no separate small-oracle cross-check/i)).toBeTruthy();
+    expect(screen.getAllByText(/optimum is solver-proven/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/no separate small-oracle cross-check/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/cross-checked by the small-case oracle/i)).toBeNull();
   });
 
@@ -647,7 +654,7 @@ describe("T09-UX02-FIX01 verdict-faithful verification copy", () => {
     render(<App />);
     const user = userEvent.setup();
     await reachReplayedVerify(user);
-    expect(screen.getByText(/minimality is not proven/i)).toBeTruthy();
+    expect(screen.getAllByText(/minimality is not proven/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/was proven by the completed solver/i)).toBeNull();
     expect(screen.queryByText(/smallest possible number/i)).toBeNull();
   });
@@ -663,7 +670,7 @@ describe("T09-UX02-FIX01 verdict-faithful verification copy", () => {
     render(<App />);
     const user = userEvent.setup();
     await reachReplayedVerify(user);
-    expect(screen.getByText(/evidence mismatch/i)).toBeTruthy();
+    expect(screen.getAllByText(/evidence mismatch/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/we independently checked this alternative/i)).toBeNull();
     expect(screen.queryByText(/smallest possible number/i)).toBeNull();
     expect(screen.queryByText(/no permitted reversal exists/i)).toBeNull();
@@ -684,7 +691,7 @@ describe("T09-UX02-FIX01 verdict-faithful verification copy", () => {
     render(<App />);
     const user = userEvent.setup();
     await reachReplayedVerify(user);
-    expect(screen.getByText(/evidence mismatch/i)).toBeTruthy();
+    expect(screen.getAllByText(/evidence mismatch/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/we independently checked this alternative/i)).toBeNull();
     expect(screen.queryByText(/smallest possible number/i)).toBeNull();
   });
@@ -766,12 +773,14 @@ describe("T09-UX03 decision canvas", () => {
     await loadDemoToReview(user);
     // Legend names the four link meanings for the reader.
     expect(screen.getByText(/possible link — a permitted alternative/i)).toBeTruthy();
-    expect(screen.getByText(/original baseline/i)).toBeTruthy();
-    expect(screen.getByText(/checked alternative/i)).toBeTruthy();
+    expect(screen.getAllByText(/original baseline/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/checked alternative/i).length).toBeGreaterThan(0);
     await adoptToChallenge(user);
     await user.click(screen.getByRole("button", { name: /back to review/i }));
-    // The reported link is badged as the baseline only after adoption.
-    expect(screen.getAllByText("Original baseline").length).toBeGreaterThan(0);
+    // The reported link stays inspectable after adoption.
+    await user.click(screen.getByRole("button", { name: /inspect t-02, uncertain record/i }));
+    const inspector = screen.getByRole("complementary", { name: /selected record inspector/i });
+    expect(within(inspector).getByText(/original assignment/i)).toBeTruthy();
     // Viewing the diagram never reruns analysis: no verdict appears from adoption alone.
     expect(screen.queryByText(/REVERSIBLE_MINIMUM_PROVEN/)).toBeNull();
   });
@@ -961,17 +970,16 @@ describe("T09-INT-01 integrated shell", () => {
     render(<App />);
     const user = userEvent.setup();
     await loadDemoToReview(user);
-    const queue = screen.getByRole("group", { name: /attendance records/i });
-    expect(queue).toBeTruthy();
-    // T-02 is unresolved and selected by default; T-01/T-03 are settled.
-    const t02 = screen.getByRole("button", { name: /t-02.*unresolved/i });
-    expect(t02.getAttribute("aria-pressed")).toBe("true");
-    expect(screen.getAllByText("Possible link").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Origin: prepared fictional policy").length).toBeGreaterThan(0);
+    expect(screen.getByLabelText(/interactive uncertainty field/i)).toBeTruthy();
+    // T-02 is uncertain; T-01/T-03 are settled.
+    await user.click(screen.getByRole("button", { name: /inspect t-02, uncertain record/i }));
+    const inspector = screen.getByRole("complementary", { name: /selected record inspector/i });
+    expect(within(inspector).getByText("T-02")).toBeTruthy();
+    expect(within(inspector).getByText("Possible link")).toBeTruthy();
     expect(screen.getAllByText(/not yet permitted — adoption required/i).length).toBeGreaterThan(0);
     const callsBefore = fetchUrls().length;
-    await user.click(screen.getByRole("button", { name: /t-01.*resolved/i }));
-    expect(screen.getByText(/settled link — no alternative/i)).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: /inspect t-01, settled record/i }));
+    expect(screen.getAllByText(/settled record/i).length).toBeGreaterThan(0);
     // Inspecting records performs no backend call and grants nothing.
     expect(fetchUrls().length).toBe(callsBefore);
     expect(screen.queryByText(/REVERSIBLE_MINIMUM_PROVEN/)).toBeNull();
@@ -1246,15 +1254,10 @@ describe("T09-INT-02 real import and human review", () => {
     const user = userEvent.setup();
     await uploadCustom(user);
     await user.click(screen.getByRole("button", { name: /fetch deterministic shortlist/i }));
-    // Both rows share one candidate; the greedy preview warns, the backend decides.
-    await waitFor(() =>
-      expect(
-        screen.getAllByRole("button", { name: /seed 1 shortlist suggestion/i }).length,
-      ).toBe(2),
-    );
-    for (const seed of screen.getAllByRole("button", { name: /seed 1 shortlist suggestion/i })) {
-      await user.click(seed);
-    }
+    // Both rows share one candidate; seed each inspected record, then the greedy preview warns.
+    await user.click(screen.getByRole("button", { name: /seed 1 shortlist suggestion/i }));
+    await user.click(screen.getByRole("button", { name: /inspect t-2, uncertain record/i }));
+    await user.click(screen.getByRole("button", { name: /seed 1 shortlist suggestion/i }));
     await waitFor(() =>
       expect(screen.getByText(/the backend will reject the duplicate/i)).toBeTruthy(),
     );
@@ -1289,8 +1292,9 @@ describe("T09-INT-02 real import and human review", () => {
     expect(screen.getByText("Attendance")).toBeTruthy();
     await user.click(screen.getByRole("button", { name: /continue to review/i }));
     await waitFor(() =>
-      expect(screen.getByRole("group", { name: /attendance records/i })).toBeTruthy(),
+      expect(screen.getByLabelText(/interactive uncertainty field/i)).toBeTruthy(),
     );
+    expect(screen.getByRole("button", { name: /inspect t-02, uncertain record/i })).toBeTruthy();
     await adoptToChallenge(user);
     await runChallenge(user);
     await waitFor(() =>
@@ -1397,14 +1401,15 @@ describe("T09-INT-01-FIX01 verdict-copy and provenance correction", () => {
     render(<App />);
     const user = userEvent.setup();
     await loadDemoToReview(user);
-    expect(screen.queryAllByText("Confirmed link").length).toBe(0);
-    await user.click(screen.getByRole("button", { name: /t-01.*resolved/i }));
-    expect(screen.getAllByText("Confirmed link").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Origin: prepared fictional policy").length).toBeGreaterThan(0);
+    await user.click(screen.getByRole("button", { name: /inspect t-01, settled record/i }));
+    const settled = screen.getByRole("complementary", { name: /selected record inspector/i });
+    expect(within(settled).getByText(/original assignment/i)).toBeTruthy();
+    expect(within(settled).queryByText("Possible link")).toBeNull();
     const calls = (globalThis.fetch as unknown as { mock: { calls: unknown[][] } }).mock.calls
       .length;
-    await user.click(screen.getByRole("button", { name: /t-02.*unresolved/i }));
-    expect(screen.getAllByText("Possible link").length).toBeGreaterThan(0);
+    await user.click(screen.getByRole("button", { name: /inspect t-02, uncertain record/i }));
+    const uncertain = screen.getByRole("complementary", { name: /selected record inspector/i });
+    expect(within(uncertain).getByText("Possible link")).toBeTruthy();
     expect(
       (globalThis.fetch as unknown as { mock: { calls: unknown[][] } }).mock.calls.length,
     ).toBe(calls);
@@ -1491,11 +1496,9 @@ describe("T09-DEMO01 verified flagship demonstration", () => {
     render(<App />);
     const user = userEvent.setup();
     await loadVerifiedEvent(user);
-    // Overview states actual imported counts from the live parse response.
-    const overview = within(screen.getByLabelText(/demonstration overview/i));
-    expect(overview.getByText(/60 attendance records/i)).toBeTruthy();
-    expect(overview.getByText(/90 registrations/i)).toBeTruthy();
-    expect(overview.getByText(/12 unresolved ambiguous matches/i)).toBeTruthy();
+    // The Atlas field states actual imported counts from the live parse response.
+    expect(screen.getByText(/60 records \/ 12 uncertain/i)).toBeTruthy();
+    expect(screen.getByText(/60 attendance records · 90 registrations · 12 ambiguous/i)).toBeTruthy();
     // Manifest pins live on the Import source cards.
     await user.click(screen.getByRole("button", { name: /back to import/i }));
     await waitFor(() => expect(screen.getByText(/PARSED_UNREVIEWED/)).toBeTruthy());
@@ -1509,12 +1512,13 @@ describe("T09-DEMO01 verified flagship demonstration", () => {
     // The parse request itself carries the 60-row attendance file.
     const parseCall = fetchUrls().find((u) => u.includes("/api/parse"));
     expect(parseCall).toBeTruthy();
-    // All twelve ambiguous records are listed without dumping sixty rows.
-    const roster = screen.getByRole("list", { name: /ambiguous records/i });
-    expect(roster.querySelectorAll("button").length).toBe(12);
-    // Roster selection drives the queue below.
-    await user.click(screen.getByRole("button", { name: "T-49" }));
-    expect(screen.getAllByText(/T-49/).length).toBeGreaterThan(0);
+    // All twelve ambiguous records are inspectable without dumping sixty rows.
+    const uncertain = screen.getAllByRole("button", { name: /inspect t-.*, uncertain record/i });
+    expect(uncertain.length).toBe(12);
+    // Field selection drives the inspector.
+    await user.click(screen.getByRole("button", { name: /inspect t-49, uncertain record/i }));
+    const inspector = screen.getByRole("complementary", { name: /selected record inspector/i });
+    expect(within(inspector).getByText("T-49")).toBeTruthy();
     // Ground truth is never requested or displayed.
     expect(fetchUrls().some((u) => u.includes("ground_truth"))).toBe(false);
     expect(screen.queryByText(/ground truth/i)).toBeNull();

@@ -1,0 +1,182 @@
+{
+  "A-1440x900": {
+    "ov1": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "ok": true
+    },
+    "ov2": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "ok": true
+    },
+    "ov3": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "ok": true
+    },
+    "ov4": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "ok": true
+    }
+  },
+  "B-1440x900": {
+    "ov1": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "ok": true
+    },
+    "ov2": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "ok": true
+    },
+    "ov3": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "ok": true
+    },
+    "ov4": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "ok": true
+    }
+  },
+  "KBD-1440x900": "BUTTON primary Explore the verified event",
+  "A-1728x1080": {
+    "ov1": {
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "ok": true
+    },
+    "ov2": {
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "ok": true
+    },
+    "ov3": {
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "ok": true
+    },
+    "ov4": {
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "ok": true
+    }
+  },
+  "B-1728x1080": {
+    "ov1": {
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "ok": true
+    },
+    "ov2": {
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "ok": true
+    },
+    "ov3": {
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "ok": true
+    },
+    "ov4": {
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "ok": true
+    }
+  },
+  "KBD-1728x1080": "BUTTON primary Explore the verified event",
+  "A-390x844": {
+    "ov1": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "ok": true
+    },
+    "ov2": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "ok": true
+    },
+    "ov3": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "ok": true
+    },
+    "ov4": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "ok": true
+    }
+  },
+  "B-390x844": {
+    "ov1": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "ok": true
+    },
+    "ov2": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "ok": true
+    },
+    "ov3": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "ok": true
+    },
+    "ov4": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "ok": true
+    }
+  },
+  "KBD-390x844": "BUTTON primary Explore the verified event",
+  "A-375x812": {
+    "ov1": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "ok": true
+    },
+    "ov2": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "ok": true
+    },
+    "ov3": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "ok": true
+    },
+    "ov4": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "ok": true
+    }
+  },
+  "B-375x812": {
+    "ov1": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "ok": true
+    },
+    "ov2": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "ok": true
+    },
+    "ov3": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "ok": true
+    },
+    "ov4": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "ok": true
+    }
+  },
+  "KBD-375x812": "BUTTON primary Explore the verified event"
+}

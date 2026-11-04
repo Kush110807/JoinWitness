@@ -46,7 +46,7 @@ interface ProductShellProps {
   /** Optional verdict summary used when no event `analysis` is present. */
   verdictSummary?: ReactNode;
   atlasMode?: "event" | "commerce";
-  /** Full-viewport scene mode: skip link + stage content only, no shell chrome. */
+  /** Full-viewport scene mode: skip link + switcher + stage content, no shell chrome. */
   bare?: boolean;
 }
 
@@ -73,6 +73,7 @@ export default function ProductShell({
         <a className="skip" href="#main">
           Skip to main content
         </a>
+        {atlasSwitcher && <div className="atlas-switcher-bar">{atlasSwitcher}</div>}
         <main id="main" tabIndex={-1} aria-label="Decision canvas">
           {children}
         </main>
